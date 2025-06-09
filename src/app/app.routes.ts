@@ -1,5 +1,6 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
+import { homeRoute } from './modules/home/home/home.route';
 
 export const routes: Routes = [
   {
@@ -13,10 +14,10 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-//   {
-//     path: 'home',
-//     loadComponent: () =>
-//       import('./modules/home/home.component').then(m => m.HomeComponent),
-//     children: homeRoute,
-//   }
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./modules/home/home/home.component').then(m => m.HomeComponent),
+    children: homeRoute,
+  }
 ];
