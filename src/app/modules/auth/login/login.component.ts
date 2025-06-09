@@ -11,9 +11,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { HttpClientModule } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { LoginService } from './login.service';
 
 @Component({
   standalone: true,
@@ -25,41 +25,42 @@ import { Router } from '@angular/router';
     ButtonModule,
     CardModule,
     FormsModule,
-
-    HttpClientModule,
   ],
-  template: `<div class="login-container">
-    <p-card class="login-card">
-      <div class="logo-container">
-        <img src="images/logo.png" alt="LEMS Logo" class="logo" />
-      </div>
-
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="form">
-        <div class="p-field">
-          <label for="email">Email</label>
-          <input id="email" type="text" pInputText formControlName="email" />
+  template: `
+    <div class="login-container">
+      <p-card class="login-card">
+        <!-- <p-button label="Toggle Dark Mode" (onClick)="toggleDarkMode()" /> -->
+        <div class="logo-container">
+          <img src="images/logo.png" alt="LEMS Logo" class="logo" />
         </div>
 
-        <div class="p-field">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            pPassword
-            formControlName="password"
-          />
-        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="form">
+          <div class="p-field">
+            <label for="email">Email</label>
+            <input id="email" type="text" pInputText formControlName="email" />
+          </div>
 
-        <button
-          pButton
-          type="submit"
-          label="Login"
-          class="login-btn"
-          [disabled]="loginForm.invalid"
-        ></button>
-      </form>
-    </p-card>
-  </div> `,
+          <div class="p-field">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              pPassword
+              formControlName="password"
+            />
+          </div>
+
+          <button
+            pButton
+            type="submit"
+            label="Login"
+            class="login-btn"
+            [disabled]="loginForm.invalid"
+          ></button>
+        </form>
+      </p-card>
+    </div>
+  `,
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -67,7 +68,11 @@ export class LoginComponent {
   loginForm!: FormGroup;
   value!: string;
 
-  constructor(public fb: FormBuilder, private router: Router) {}
+  constructor(
+    public fb: FormBuilder,
+    private router: Router,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -78,20 +83,37 @@ export class LoginComponent {
 
   onLogin() {
     if (this.loginForm.valid) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Login Successful',
-        text: 'Welcome back!',
-        confirmButtonColor: '#f5a623',
-      });
-      this.router.navigate(['home/']);
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Login Failed',
-        text: 'Please check your email and password.',
-        confirmButtonColor: '#f5a623',
+      const loginData = this.loginForm.value;
+
+      this.loginService.login(loginData).subscribe({
+        next: (response: any) => {
+          console.log('✅ Login success:', response);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Successful',
+            text: 'Welcome back!',
+            confirmButtonColor: '#f5a623',
+          });
+
+          this.router.navigate(['home/']);
+        },
+        error: (err) => {
+          console.error('❌ Login failed:', err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: 'Invalid credentials.',
+            confirmButtonColor: '#f5a623',
+          });
+        },
       });
     }
+  }
+
+  toggleDarkMode() {
+    const element = document.querySelector('html')!;
+    element.classList.toggle('my-app-dark');
   }
 }
