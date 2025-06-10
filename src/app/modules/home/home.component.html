@@ -19,113 +19,136 @@
     </div>
   </nav>
   <div class="main-content">
-    <aside
-      class="sidebar"
-      [class.collapsed]="!isMobile && sidebarCollapsed"
-      [class.mobile-open]="isMobile && sidebarCollapsed"
-      (click)="isMobile ? closeSidebar() : null"
-    >
-      <ul (click)="$event.stopPropagation()">
-        <li>
-          <a routerLink="/dashboard">
-            <i class="pi pi-home"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/equipment">
-            <i class="pi pi-box"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/laboratory">
-            <i class="pi pi-briefcase"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/maintenance">
-            <i class="pi pi-wrench"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
-          </a>
-        </li>
+    <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+      <div class="sidebar-nav">
+        <ul (click)="$event.stopPropagation()">
+          <li>
+            <a routerLink="/dashboard">
+              <i class="pi pi-home"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/equipment">
+              <i class="pi pi-box"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/laboratory">
+              <i class="pi pi-briefcase"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/maintenance">
+              <i class="pi pi-wrench"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
+            </a>
+          </li>
 
-        <li>
-          <a routerLink="/dashboard">
-            <i class="pi pi-home"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/equipment">
-            <i class="pi pi-box"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/laboratory">
-            <i class="pi pi-briefcase"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/maintenance">
-            <i class="pi pi-wrench"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
-          </a>
-        </li>
+          <li>
+            <a routerLink="/dashboard">
+              <i class="pi pi-home"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/equipment">
+              <i class="pi pi-box"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/laboratory">
+              <i class="pi pi-briefcase"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/maintenance">
+              <i class="pi pi-wrench"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
+            </a>
+          </li>
 
-        <li>
-          <a routerLink="/dashboard">
-            <i class="pi pi-home"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/equipment">
-            <i class="pi pi-box"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/laboratory">
-            <i class="pi pi-briefcase"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/maintenance">
-            <i class="pi pi-wrench"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
-          </a>
-        </li>
+          <li>
+            <a routerLink="/dashboard">
+              <i class="pi pi-home"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/equipment">
+              <i class="pi pi-box"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/laboratory">
+              <i class="pi pi-briefcase"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/maintenance">
+              <i class="pi pi-wrench"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
+            </a>
+          </li>
 
-        <li>
-          <a routerLink="/dashboard">
-            <i class="pi pi-home"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/equipment">
-            <i class="pi pi-box"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/laboratory">
-            <i class="pi pi-briefcase"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/maintenance">
-            <i class="pi pi-wrench"></i>
-            <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
-          </a>
-        </li>
-      </ul>
+          <li>
+            <a routerLink="/dashboard">
+              <i class="pi pi-home"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/equipment">
+              <i class="pi pi-box"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/laboratory">
+              <i class="pi pi-briefcase"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/maintenance">
+              <i class="pi pi-wrench"></i>
+              <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar-profile" [class.expanded]="profileExpanded">
+        <div class="profile-header" (click)="toggleProfile()">
+          <p-avatar
+            image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+            size="large"
+            shape="circle"
+          ></p-avatar>
+          <div class="profile-info">
+            <div class="profile-name">Amy Elsner</div>
+            <div class="profile-role">Webmaster</div>
+          </div>
+          <i
+            class="pi pi-chevron-up profile-arrow"
+            [class.rotated]="profileExpanded"
+          ></i>
+        </div>
+        <div
+          class="profile-actions"
+          [@expandUp]="profileExpanded ? 'expanded' : 'collapsed'"
+        >
+          <a><i class="pi pi-cog"></i> <span>Settings</span></a>
+          <a><i class="pi pi-file"></i> <span>Profile</span></a>
+          <a><i class="pi pi-ban"></i> <span>Support</span></a>
+          <a><i class="pi pi-power-off"></i> <span>Logout</span></a>
+        </div>
+      </div>
     </aside>
     <section class="content" (click)="closeSidebar()">
       <router-outlet></router-outlet>
