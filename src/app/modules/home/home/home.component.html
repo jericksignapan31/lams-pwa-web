@@ -1,3 +1,59 @@
-<p>
-  home works!
-</p>
+<div class="layout">
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button
+        class="sidebar-toggle"
+        (click)="toggleSidebar()"
+        pButton
+        type="button"
+        icon="pi pi-bars"
+      ></button>
+      <span class="logo">Laboratory Asset Management System</span>
+    </div>
+    <div class="navbar-right">
+      <p-avatar
+        image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png"
+        shape="circle"
+      />
+      <p>Jerick P. Sgnapan</p>
+    </div>
+  </nav>
+  <div class="main-content">
+    <aside
+      class="sidebar"
+      [class.collapsed]="!isMobile && sidebarCollapsed"
+      [class.mobile-open]="isMobile && sidebarCollapsed"
+      (click)="isMobile ? closeSidebar() : null"
+    >
+      <ul (click)="$event.stopPropagation()">
+        <li>
+          <a routerLink="/dashboard">
+            <i class="pi pi-home"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/equipment">
+            <i class="pi pi-box"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/laboratory">
+            <i class="pi pi-briefcase"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/maintenance">
+            <i class="pi pi-wrench"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+    <section class="content" (click)="closeSidebar()">
+      <router-outlet></router-outlet>
+    </section>
+  </div>
+</div>

@@ -11,7 +11,7 @@ export class LoginService {
   constructor(private http: HttpClient) {}
 
   login(data: { email: string; password: string }) {
-    return this.http.post(`${this.baseUrl}/auth/login`, data);
+    return this.http.post(`${this.baseUrl}/auth/login/`, data);
   }
 
   getItems() {
