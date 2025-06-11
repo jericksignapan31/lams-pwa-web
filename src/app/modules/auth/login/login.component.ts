@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { LoginService } from './login.service';
+import { LoginService } from '../../../core/services/login.service';
 
 @Component({
   standalone: true,

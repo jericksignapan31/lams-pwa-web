@@ -1,17 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../environments/environment.development';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
 
-  login(data: { email: string; password: string }) {
-    return this.http.post(`${this.baseUrl}/auth/login/`, data);
+  /**
+   * Secure login method
+   */
+  login(data: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/login/`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true, // for secure cookies if backend supports
+    });
   }
 
   getItems() {

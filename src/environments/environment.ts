@@ -1,4 +1,6 @@
 export const environment = {
-  production: false,
-  apiUrl: 'https://your-production-api.com/api'
+  production: true,
+  apiUrl: 'https://your-production-api.com/api',
+  tokenName: 'lams_authToken123',
+  theme: 'themeColor',
 };
