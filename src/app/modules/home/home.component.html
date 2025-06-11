@@ -11,11 +11,8 @@
       <span class="logo">Laboratory Asset Management System</span>
     </div>
     <div class="navbar-right">
-      <p-avatar
-        image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png"
-        shape="circle"
-      />
-      <p>Jerick P. Sgnapan</p>
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <i class="pi pi-spin pi-cog" style="font-size: 2rem"></i>
     </div>
   </nav>
   <div class="main-content">
@@ -131,8 +128,8 @@
             shape="circle"
           ></p-avatar>
           <div class="profile-info">
-            <div class="profile-name">Amy Elsner</div>
-            <div class="profile-role">Webmaster</div>
+            <div class="profile-name">Jerick Signapan</div>
+            <div class="profile-role">Superm Admin</div>
           </div>
           <i
             class="pi pi-chevron-up profile-arrow"
@@ -144,9 +141,15 @@
           [@expandUp]="profileExpanded ? 'expanded' : 'collapsed'"
         >
           <a><i class="pi pi-cog"></i> <span>Settings</span></a>
-          <a><i class="pi pi-file"></i> <span>Profile</span></a>
-          <a><i class="pi pi-ban"></i> <span>Support</span></a>
-          <a><i class="pi pi-power-off"></i> <span>Logout</span></a>
+          <a routerLink="/home/profile"
+            ><i class="pi pi-file"></i> <span>Profile</span></a
+          >
+          <a routerLink="/home/user-table"
+            ><i class="pi pi-table"></i> <span>View User</span></a
+          >
+          <a (click)="_auth.logout()"
+            ><i class="pi pi-power-off"></i> <span>Logout</span></a
+          >
         </div>
       </div>
     </aside>

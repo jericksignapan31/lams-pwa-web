@@ -8,20 +8,20 @@ export const homeRoute: Route[] = [
         (m) => m.DashboardComponent
       ),
   },
-  //   {
-  //     path: 'equipment',
-  //     loadComponent: () =>
-  //       import('../inventory/pages/equipment/equipment.component').then(
-  //         (m) => m.EquipmentComponent
-  //       ),
-  //   },
-  //   {
-  //     path: 'laboratory',
-  //     loadComponent: () =>
-  //       import('../laboratories/pages/laboratory/laboratory.component').then(
-  //         (m) => m.LaboratoryComponent
-  //       ),
-  //   },
+    {
+      path: 'profile',
+      loadComponent: () =>
+        import('../usermanagement/pages/profile/profile.component').then(
+          (m) => m.ProfileComponent
+        ),
+    },
+    {
+      path: 'user-table',
+      loadComponent: () =>
+        import('../usermanagement/pages/user-table/user-table.component').then(
+          (m) => m.UserTableComponent
+        ),
+    },
   //   {
   //     path: 'maintenance',
   //     loadComponent: () =>

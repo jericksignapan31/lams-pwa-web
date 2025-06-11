@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, ViewChild } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { Drawer, DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
@@ -18,6 +18,7 @@ import {
   animate,
   transition,
 } from '@angular/animations';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -61,6 +62,7 @@ export class HomeComponent {
   sidebarCollapsed = false;
   isMobile = false;
   profileExpanded = false;
+  _auth = inject(AuthService);
 
   @HostListener('window:resize', [])
   onResize() {
