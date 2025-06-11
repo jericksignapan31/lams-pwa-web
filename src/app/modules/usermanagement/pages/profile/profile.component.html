@@ -1,1 +1,68 @@
-<p>profile works!</p>
+<!-- Make sure AvatarModule is imported in your profile.component.ts -->
+<!-- Main profile and additional details side by side -->
+<div class="profile-container">
+  <div class="profile-card main-profile">
+    <div class="profile-avatar-section">
+      <p-avatar
+        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+        size="xlarge"
+        shape="circle"
+      ></p-avatar>
+      <div class="profile-info">
+        <h2 class="profile-name">Jerick Signapan</h2>
+        <div class="profile-role">Super Admin</div>
+        <div class="profile-email">jerick&#64;email.com</div>
+      </div>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-pencil"
+        label="Edit"
+        class="edit-btn"
+      ></button>
+    </div>
+    <div class="profile-details">
+      <div class="profile-detail-card">
+        <div class="detail-label">Full Name</div>
+        <div class="detail-value">Jerick P. Signapan</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Email</div>
+        <div class="detail-value">jerick&#64;email.com</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Role</div>
+        <div class="detail-value">Super Admin</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Address</div>
+        <div class="detail-value">123 Main St, City, Country</div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-card extra-details">
+    <h3 class="extra-title">USTP Laboratory Info</h3>
+    <div class="profile-details">
+      <div class="profile-detail-card">
+        <div class="detail-label">Campus</div>
+        <div class="detail-value">USTP CDO</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Department</div>
+        <div class="detail-value">College of Engineering</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Laboratory</div>
+        <div class="detail-value">Computer Laboratory 1</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Position</div>
+        <div class="detail-value">Lab Technician</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Contact</div>
+        <div class="detail-value">0917-123-4567</div>
+      </div>
+    </div>
+  </div>
+</div>

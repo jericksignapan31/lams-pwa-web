@@ -1,0 +1,142 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 80vh;
+  background: #f4f6f8;
+  padding: 2rem 0;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px 0 rgba(60, 72, 88, 0.1);
+  padding: 2rem 2.5rem;
+  max-width: 480px;
+  width: 100%;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  /* Make cards stretch to same height */
+  flex: 1 1 340px;
+  min-height: 500px;
+}
+
+.main-profile {
+  flex: 1 1 340px;
+}
+
+.extra-details {
+  flex: 1 1 340px;
+  background: #f7fafc;
+  border: 1px solid #e0e7ef;
+}
+
+.extra-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 1.2rem;
+}
+
+.profile-avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.profile-role {
+  font-size: 1rem;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.profile-email {
+  font-size: 0.95rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.edit-btn {
+  margin-left: auto;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  transition: background 0.2s;
+}
+.edit-btn:hover {
+  background: #1251a2;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.profile-detail-card {
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 4px 0 rgba(60, 72, 88, 0.04);
+  border: 1px solid #f0f0f0;
+}
+
+.extra-details .profile-detail-card {
+  background: #f7fafc;
+  border: 1px solid #e0e7ef;
+}
+
+.detail-label {
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 0.2rem;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  color: #222;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .profile-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .profile-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-card {
+    padding: 1rem 0.5rem;
+  }
+  .profile-avatar-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+}
