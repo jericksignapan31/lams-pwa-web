@@ -1,1 +1,65 @@
-<p>dashboard works!</p>
+<div class="dashboard-grid">
+  <div class="dashboard-cards">
+    <p-card [header]="'Total Computers'" [ngStyle]="{ width: '18em' }">
+      <div class="dashboard-card-content">
+        <span class="dashboard-card-value">{{ totalComputers }}</span>
+        <span class="dashboard-card-label">Computers</span>
+      </div>
+    </p-card>
+    <p-card [header]="'Total Campuses'" [ngStyle]="{ width: '18em' }">
+      <div class="dashboard-card-content">
+        <span class="dashboard-card-value">{{ totalCampuses }}</span>
+        <span class="dashboard-card-label">Campuses</span>
+      </div>
+    </p-card>
+    <p-card [header]="'Repair Requests'" [ngStyle]="{ width: '18em' }">
+      <div class="dashboard-card-content">
+        <span class="dashboard-card-value">{{ totalRequests }}</span>
+        <span class="dashboard-card-label">Requests</span>
+      </div>
+    </p-card>
+    <p-card [header]="'Pending Repairs'" [ngStyle]="{ width: '18em' }">
+      <div class="dashboard-card-content">
+        <span class="dashboard-card-value">{{ pendingRepairs }}</span>
+        <span class="dashboard-card-label">Pending</span>
+      </div>
+    </p-card>
+  </div>
+
+  <div class="dashboard-charts">
+    <div class="dashboard-chart">
+      <p-chart type="pie" [data]="computersPie" [responsive]="true"></p-chart>
+      <div class="dashboard-chart-label">Computer Status Distribution</div>
+    </div>
+    <div class="dashboard-chart">
+      <p-chart type="bar" [data]="requestsBar" [responsive]="true"></p-chart>
+      <div class="dashboard-chart-label">Repair Requests</div>
+    </div>
+    <div class="dashboard-chart">
+      <p-chart
+        type="bar"
+        [data]="campusComputers"
+        [responsive]="true"
+      ></p-chart>
+      <div class="dashboard-chart-label">Computers by Campus</div>
+    </div>
+  </div>
+
+  <div class="dashboard-table">
+    <p-table [value]="computersByCampus" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Campus</th>
+          <th>Computers</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.campus }}</td>
+          <td>{{ row.count }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
