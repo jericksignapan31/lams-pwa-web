@@ -20,88 +20,28 @@
       <div class="sidebar-nav">
         <ul (click)="$event.stopPropagation()">
           <li>
-            <a routerLink="/dashboard">
+            <a routerLink="/home/dashboard">
               <i class="pi pi-home"></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/equipment">
-              <i class="pi pi-box"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/laboratory">
-              <i class="pi pi-briefcase"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/maintenance">
-              <i class="pi pi-wrench"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
             </a>
           </li>
 
           <li>
-            <a routerLink="/dashboard">
-              <i class="pi pi-home"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/equipment">
+            <a routerLink="/campus">
               <i class="pi pi-box"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/laboratory">
-              <i class="pi pi-briefcase"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/maintenance">
-              <i class="pi pi-wrench"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
+              <span *ngIf="!sidebarCollapsed || isMobile">Campuses</span>
             </a>
           </li>
 
           <li>
-            <a routerLink="/dashboard">
-              <i class="pi pi-home"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/equipment">
+            <a routerLink="/department">
               <i class="pi pi-box"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/laboratory">
-              <i class="pi pi-briefcase"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/maintenance">
-              <i class="pi pi-wrench"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
+              <span *ngIf="!sidebarCollapsed || isMobile">Department</span>
             </a>
           </li>
 
           <li>
-            <a routerLink="/dashboard">
-              <i class="pi pi-home"></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/equipment">
+            <a routerLink="/home/equipments">
               <i class="pi pi-box"></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
             </a>
@@ -145,7 +85,7 @@
             ><i class="pi pi-file"></i> <span>Profile</span></a
           >
           <a routerLink="/home/user-table"
-            ><i class="pi pi-table"></i> <span>View User</span></a
+            ><i class="pi pi-table"></i> <span>View Users</span></a
           >
           <a (click)="_auth.logout()"
             ><i class="pi pi-power-off"></i> <span>Logout</span></a

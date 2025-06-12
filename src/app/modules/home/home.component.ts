@@ -1,16 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, ViewChild } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
-import { Drawer, DrawerModule } from 'primeng/drawer';
-import { ButtonModule } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
-import { AvatarModule } from 'primeng/avatar';
-import { StyleClass } from 'primeng/styleclass';
-import { MenuItem } from 'primeng/api';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { BadgeModule } from 'primeng/badge';
-import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
+
 import {
   trigger,
   state,
@@ -19,6 +10,7 @@ import {
   transition,
 } from '@angular/animations';
 import { AuthService } from '../../core/services/auth.service';
+import { ImportsModule } from '../../imports';
 
 @Component({
   selector: 'app-home',
@@ -26,15 +18,7 @@ import { AuthService } from '../../core/services/auth.service';
   imports: [
     CommonModule,
     RouterModule,
-    DrawerModule,
-    ButtonModule,
-    AvatarModule,
-    ButtonModule,
-    PanelMenuModule,
-    BadgeModule,
-    FormsModule,
-    InputTextModule,
-    AvatarModule,
+  ImportsModule,
     RouterOutlet,
   ],
   templateUrl: './home.component.html',

@@ -1,1 +1,112 @@
-<p>user-table works!</p>
+<div class="user-table-container">
+  <div class="user-table-header p-d-flex p-jc-between p-ai-center">
+    <div class="header-left">
+      <h2>Customers</h2>
+      <div class="subtitle">The analysis list here shows all users</div>
+    </div>
+    <div class="header-right">
+      <span class="online-indicator p-d-flex p-ai-center">
+        <i
+          class="pi pi-circle-on"
+          style="color: #22c55e; font-size: 1.2rem; margin-right: 0.5rem"
+        ></i>
+        1 Active User
+      </span>
+    </div>
+  </div>
+
+  <div class="user-table-toolbar p-d-flex p-jc-between p-ai-center p-mb-3">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Search" style="width: 220px" />
+    </span>
+    <button pButton icon="pi pi-plus" class="p-ml-2" label="Add User"></button>
+  </div>
+
+  <div style="overflow-x: auto; width: 100%">
+    <p-table
+      [value]="users"
+      [scrollable]="true"
+      scrollHeight="400px"
+      scrollDirection="both"
+      [resizableColumns]="true"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [ngStyle]="{ 'min-width': '1200px', width: '100%' }"
+      class="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 50px">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th>User ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Role</th>
+          <th>Department</th>
+          <th>Contact Number</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+          </td>
+          <td>{{ user.id }}</td>
+          <td>
+            <div class="p-d-flex p-ai-center">
+              <p-avatar
+                *ngIf="user.avatar"
+                [image]="user.avatar"
+                shape="circle"
+                [style]="{ 'margin-right': '0.5rem' }"
+              ></p-avatar>
+              <span>{{ user.username }}</span>
+            </div>
+          </td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.first_name }}</td>
+          <td>{{ user.last_name }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.department }}</td>
+          <td>{{ user.contact_number }}</td>
+          <td>
+            <span
+              class="p-tag"
+              [ngClass]="{
+                'p-tag-success': user.status === 'Active',
+                'p-tag-danger': user.status === 'Inactive',
+                'p-tag-info': user.status === 'Prospect'
+              }"
+            >
+              {{ user.status }}
+            </span>
+          </td>
+          <td>
+            <button
+              pButton
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-text p-mr-2"
+            ></button>
+            <button
+              pButton
+              icon="pi pi-eye"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

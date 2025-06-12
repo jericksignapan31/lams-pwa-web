@@ -22,13 +22,13 @@ export const homeRoute: Route[] = [
           (m) => m.UserTableComponent
         ),
     },
-  //   {
-  //     path: 'maintenance',
-  //     loadComponent: () =>
-  //       import('../maintenances/pages/maintenance/maintenance.component').then(
-  //         (m) => m.MaintenanceComponent
-  //       ),
-  //   },
+    {
+      path: 'equipments',
+      loadComponent: () =>
+        import('../equipments/pages/equipment/equipment.component').then(
+          (m) => m.EquipmentComponent
+        ),
+    },
   {
     path: '',
     redirectTo: 'dashboard',
