@@ -1,6 +1,7 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, NgZone, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, tap, timer } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { UserModel } from '../../modules/usermanagement/models/user.interface';
 import { LoginService } from './login.service';
@@ -16,11 +17,24 @@ export class AuthService {
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   user = signal<UserModel | null>(null);
   userInfo: UserModel | null = null;
+  private refreshKey = 'refresh_token';
+  private userActivityEvents = ['mousemove', 'keydown', 'click', 'touchstart'];
+  private inactivityTimeout = 60 * 1000; // 60 seconds
+  private inactivityTimer?: Subscription;
+  private apiUrl = '/api/auth';
 
-  constructor(private _login: LoginService, private router: Router) {
+  constructor(
+    private _login: LoginService,
+    private router: Router,
+    private http: HttpClient,
+    private ngZone: NgZone
+  ) {
     this._isLoggedIn$.next(!!this.token);
     this.userInfo = this.getUser(this.token);
     this.user.set(this.userInfo);
+    if (typeof window !== 'undefined') {
+      this.initInactivityListener();
+    }
   }
 
   /**
@@ -79,7 +93,20 @@ export class AuthService {
   /**
    * Logout and clear state
    */
-  logout() {
+  logout(silent = false) {
+    if (silent) {
+      this._isLoggedIn$.next(false);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem(this.TOKEN_NAME);
+        localStorage.removeItem(this.refreshKey);
+      }
+      this.user.set(null);
+      this.userInfo = null;
+      if (typeof window !== 'undefined') {
+        this.router.navigate(['login']);
+      }
+      return;
+    }
     this._alert.simpleAlert(
       'warning',
       'Warning',
@@ -96,5 +123,52 @@ export class AuthService {
         }
       }
     );
+  }
+
+  // Save refresh token
+  saveTokens(access: string, refresh: string) {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(this.TOKEN_NAME, access);
+      localStorage.setItem(this.refreshKey, refresh);
+    }
+    this._isLoggedIn$.next(true);
+    this.resetInactivityTimer();
+  }
+
+  getRefreshToken(): string | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem(this.refreshKey);
+    }
+    return null;
+  }
+
+  refreshToken(): Observable<any> {
+    const refresh = this.getRefreshToken();
+    return this.http.post(`${this.apiUrl}/token/refresh/`, { refresh });
+  }
+
+  // Inactivity logic
+  private initInactivityListener() {
+    if (typeof window === 'undefined') return;
+    this.userActivityEvents.forEach((event) => {
+      window.addEventListener(event, () => this.resetInactivityTimer());
+    });
+    this.resetInactivityTimer();
+  }
+
+  private resetInactivityTimer() {
+    this.clearInactivityTimer();
+    this.ngZone.runOutsideAngular(() => {
+      this.inactivityTimer = timer(this.inactivityTimeout).subscribe(() => {
+        this.ngZone.run(() => this.logout(true));
+      });
+    });
+  }
+
+  private clearInactivityTimer() {
+    if (this.inactivityTimer) {
+      this.inactivityTimer.unsubscribe();
+      this.inactivityTimer = undefined;
+    }
   }
 }
