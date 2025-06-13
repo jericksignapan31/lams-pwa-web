@@ -103,7 +103,7 @@ export class AuthService {
       this.user.set(null);
       this.userInfo = null;
       if (typeof window !== 'undefined') {
-        this.router.navigate(['login']);
+        window.location.replace('/login'); // Use replace to prevent back navigation
       }
       return;
     }
@@ -119,7 +119,7 @@ export class AuthService {
         this.user.set(null);
         this.userInfo = null;
         if (typeof window !== 'undefined') {
-          this.router.navigate(['login']);
+          window.location.replace('/login'); // Use replace to prevent back navigation
         }
       }
     );
