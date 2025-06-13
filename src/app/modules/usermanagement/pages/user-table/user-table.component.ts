@@ -24,6 +24,6 @@ export class UserTableComponent {
   users: any[] = [];
 
   constructor(private userService: UserService) {
-    this.users = this.userService.getUsers();
+    this.users = this.userService.getAllUsers();
   }
 }

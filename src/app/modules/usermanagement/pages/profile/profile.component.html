@@ -4,14 +4,19 @@
   <div class="profile-card main-profile">
     <div class="profile-avatar-section">
       <p-avatar
-        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+        [image]="
+          user?.avatar ||
+          'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
+        "
         size="xlarge"
         shape="circle"
       ></p-avatar>
       <div class="profile-info">
-        <h2 class="profile-name">Jerick Signapan</h2>
-        <div class="profile-role">Super Admin</div>
-        <div class="profile-email">jerick&#64;email.com</div>
+        <h2 class="profile-name">
+          {{ user?.first_name }} {{ user?.last_name }}
+        </h2>
+        <div class="profile-role">{{ user?.role }}</div>
+        <div class="profile-email">{{ user?.email }}</div>
       </div>
       <button
         pButton
@@ -24,19 +29,25 @@
     <div class="profile-details">
       <div class="profile-detail-card">
         <div class="detail-label">Full Name</div>
-        <div class="detail-value">Jerick P. Signapan</div>
+        <div class="detail-value">
+          {{ user?.first_name }} {{ user?.last_name }}
+        </div>
       </div>
       <div class="profile-detail-card">
         <div class="detail-label">Email</div>
-        <div class="detail-value">jerick&#64;email.com</div>
+        <div class="detail-value">{{ user?.email }}</div>
       </div>
       <div class="profile-detail-card">
         <div class="detail-label">Role</div>
-        <div class="detail-value">Super Admin</div>
+        <div class="detail-value">{{ user?.role }}</div>
       </div>
       <div class="profile-detail-card">
-        <div class="detail-label">Address</div>
-        <div class="detail-value">123 Main St, City, Country</div>
+        <div class="detail-label">Department</div>
+        <div class="detail-value">{{ user?.department }}</div>
+      </div>
+      <div class="profile-detail-card">
+        <div class="detail-label">Contact</div>
+        <div class="detail-value">{{ user?.contact_number }}</div>
       </div>
     </div>
   </div>

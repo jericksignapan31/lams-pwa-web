@@ -1,9 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private baseUrl = environment.baseUrl;
+
   private users = [
     {
       id: 1,
@@ -137,9 +141,13 @@ export class UserService {
     },
   ];
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  getUsers() {
+  getAllUsers() {
     return this.users;
+  }
+
+  getUser() {
+    return this.http.get(`${this.baseUrl}/profile/`);
   }
 }

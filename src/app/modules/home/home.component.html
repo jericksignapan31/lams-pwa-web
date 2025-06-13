@@ -93,17 +93,21 @@
       <div class="sidebar-profile" [class.expanded]="profileExpanded">
         <div class="profile-header" (click)="toggleProfile()">
           <p-avatar
-            image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+            [image]="
+              user?.profile_picture
+                ? user.profile_picture.replace('/media/', '')
+                : 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
+            "
             size="large"
             shape="circle"
           ></p-avatar>
 
           <div class="profile-info">
             <div class="profile-name" *ngIf="!sidebarCollapsed || isMobile">
-              Jerick Signapan
+              {{ user?.first_name }} {{ user?.last_name }}
             </div>
             <div class="profile-role" *ngIf="!sidebarCollapsed || isMobile">
-              Superm Admin
+              {{ user?.role }}
             </div>
           </div>
           <i

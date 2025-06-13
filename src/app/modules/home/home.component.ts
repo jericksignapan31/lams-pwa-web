@@ -11,16 +11,12 @@ import {
 } from '@angular/animations';
 import { AuthService } from '../../core/services/auth.service';
 import { ImportsModule } from '../../imports';
+import { UserService } from '../../modules/usermanagement/services/user.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-  ImportsModule,
-    RouterOutlet,
-  ],
+  imports: [CommonModule, RouterModule, ImportsModule, RouterOutlet],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -46,7 +42,9 @@ export class HomeComponent {
   sidebarCollapsed = false;
   isMobile = false;
   profileExpanded = false;
+  user: any;
   _auth = inject(AuthService);
+  userService = inject(UserService);
 
   @HostListener('window:resize', [])
   onResize() {
@@ -60,6 +58,7 @@ export class HomeComponent {
 
   ngOnInit() {
     this.onResize();
+    this.user = this.userService.getAllUsers()[0]; // Get first user for demo, replace with actual logic as needed
   }
 
   toggleSidebar() {

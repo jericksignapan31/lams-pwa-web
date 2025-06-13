@@ -11,21 +11,16 @@ export class LoginService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Secure login method
-   */
   login(data: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this.baseUrl}/auth/login/`, data, {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: true, // for secure cookies if backend supports
+      withCredentials: true,
     });
   }
 
-  getItems() {
-    return this.http.get(`${this.baseUrl}/items/`);
-  }
+ 
 
   createItem(data: any) {
     return this.http.post(`${this.baseUrl}/items/`, data);

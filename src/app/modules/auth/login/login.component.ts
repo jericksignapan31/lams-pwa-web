@@ -14,6 +14,7 @@ import { CardModule } from 'primeng/card';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../core/services/login.service';
+import { UserService } from '../../../modules/usermanagement/services/user.service';
 
 @Component({
   standalone: true,
@@ -54,14 +55,13 @@ import { LoginService } from '../../../core/services/login.service';
             pButton
             type="submit"
             class="login-btn"
-            [disabled]="loginForm.invalid"
+            [disabled]="loginForm.invalid || loading"
           >
-            <ng-container *ngIf="!loading; else loadingTemplate">
-              Login
+            <ng-container *ngIf="loading; else loginText">
+              <i class="pi pi-spin pi-spinner" style="margin-right: 8px;"></i>
+              Logging in...
             </ng-container>
-            <ng-template #loadingTemplate>
-              <i class="pi pi-spin pi-spinner"></i>
-            </ng-template>
+            <ng-template #loginText>Login</ng-template>
           </button>
         </form>
       </p-card>
@@ -69,16 +69,19 @@ import { LoginService } from '../../../core/services/login.service';
   `,
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserService],
 })
 export class LoginComponent {
   loginForm!: FormGroup;
   value!: string;
   loading = false;
+  user: any;
 
   constructor(
     public fb: FormBuilder,
     private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -95,21 +98,29 @@ export class LoginComponent {
       this.loginService.login(loginData).subscribe({
         next: (response: any) => {
           this.loading = false;
-          console.log('✅ Login success:', response);
-
+          // Save access token to localStorage for interceptor
+          localStorage.setItem('access_token', response.access);
+          // Fetch user profile from backend after login (now token is present)
+          this.userService.getUser().subscribe({
+            next: (userProfile: any) => {
+              console.log('🔗 User profile from /api/profile/:', userProfile);
+              this.user = userProfile;
+            },
+            error: (err: any) => {
+              console.error('❌ Error fetching user profile:', err);
+            },
+          });
           Swal.fire({
             icon: 'success',
             title: 'Login Successful',
             text: 'Welcome back!',
             confirmButtonColor: '#f5a623',
           });
-
           this.router.navigate(['home/']);
         },
-        error: (err) => {
+        error: (err: any) => {
           this.loading = false;
           console.error('❌ Login failed:', err);
-
           Swal.fire({
             icon: 'error',
             title: 'Login Failed',
