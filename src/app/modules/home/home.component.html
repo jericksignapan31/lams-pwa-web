@@ -21,40 +21,70 @@
         <ul (click)="$event.stopPropagation()">
           <li>
             <a routerLink="/home/dashboard">
-              <i class="pi pi-home"></i>
+              <i
+                class="pi pi-home"
+                pTooltip="Dashboard"
+                [tooltipDisabled]="!sidebarCollapsed || isMobile"
+                tooltipPosition="right"
+              ></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
             </a>
           </li>
 
           <li>
             <a routerLink="/campus">
-              <i class="pi pi-box"></i>
+              <i
+                class="pi pi-box"
+                pTooltip="Campuses"
+                [tooltipDisabled]="!sidebarCollapsed || isMobile"
+                tooltipPosition="right"
+              ></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Campuses</span>
             </a>
           </li>
 
           <li>
             <a routerLink="/department">
-              <i class="pi pi-box"></i>
+              <i
+                class="pi pi-box"
+                pTooltip="Department"
+                [tooltipDisabled]="!sidebarCollapsed || isMobile"
+                tooltipPosition="right"
+              ></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Department</span>
             </a>
           </li>
 
           <li>
             <a routerLink="/home/equipments">
-              <i class="pi pi-box"></i>
+              <i
+                class="pi pi-box"
+                pTooltip="Equipment"
+                [tooltipDisabled]="!sidebarCollapsed || isMobile"
+                tooltipPosition="right"
+              ></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
             </a>
           </li>
           <li>
             <a routerLink="/laboratory">
-              <i class="pi pi-briefcase"></i>
+              <i
+                class="pi pi-briefcase"
+                pTooltip="Laboratory"
+                [tooltipDisabled]="!sidebarCollapsed || isMobile"
+                tooltipPosition="right"
+              ></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
             </a>
           </li>
           <li>
             <a routerLink="/maintenance">
-              <i class="pi pi-wrench"></i>
+              <i
+                class="pi pi-wrench"
+                pTooltip="Maintenance"
+                [tooltipDisabled]="!sidebarCollapsed || isMobile"
+                tooltipPosition="right"
+              ></i>
               <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
             </a>
           </li>
@@ -87,19 +117,39 @@
           [@expandUp]="profileExpanded ? 'expanded' : 'collapsed'"
         >
           <a
-            ><i class="pi pi-cog"></i>
+            ><i
+              class="pi pi-cog"
+              pTooltip="Settings"
+              [tooltipDisabled]="!sidebarCollapsed || isMobile"
+              tooltipPosition="right"
+            ></i>
             <span *ngIf="!sidebarCollapsed || isMobile">Settings</span></a
           >
           <a routerLink="/home/profile"
-            ><i class="pi pi-file"></i>
+            ><i
+              class="pi pi-file"
+              pTooltip="Profile"
+              [tooltipDisabled]="!sidebarCollapsed || isMobile"
+              tooltipPosition="right"
+            ></i>
             <span *ngIf="!sidebarCollapsed || isMobile">Profile</span></a
           >
           <a routerLink="/home/user-table"
-            ><i class="pi pi-table"></i>
+            ><i
+              class="pi pi-table"
+              pTooltip="View User"
+              [tooltipDisabled]="!sidebarCollapsed || isMobile"
+              tooltipPosition="right"
+            ></i>
             <span *ngIf="!sidebarCollapsed || isMobile">View Users</span></a
           >
           <a (click)="_auth.logout()"
-            ><i class="pi pi-power-off"></i>
+            ><i
+              class="pi pi-power-off"
+              pTooltip="Logout"
+              [tooltipDisabled]="!sidebarCollapsed || isMobile"
+              tooltipPosition="right"
+            ></i>
             <span *ngIf="!sidebarCollapsed || isMobile">Logout</span></a
           >
         </div>
