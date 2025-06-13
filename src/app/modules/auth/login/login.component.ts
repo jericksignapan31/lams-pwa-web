@@ -53,10 +53,16 @@ import { LoginService } from '../../../core/services/login.service';
           <button
             pButton
             type="submit"
-            label="Login"
             class="login-btn"
             [disabled]="loginForm.invalid"
-          ></button>
+          >
+            <ng-container *ngIf="!loading; else loadingTemplate">
+              Login
+            </ng-container>
+            <ng-template #loadingTemplate>
+              <i class="pi pi-spin pi-spinner"></i>
+            </ng-template>
+          </button>
         </form>
       </p-card>
     </div>
@@ -67,6 +73,7 @@ import { LoginService } from '../../../core/services/login.service';
 export class LoginComponent {
   loginForm!: FormGroup;
   value!: string;
+  loading = false;
 
   constructor(
     public fb: FormBuilder,
@@ -83,10 +90,11 @@ export class LoginComponent {
 
   onLogin() {
     if (this.loginForm.valid) {
+      this.loading = true;
       const loginData = this.loginForm.value;
-
       this.loginService.login(loginData).subscribe({
         next: (response: any) => {
+          this.loading = false;
           console.log('✅ Login success:', response);
 
           Swal.fire({
@@ -99,6 +107,7 @@ export class LoginComponent {
           this.router.navigate(['home/']);
         },
         error: (err) => {
+          this.loading = false;
           console.error('❌ Login failed:', err);
 
           Swal.fire({
