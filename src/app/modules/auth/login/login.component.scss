@@ -1,9 +1,117 @@
+html.my-app-dark,
+html.my-app-dark body {
+  background-color: #181a20 !important;
+  color: #f5f5f5 !important;
+}
+
+.my-app-dark .login-container,
+.my-app-dark .login-card {
+  background-color: #262a32 !important; /* lighter dark shade */
+  color: #f5f5f5 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.my-app-dark .form label {
+  color: #f5f5f5 !important;
+}
+
+.my-app-dark .form input,
+.my-app-dark .form input:focus {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .login-btn {
+  background-color: #f4a300 !important;
+  color: #181a20 !important;
+}
+
+.my-app-dark .card,
+.my-app-dark .p-card,
+.my-app-dark .p-toolbar,
+.my-app-dark .p-dialog,
+.my-app-dark .p-table,
+.my-app-dark .p-panel,
+.my-app-dark .p-sidebar,
+.my-app-dark .p-menu,
+.my-app-dark .p-menubar,
+.my-app-dark .p-password,
+.my-app-dark .p-inputtext,
+.my-app-dark .p-button,
+.my-app-dark .p-tag,
+.my-app-dark .p-avatar,
+.my-app-dark .p-breadcrumb,
+.my-app-dark .p-toast,
+.my-app-dark .p-confirm-dialog,
+.my-app-dark .p-selectbutton,
+.my-app-dark .p-radiobutton,
+.my-app-dark .p-checkbox,
+.my-app-dark .p-dropdown,
+.my-app-dark .p-inputnumber,
+.my-app-dark .p-tabview,
+.my-app-dark .p-tabs,
+.my-app-dark .p-accordion,
+.my-app-dark .p-panelmenu,
+.my-app-dark .p-datatable,
+.my-app-dark .p-toolbar,
+.my-app-dark .p-sidebar,
+.my-app-dark .p-dialog {
+  background-color: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .p-inputtext,
+.my-app-dark .p-password-input,
+.my-app-dark .p-inputnumber-input,
+.my-app-dark .p-dropdown-label {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .p-button,
+.my-app-dark .login-btn {
+  background-color: #f4a300 !important;
+  color: #181a20 !important;
+  border: none !important;
+}
+
+.my-app-dark .p-button:disabled,
+.my-app-dark .login-btn:disabled {
+  background-color: #444 !important;
+  color: #888 !important;
+}
+
+.my-app-dark .form label,
+.my-app-dark label {
+  color: #f5f5f5 !important;
+}
+
+.my-app-dark .p-tag-success {
+  background: #14532d !important;
+  color: #bbf7d0 !important;
+}
+.my-app-dark .p-tag-danger {
+  background: #7f1d1d !important;
+  color: #fecaca !important;
+}
+.my-app-dark .p-tag-info {
+  background: #0c4a6e !important;
+  color: #bae6fd !important;
+}
+
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: #f5f5f5;
+
+  &.my-app-dark {
+    background-color: #181a20;
+  }
 }
 
 .login-card {
@@ -11,6 +119,12 @@
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  &.my-app-dark {
+    background-color: #262a32;
+    color: #f5f5f5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .logo-container {
@@ -31,20 +145,37 @@
     font-weight: 600;
     margin-bottom: 0.3rem;
     color: #2b2b2b;
+
+    @extend .my-app-dark;
   }
 
   input {
     width: 100%;
+    background: #fff;
+    color: #2b2b2b;
+    border: 1px solid #ccc;
+
+    &.my-app-dark,
+    &:focus {
+      background: #23272f;
+      color: #f5f5f5;
+      border-color: #444;
+    }
   }
 }
 
 .login-btn {
-  background-color: #f4a300; 
+  background-color: #f4a300;
   border: none;
-  color: #09253a; 
+  color: #09253a;
   font-weight: bold;
 
   &:hover {
     background-color: #e59400;
+  }
+
+  &.my-app-dark {
+    background-color: #f4a300;
+    color: #181a20;
   }
 }

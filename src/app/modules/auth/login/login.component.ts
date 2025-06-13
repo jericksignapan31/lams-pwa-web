@@ -30,9 +30,26 @@ import { UserService } from '../../../modules/usermanagement/services/user.servi
   template: `
     <div class="login-container">
       <p-card class="login-card">
-        <!-- <p-button label="Toggle Dark Mode" (onClick)="toggleDarkMode()" /> -->
+        <div
+          style="display: flex; justify-content: flex-end; margin-bottom: 1rem;"
+        >
+          <button
+            pButton
+            type="button"
+            icon="pi pi-moon"
+            class="p-button-text"
+            (click)="toggleDarkMode()"
+            aria-label="Toggle dark mode"
+          ></button>
+        </div>
         <div class="logo-container">
-          <img src="images/logo.png" alt="LEMS Logo" class="logo" />
+          <img
+            [src]="
+              isDarkMode ? 'images/lams-logo-dm.png' : 'images/lams-logo-lm.png'
+            "
+            alt="LEMS Logo"
+            class="logo"
+          />
         </div>
 
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="form">
@@ -76,6 +93,7 @@ export class LoginComponent {
   value!: string;
   loading = false;
   user: any;
+  isDarkMode = false;
 
   constructor(
     public fb: FormBuilder,
@@ -84,11 +102,30 @@ export class LoginComponent {
     private userService: UserService
   ) {}
 
+  toggleDarkMode() {
+    const html = document.querySelector('html');
+    if (html) {
+      html.classList.toggle('my-app-dark');
+      this.isDarkMode = html.classList.contains('my-app-dark');
+      localStorage.setItem('darkMode', this.isDarkMode ? '1' : '0');
+    }
+  }
+
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
+    // SSR-safe: Only access document in browser
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      const html = document.querySelector('html');
+      if (html && localStorage.getItem('darkMode') === '1') {
+        html.classList.add('my-app-dark');
+        this.isDarkMode = true;
+      } else {
+        this.isDarkMode = false;
+      }
+    }
   }
 
   onLogin() {
@@ -128,10 +165,5 @@ export class LoginComponent {
         },
       });
     }
-  }
-
-  toggleDarkMode() {
-    const element = document.querySelector('html')!;
-    element.classList.toggle('my-app-dark');
   }
 }
