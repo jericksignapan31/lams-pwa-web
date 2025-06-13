@@ -98,9 +98,7 @@ export class LoginComponent {
       this.loginService.login(loginData).subscribe({
         next: (response: any) => {
           this.loading = false;
-          // Save access token to localStorage for interceptor
           localStorage.setItem('access_token', response.access);
-          // Fetch user profile from backend after login (now token is present)
           this.userService.getUser().subscribe({
             next: (userProfile: any) => {
               console.log('🔗 User profile from /api/profile/:', userProfile);
