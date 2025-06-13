@@ -69,6 +69,15 @@
   z-index: 200;
   overflow-y: auto;
   min-height: 0;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.collapsed {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+  }
 
   .sidebar-nav {
     flex: 1 1 auto;
@@ -77,6 +86,7 @@
 
     li {
       margin: 1rem 0;
+
       a {
         color: #fff;
         text-decoration: none;
@@ -84,9 +94,11 @@
         display: flex;
         align-items: center;
         gap: 1rem;
+
         &:hover {
           background: #37474f;
         }
+
         i {
           font-size: 1.2rem;
         }
@@ -98,22 +110,30 @@
     border-top: 1px solid #d1d5db;
     background: #fff;
     color: #222;
+    transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1rem 0.5rem 1rem;
 
     .profile-header {
       display: flex;
       align-items: center;
       gap: 1rem;
       cursor: pointer;
-      padding: 1rem;
+      width: 100%;
 
       .profile-info {
         display: flex;
         flex-direction: column;
         flex: 1;
+
         .profile-name {
           font-weight: 600;
           font-size: 1rem;
         }
+
         .profile-role {
           font-size: 0.85rem;
           color: #6b7280;
@@ -124,6 +144,7 @@
         font-size: 1.2rem;
         transition: transform 0.2s;
       }
+
       .profile-arrow.rotated {
         transform: rotate(180deg);
       }
@@ -132,7 +153,10 @@
     .profile-actions {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
       padding: 0 1rem;
+
       a {
         display: flex;
         align-items: center;
@@ -148,11 +172,50 @@
         &:hover {
           background: #f3f4f6;
         }
+
         i {
           font-size: 1.2rem;
         }
       }
     }
+  }
+
+  &.collapsed {
+    .sidebar-nav span,
+    .sidebar-profile .profile-info,
+    .sidebar-profile .profile-arrow {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .sidebar-profile {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+
+  .sidebar.collapsed .sidebar-profile {
+    padding: 0.5rem 0.2rem 0.2rem 0.2rem;
+  }
+
+  .sidebar.collapsed .sidebar-profile .profile-info,
+  .sidebar.collapsed .sidebar-profile .profile-role,
+  .sidebar.collapsed .sidebar-profile .profile-name {
+    display: none !important;
+  }
+
+  .sidebar.collapsed .sidebar-profile .profile-arrow {
+    display: none;
+  }
+
+  .sidebar.collapsed .sidebar-profile .profile-actions span {
+    display: none;
+  }
+
+  .sidebar.collapsed .sidebar-profile .profile-actions a {
+    justify-content: center;
+    width: 100%;
   }
 }
 
@@ -191,18 +254,22 @@
     padding-top: 1rem;
     box-shadow: none;
   }
+
   .sidebar.mobile-open {
     width: 180px;
     min-width: 180px;
     max-width: 180px;
     transform: translateX(0);
   }
+
   .main-content {
     margin-left: 0;
   }
+
   .sidebar-toggle {
     display: inline;
   }
+
   .collapse-btn {
     display: none !important;
   }

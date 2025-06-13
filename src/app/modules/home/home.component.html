@@ -67,28 +67,40 @@
             size="large"
             shape="circle"
           ></p-avatar>
+
           <div class="profile-info">
-            <div class="profile-name">Jerick Signapan</div>
-            <div class="profile-role">Superm Admin</div>
+            <div class="profile-name" *ngIf="!sidebarCollapsed || isMobile">
+              Jerick Signapan
+            </div>
+            <div class="profile-role" *ngIf="!sidebarCollapsed || isMobile">
+              Superm Admin
+            </div>
           </div>
           <i
             class="pi pi-chevron-up profile-arrow"
             [class.rotated]="profileExpanded"
+            *ngIf="!sidebarCollapsed || isMobile"
           ></i>
         </div>
         <div
           class="profile-actions"
           [@expandUp]="profileExpanded ? 'expanded' : 'collapsed'"
         >
-          <a><i class="pi pi-cog"></i> <span>Settings</span></a>
+          <a
+            ><i class="pi pi-cog"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">Settings</span></a
+          >
           <a routerLink="/home/profile"
-            ><i class="pi pi-file"></i> <span>Profile</span></a
+            ><i class="pi pi-file"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">Profile</span></a
           >
           <a routerLink="/home/user-table"
-            ><i class="pi pi-table"></i> <span>View Users</span></a
+            ><i class="pi pi-table"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">View Users</span></a
           >
           <a (click)="_auth.logout()"
-            ><i class="pi pi-power-off"></i> <span>Logout</span></a
+            ><i class="pi pi-power-off"></i>
+            <span *ngIf="!sidebarCollapsed || isMobile">Logout</span></a
           >
         </div>
       </div>
