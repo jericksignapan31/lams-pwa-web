@@ -15,6 +15,9 @@ export class ProfileComponent implements OnInit {
   userService = inject(UserService);
 
   ngOnInit() {
-    this.user = this.userService.getAllUsers()[0]; 
+    // Fetch user profile from API
+    this.userService.getUser().subscribe((profile: any) => {
+      this.user = profile;
+    });
   }
 }

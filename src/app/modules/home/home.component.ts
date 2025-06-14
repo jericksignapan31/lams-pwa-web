@@ -70,7 +70,6 @@ export class HomeComponent {
 
   ngOnInit() {
     this.onResize();
-    this.user = this.userService.getAllUsers()[0]; // Get first user for demo, replace with actual logic as needed
 
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       const html = document.querySelector('html');
@@ -81,6 +80,10 @@ export class HomeComponent {
         this.isDarkMode = false;
       }
     }
+
+    this.userService.getUser().subscribe((profile: any) => {
+      this.user = profile;
+    });
   }
 
   toggleSidebar() {

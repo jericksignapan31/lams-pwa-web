@@ -58,12 +58,12 @@
           <td>
             <p-tableCheckbox [value]="user"></p-tableCheckbox>
           </td>
-          <td>{{ user.id }}</td>
+          <td>{{ user.user_id }}</td>
           <td>
             <div class="p-d-flex p-ai-center">
               <p-avatar
-                *ngIf="user.avatar"
-                [image]="user.avatar"
+                *ngIf="user.profile_picture"
+                [image]="user.profile_picture"
                 shape="circle"
                 [style]="{ 'margin-right': '0.5rem' }"
               ></p-avatar>

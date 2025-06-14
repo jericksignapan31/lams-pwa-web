@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 
@@ -144,10 +144,24 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getAllUsers() {
-    return this.users;
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return { subscribe: (cb: any) => cb([]) };
+    }
+    const accessToken = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+    return this.http.get(`${this.baseUrl}/users/`, { headers });
   }
 
   getUser() {
-    return this.http.get(`${this.baseUrl}/profile/`);
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return { subscribe: (cb: any) => cb({}) };
+    }
+    const accessToken = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+    return this.http.get(`${this.baseUrl}/profile/`, { headers });
   }
 }

@@ -11,7 +11,8 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private auth: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.auth.token;
+    // Always get the latest token from localStorage
+    const token = localStorage.getItem('access_token');
     let authReq = req;
     if (token) {
       authReq = req.clone({

@@ -24,6 +24,14 @@ export class UserTableComponent {
   users: any[] = [];
 
   constructor(private userService: UserService) {
-    this.users = this.userService.getAllUsers();
+     this.userService.getAllUsers().subscribe({
+            next: (userProfile: any) => {
+              console.log('🔗 User profile from /api/users/:', userProfile);
+              this.users = userProfile;
+            },
+            error: (err: any) => {
+              console.error('❌ Error fetching user profile:', err);
+            },
+          });
   }
 }
