@@ -88,9 +88,7 @@ export class AddUserComponent implements OnInit {
       next: (res: any) => {
         this.loading = false;
         this.alertService.handleSuccess('Account created successfully!');
-        setTimeout(() => {
-          this.close.emit();
-        }, 1200); 
+        this.close.emit(); // Close modal immediately after showing alert
       },
       error: (err: any) => {
         this.loading = false;
