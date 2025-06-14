@@ -43,6 +43,7 @@ export class HomeComponent {
   isMobile = false;
   profileExpanded = false;
   user: any;
+  isDarkMode = false;
   _auth = inject(AuthService);
   userService = inject(UserService);
 
@@ -56,9 +57,30 @@ export class HomeComponent {
     }
   }
 
+  toggleDarkMode() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      const html = document.querySelector('html');
+      if (html) {
+        html.classList.toggle('my-app-dark');
+        this.isDarkMode = html.classList.contains('my-app-dark');
+        localStorage.setItem('darkMode', this.isDarkMode ? '1' : '0');
+      }
+    }
+  }
+
   ngOnInit() {
     this.onResize();
     this.user = this.userService.getAllUsers()[0]; // Get first user for demo, replace with actual logic as needed
+
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      const html = document.querySelector('html');
+      if (html && localStorage.getItem('darkMode') === '1') {
+        html.classList.add('my-app-dark');
+        this.isDarkMode = true;
+      } else {
+        this.isDarkMode = false;
+      }
+    }
   }
 
   toggleSidebar() {
