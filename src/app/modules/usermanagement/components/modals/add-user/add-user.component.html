@@ -1,1 +1,53 @@
 <h1>aw</h1>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label>Email</label>
+    <input pInputText formControlName="email" type="email" />
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input pInputText formControlName="password" type="password" />
+  </div>
+  <div class="form-group">
+    <label>First Name</label>
+    <input pInputText formControlName="first_name" type="text" />
+  </div>
+  <div class="form-group">
+    <label>Last Name</label>
+    <input pInputText formControlName="last_name" type="text" />
+  </div>
+  <div class="form-group">
+    <label>Role</label>
+    <input
+      pInputText
+      formControlName="role"
+      type="text"
+      [value]="'Campus Admin'"
+      [disabled]="true"
+    />
+  </div>
+  <div class="form-group">
+    <label>Campus</label>
+    <p-dropdown
+      formControlName="campus"
+      [options]="campuses"
+      optionLabel="campus_name"
+      optionValue="campus_id"
+      placeholder="Select a campus"
+    ></p-dropdown>
+  </div>
+  <div class="form-group">
+    <label>Contact Number</label>
+    <input pInputText formControlName="contact_number" type="text" />
+  </div>
+  <div class="form-group">
+    <label>Profile Picture</label>
+    <input type="file" (change)="onFileChange($event)" />
+  </div>
+  <button
+    pButton
+    type="submit"
+    label="Create Account"
+    [disabled]="form.invalid || loading"
+  ></button>
+</form>

@@ -124,6 +124,6 @@
     [style]="{ width: '400px' }"
     (onHide)="closeAddUserModal()"
   >
-    <app-add-user></app-add-user>
+    <app-add-user (close)="closeAddUserModal()"></app-add-user>
   </p-dialog>
 </div>
