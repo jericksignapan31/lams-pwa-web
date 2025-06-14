@@ -23,7 +23,7 @@
       pButton
       icon="pi pi-plus"
       class="p-ml-2"
-      label="Add User"
+      label="ADD USER"
       (click)="openAddUserModal()"
     ></button>
   </div>
@@ -52,7 +52,6 @@
           <th>First Name</th>
           <th>Last Name</th>
           <th>Role</th>
-          <th>Department</th>
           <th>Contact Number</th>
           <th>Status</th>
           <th>Action</th>
@@ -79,7 +78,6 @@
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
           <td>{{ user.role }}</td>
-          <td>{{ user.department }}</td>
           <td>{{ user.contact_number }}</td>
           <td>
             <span
