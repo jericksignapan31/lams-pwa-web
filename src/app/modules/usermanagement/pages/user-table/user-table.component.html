@@ -20,7 +20,13 @@
       <i class="pi pi-search"></i>
       <input type="text" pInputText placeholder="Search" style="width: 220px" />
     </span>
-    <button pButton icon="pi pi-plus" class="p-ml-2" label="Add User"></button>
+    <button
+      pButton
+      icon="pi pi-plus"
+      class="p-ml-2"
+      label="Add User"
+      (click)="openAddUserModal()"
+    ></button>
   </div>
 
   <div style="overflow-x: auto; width: 100%">
@@ -109,4 +115,15 @@
       </ng-template>
     </p-table>
   </div>
+
+  <p-dialog
+    header="Add User"
+    [(visible)]="showAddUserModal"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '400px' }"
+    (onHide)="closeAddUserModal()"
+  >
+    <app-add-user></app-add-user>
+  </p-dialog>
 </div>

@@ -8,8 +8,6 @@ import { environment } from '../../../../environments/environment.development';
 export class UserService {
   private baseUrl = environment.baseUrl;
 
-  
-
   constructor(private http: HttpClient) {}
 
   getAllUsers() {

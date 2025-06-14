@@ -218,6 +218,40 @@
   color: #1251a2;
 }
 
+.add-user-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.add-user-modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+  min-width: 350px;
+  max-width: 90vw;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
+}
+
 @media (max-width: 900px) {
   .user-table-container {
     padding: 1rem;
@@ -233,7 +267,6 @@
     gap: 0.7rem;
   }
   .user-table-wrapper {
-    /* Always allow horizontal scroll on small screens */
     overflow-x: auto;
   }
 }

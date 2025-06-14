@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { CampusService } from './../../../../../core/services/campus.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -28,6 +29,12 @@ import { UserService } from '../../../services/user.service';
   templateUrl: './add-user.component.html',
   styleUrl: './add-user.component.scss',
 })
-export class AddUserComponent {
-  
+export class AddUserComponent implements OnInit {
+  constructor(private CampusService: CampusService) {}
+
+  ngOnInit(): void {
+    this.CampusService.getCampuses().subscribe((data: any) => {
+      console.log('Campuses:', data);
+    });
+  }
 }
