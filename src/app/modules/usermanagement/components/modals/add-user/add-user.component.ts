@@ -58,7 +58,6 @@ export class AddUserComponent implements OnInit {
   ngOnInit(): void {
     this.campusService.getCampuses().subscribe((data: any) => {
       this.campuses = data;
-      console.log('Campuses:', data);
     });
   }
 
@@ -88,7 +87,10 @@ export class AddUserComponent implements OnInit {
       next: (res: any) => {
         this.loading = false;
         this.alertService.handleSuccess('Account created successfully!');
-        this.close.emit(); // Close modal immediately after showing alert
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        this.close.emit();
       },
       error: (err: any) => {
         this.loading = false;

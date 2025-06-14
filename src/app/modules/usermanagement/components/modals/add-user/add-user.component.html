@@ -1,53 +1,91 @@
-<h1>aw</h1>
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <div class="form-group">
-    <label>Email</label>
-    <input pInputText formControlName="email" type="email" />
+<form [formGroup]="form" (ngSubmit)="submit()" class="add-user-form">
+  <div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-12">
+      <label for="email">Email</label>
+      <input
+        pInputText
+        id="email"
+        formControlName="email"
+        type="email"
+        placeholder="Enter email"
+      />
+    </div>
+    <div class="p-field p-col-12">
+      <label for="password">Password</label>
+      <input
+        pInputText
+        id="password"
+        formControlName="password"
+        type="password"
+        placeholder="Enter password"
+      />
+    </div>
+    <div class="p-field p-col-6">
+      <label for="first_name">First Name</label>
+      <input
+        pInputText
+        id="first_name"
+        formControlName="first_name"
+        type="text"
+        placeholder="First name"
+      />
+    </div>
+    <div class="p-field p-col-6">
+      <label for="last_name">Last Name</label>
+      <input
+        pInputText
+        id="last_name"
+        formControlName="last_name"
+        type="text"
+        placeholder="Last name"
+      />
+    </div>
+    <div class="p-field p-col-6">
+      <label for="role">Role</label>
+      <input
+        pInputText
+        id="role"
+        formControlName="role"
+        type="text"
+        [value]="'Campus Admin'"
+        [disabled]="true"
+      />
+    </div>
+    <div class="p-field p-col-6">
+      <label for="campus">Campus</label>
+      <p-dropdown
+        id="campus"
+        formControlName="campus"
+        [options]="campuses"
+        optionLabel="campus_name"
+        optionValue="campus_id"
+        placeholder="Select a campus"
+        [showClear]="true"
+      ></p-dropdown>
+    </div>
+    <div class="p-field p-col-6">
+      <label for="contact_number">Contact Number</label>
+      <input
+        pInputText
+        id="contact_number"
+        formControlName="contact_number"
+        type="text"
+        placeholder="Contact number"
+      />
+    </div>
+    <div class="p-field p-col-6">
+      <label for="profile_picture">Profile Picture</label>
+      <input id="profile_picture" type="file" (change)="onFileChange($event)" />
+    </div>
+    <div class="p-field p-col-12 p-text-center">
+      <button
+        pButton
+        type="submit"
+        [label]="loading ? '' : 'Create Account'"
+        [disabled]="form.invalid || loading"
+        [icon]="loading ? 'pi pi-spin pi-spinner' : ''"
+        class="p-button-lg"
+      ></button>
+    </div>
   </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input pInputText formControlName="password" type="password" />
-  </div>
-  <div class="form-group">
-    <label>First Name</label>
-    <input pInputText formControlName="first_name" type="text" />
-  </div>
-  <div class="form-group">
-    <label>Last Name</label>
-    <input pInputText formControlName="last_name" type="text" />
-  </div>
-  <div class="form-group">
-    <label>Role</label>
-    <input
-      pInputText
-      formControlName="role"
-      type="text"
-      [value]="'Campus Admin'"
-      [disabled]="true"
-    />
-  </div>
-  <div class="form-group">
-    <label>Campus</label>
-    <p-dropdown
-      formControlName="campus"
-      [options]="campuses"
-      optionLabel="campus_name"
-      optionValue="campus_id"
-      placeholder="Select a campus"
-    ></p-dropdown>
-  </div>
-  <div class="form-group">
-    <label>Contact Number</label>
-    <input pInputText formControlName="contact_number" type="text" />
-  </div>
-  <div class="form-group">
-    <label>Profile Picture</label>
-    <input type="file" (change)="onFileChange($event)" />
-  </div>
-  <button
-    pButton
-    type="submit"
-    label="Create Account"
-    [disabled]="form.invalid || loading"
-  ></button>
 </form>

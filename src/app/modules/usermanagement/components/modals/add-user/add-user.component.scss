@@ -1,0 +1,24 @@
+.add-user-form {
+  padding: 1rem 0.5rem;
+}
+.p-field label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+.p-field input[type="text"],
+.p-field input[type="email"],
+.p-field input[type="password"] {
+  width: 100%;
+}
+.p-field input[type="file"] {
+  padding: 0.25rem 0;
+}
+.p-button-lg {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.75rem 0;
+}
+.p-text-center {
+  text-align: center;
+}
