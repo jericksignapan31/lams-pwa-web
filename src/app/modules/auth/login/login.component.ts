@@ -149,6 +149,8 @@ export class LoginComponent {
             title: 'Login Successful',
             text: 'Welcome back!',
             confirmButtonColor: '#f5a623',
+            timer: 1000,
+            showConfirmButton: false,
           });
           this.router.navigate(['home/']);
         },

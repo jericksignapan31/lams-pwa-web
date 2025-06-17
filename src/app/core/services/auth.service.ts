@@ -95,15 +95,22 @@ export class AuthService {
    */
   logout(silent = false) {
     if (silent) {
-      this._isLoggedIn$.next(false);
-      if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.removeItem(this.TOKEN_NAME);
-        localStorage.removeItem(this.refreshKey);
-      }
-      this.user.set(null);
-      this.userInfo = null;
       if (typeof window !== 'undefined') {
-        window.location.replace('/login'); // Use replace to prevent back navigation
+        this._alert.simpleAlert(
+          'info',
+          'Logged out',
+          'Your account was automatically logged out due to 60 seconds of inactivity.',
+          () => {
+            this._isLoggedIn$.next(false);
+            if (typeof window !== 'undefined' && window.localStorage) {
+              localStorage.removeItem(this.TOKEN_NAME);
+              localStorage.removeItem(this.refreshKey);
+            }
+            this.user.set(null);
+            this.userInfo = null;
+            window.location.replace('/login');
+          }
+        );
       }
       return;
     }
@@ -119,7 +126,7 @@ export class AuthService {
         this.user.set(null);
         this.userInfo = null;
         if (typeof window !== 'undefined') {
-          window.location.replace('/login'); 
+          window.location.replace('/login');
         }
       }
     );
