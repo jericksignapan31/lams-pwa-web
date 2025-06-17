@@ -43,4 +43,15 @@ export class UserService {
     });
     return this.http.post(`${this.baseUrl}/users/`, data, { headers });
   }
+
+  deleteUser(id: string | number) {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of({});
+    }
+    const accessToken = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+    return this.http.delete(`${this.baseUrl}/users/${id}/`, { headers });
+  }
 }

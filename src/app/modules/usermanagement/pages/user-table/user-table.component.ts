@@ -8,6 +8,7 @@ import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.interface';
 import { AddUserComponent } from '../../components/modals/add-user/add-user.component';
 import { DialogModule } from 'primeng/dialog';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-table',
@@ -46,5 +47,30 @@ export class UserTableComponent {
 
   closeAddUserModal() {
     this.showAddUserModal = false;
+  }
+
+  async deleteUser(user: any) {
+    if (!user || !user.user_id) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    });
+    if (result.isConfirmed) {
+      this.userService.deleteUser(user.user_id).subscribe({
+        next: () => {
+          this.users = this.users.filter((u) => u.user_id !== user.user_id);
+          Swal.fire('Deleted!', 'User has been deleted.', 'success');
+        },
+        error: (err: any) => {
+          Swal.fire('Failed!', 'Failed to delete user.', 'error');
+          console.error('Delete error:', err);
+        },
+      });
+    }
   }
 }
