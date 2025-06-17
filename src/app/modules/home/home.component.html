@@ -64,15 +64,12 @@
           </li> -->
 
           <li>
-            <a routerLink="/home/equipments">
-              <i
-                class="pi pi-warehouse"
-                pTooltip="Equipment"
-                [tooltipDisabled]="!sidebarCollapsed || isMobile"
-                tooltipPosition="right"
-              ></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Equipment</span>
-            </a>
+            <div class="card flex justify-center">
+              <p-panelmenu
+                [model]="panelMenuItems"
+                styleClass="w-full md:w-80"
+              />
+            </div>
           </li>
           <!-- <li>
             <a routerLink="/laboratory">

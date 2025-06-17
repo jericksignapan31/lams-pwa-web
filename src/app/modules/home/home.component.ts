@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 import {
   trigger,
@@ -12,11 +13,12 @@ import {
 import { AuthService } from '../../core/services/auth.service';
 import { ImportsModule } from '../../imports';
 import { UserService } from '../../modules/usermanagement/services/user.service';
+import { campuses as campusesData } from './models/data';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ImportsModule, RouterOutlet],
+  imports: [CommonModule, RouterModule, ImportsModule, RouterOutlet, PanelMenuModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -46,6 +48,28 @@ export class HomeComponent {
   isDarkMode = false;
   _auth = inject(AuthService);
   userService = inject(UserService);
+
+  inventoryOpen = false;
+  campuses = campusesData.map(campus => ({ ...campus, open: false, departments: campus.departments.map(dept => ({ ...dept, open: false })) }));
+
+  panelMenuItems = [
+    {
+      label: 'Inventory',
+      icon: 'pi pi-warehouse',
+      items: this.campuses.map(campus => ({
+        label: campus.name,
+        icon: 'pi pi-building',
+        items: campus.departments.map(dept => ({
+          label: dept.name,
+          icon: 'pi pi-building-columns',
+          items: dept.rooms.map(room => ({
+            label: room,
+            icon: 'pi pi-home',
+          }))
+        }))
+      }))
+    }
+  ];
 
   @HostListener('window:resize', [])
   onResize() {
@@ -102,5 +126,15 @@ export class HomeComponent {
 
   toggleProfile() {
     this.profileExpanded = !this.profileExpanded;
+  }
+
+  toggleInventory() {
+    this.inventoryOpen = !this.inventoryOpen;
+  }
+  toggleCampus(campus: any) {
+    campus.open = !campus.open;
+  }
+  toggleDepartment(dept: any) {
+    dept.open = !dept.open;
   }
 }
