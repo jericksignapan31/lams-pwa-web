@@ -66,8 +66,12 @@
           <td>
             <div class="p-d-flex p-ai-center">
               <p-avatar
-                *ngIf="user.profile_picture"
-                [image]="user.profile_picture"
+                [image]="
+                  user.profile_picture
+                    ? user.profile_picture.replace('/media/', '')
+                    : 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
+                "
+                size="large"
                 shape="circle"
                 [style]="{ 'margin-right': '0.5rem' }"
               ></p-avatar>
