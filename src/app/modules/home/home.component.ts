@@ -18,7 +18,13 @@ import { campuses as campusesData } from './models/data';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ImportsModule, RouterOutlet, PanelMenuModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ImportsModule,
+    RouterOutlet,
+    PanelMenuModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -50,25 +56,48 @@ export class HomeComponent {
   userService = inject(UserService);
 
   inventoryOpen = false;
-  campuses = campusesData.map(campus => ({ ...campus, open: false, departments: campus.departments.map(dept => ({ ...dept, open: false })) }));
+  campuses = campusesData.map((campus) => ({
+    ...campus,
+    open: false,
+    departments: campus.departments.map((dept) => ({ ...dept, open: false })),
+  }));
 
   panelMenuItems = [
     {
       label: 'Inventory',
       icon: 'pi pi-warehouse',
-      items: this.campuses.map(campus => ({
+      items: this.campuses.map((campus) => ({
         label: campus.name,
         icon: 'pi pi-building',
-        items: campus.departments.map(dept => ({
+        items: campus.departments.map((dept) => ({
           label: dept.name,
           icon: 'pi pi-building-columns',
-          items: dept.rooms.map(room => ({
+          items: dept.rooms.map((room) => ({
             label: room,
             icon: 'pi pi-home',
-          }))
-        }))
-      }))
-    }
+          })),
+        })),
+      })),
+    },
+  ];
+
+  dashboardMenuItems = [
+    {
+      label: 'Dashboard',
+      icon: 'pi pi-objects-column',
+      items: [
+        {
+          label: 'Analytics',
+          icon: 'pi pi-chart-bar',
+          routerLink: '/home/dashboard',
+        },
+        {
+          label: 'Reports',
+          icon: 'pi pi-file',
+          routerLink: '/home/reports',
+        },
+      ],
+    },
   ];
 
   @HostListener('window:resize', [])

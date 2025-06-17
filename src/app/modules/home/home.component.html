@@ -28,15 +28,33 @@
       <div class="sidebar-nav">
         <ul (click)="$event.stopPropagation()">
           <li>
-            <a routerLink="/home/dashboard">
-              <i
-                class="pi pi-objects-column"
-                pTooltip="Dashboard"
-                [tooltipDisabled]="!sidebarCollapsed || isMobile"
-                tooltipPosition="right"
-              ></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Dashboard</span>
-            </a>
+            <ng-container
+              *ngIf="!sidebarCollapsed || isMobile; else dashboardIconOnly"
+            >
+              <div class="card flex justify-center">
+                <p-panelmenu
+                  [model]="dashboardMenuItems"
+                  styleClass="w-full md:w-80"
+                />
+              </div>
+            </ng-container>
+            <ng-template #dashboardIconOnly>
+              <a
+                style="
+                  justify-content: center;
+                  display: flex;
+                  align-items: center;
+                  height: 40px;
+                "
+              >
+                <i
+                  class="pi pi-objects-column"
+                  pTooltip="Dashboard"
+                  tooltipPosition="right"
+                  [tooltipDisabled]="false"
+                ></i>
+              </a>
+            </ng-template>
           </li>
 
           <!-- <li>
@@ -64,24 +82,34 @@
           </li> -->
 
           <li>
-            <div class="card flex justify-center">
-              <p-panelmenu
-                [model]="panelMenuItems"
-                styleClass="w-full md:w-80"
-              />
-            </div>
+            <ng-container
+              *ngIf="!sidebarCollapsed || isMobile; else inventoryIconOnly"
+            >
+              <div class="card flex justify-center">
+                <p-panelmenu
+                  [model]="panelMenuItems"
+                  styleClass="w-full md:w-80"
+                />
+              </div>
+            </ng-container>
+            <ng-template #inventoryIconOnly>
+              <a
+                style="
+                  justify-content: center;
+                  display: flex;
+                  align-items: center;
+                  height: 40px;
+                "
+              >
+                <i
+                  class="pi pi-warehouse"
+                  pTooltip="Inventory"
+                  tooltipPosition="right"
+                  [tooltipDisabled]="false"
+                ></i>
+              </a>
+            </ng-template>
           </li>
-          <!-- <li>
-            <a routerLink="/laboratory">
-              <i
-                class="pi pi-briefcase"
-                pTooltip="Laboratory"
-                [tooltipDisabled]="!sidebarCollapsed || isMobile"
-                tooltipPosition="right"
-              ></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Laboratory</span>
-            </a>
-          </li> -->
           <!-- <li>
             <a routerLink="/maintenance">
               <i

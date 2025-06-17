@@ -58,7 +58,7 @@
   min-width: 260px;
   max-width: 260px;
   flex-shrink: 0;
-  background: rgb(10, 10, 106);
+  background: #fffff0;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -216,6 +216,49 @@
   .sidebar.collapsed .sidebar-profile .profile-actions a {
     justify-content: center;
     width: 100%;
+  }
+
+  .p-panelmenu {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .p-panelmenu-panel {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .p-panelmenu-header > a,
+  .p-panelmenu-content {
+    background: transparent !important;
+    color: #fff !important;
+  }
+
+  .p-panelmenu-header > a:hover,
+  .p-panelmenu-content .p-menuitem-link:hover {
+    background: #37474f !important;
+    color: #fff !important;
+  }
+
+  .sidebar .p-panelmenu,
+  .sidebar .p-panelmenu .p-panelmenu-panel,
+  .sidebar .p-panelmenu .p-panelmenu-header,
+  .sidebar .p-panelmenu .p-panelmenu-header > a,
+  .sidebar .p-panelmenu .p-panelmenu-content,
+  .sidebar .p-panelmenu .p-menuitem-link {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .sidebar .p-panelmenu .p-panelmenu-header > a,
+  .sidebar .p-panelmenu .p-panelmenu-content .p-menuitem-link {
+    color: #fff !important;
+  }
+  .sidebar .p-panelmenu .p-panelmenu-header > a:hover,
+  .sidebar .p-panelmenu .p-panelmenu-content .p-menuitem-link:hover {
+    background: #3949ab !important;
+    color: #fff !important;
   }
 }
 

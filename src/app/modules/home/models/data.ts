@@ -1,28 +1,28 @@
 export const campuses = [
   {
-    name: 'BALUBAL CAMPUS',
+    name: 'balubal campus',
     open: false,
     departments: [
       {
-        name: 'IT DEPARTMENT',
+        name: 'it department',
         open: false,
-        rooms: ['ICT LAB 108', 'ICT LAB 107']
+        rooms: ['ict lab 108', 'ict lab 107'],
       },
       {
-        name: 'EMT DEPARTMENT',
+        name: 'emt department',
         open: false,
-        rooms: []
+        rooms: [],
       },
       {
-        name: 'TCM DEPARTMENT',
+        name: 'tcm department',
         open: false,
-        rooms: []
-      }
-    ]
+        rooms: [],
+      },
+    ],
   },
   {
-    name: 'VILLANUEVA CAMPUS',
+    name: 'villanueva campus',
     open: false,
-    departments: []
-  }
+    departments: [],
+  },
 ];
