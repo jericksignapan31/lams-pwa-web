@@ -228,7 +228,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
 }
 
 .add-user-modal {
@@ -236,7 +235,6 @@
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
-  min-width: 350px;
   max-width: 90vw;
   position: relative;
 }
@@ -250,6 +248,18 @@
   font-size: 2rem;
   cursor: pointer;
   color: #333;
+}
+
+.p-dialog {
+  width: 100%;
+}
+.p-dialog-content {
+  overflow-y: unset !important;
+  overflow-x: unset !important;
+}
+:host ::ng-deep .p-dialog-content {
+  overflow-y: unset !important;
+  overflow-x: unset !important;
 }
 
 @media (max-width: 900px) {

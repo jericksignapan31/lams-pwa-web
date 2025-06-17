@@ -116,7 +116,6 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
-    // SSR-safe: Only access document in browser
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       const html = document.querySelector('html');
       if (html && localStorage.getItem('darkMode') === '1') {

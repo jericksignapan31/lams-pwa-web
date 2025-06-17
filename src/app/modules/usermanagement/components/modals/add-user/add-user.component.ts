@@ -14,6 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../../services/user.service';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-add-user',
@@ -26,6 +28,7 @@ import { UserService } from '../../../services/user.service';
     InputTextModule,
     FileUploadModule,
     ButtonModule,
+    FloatLabelModule,
   ],
   templateUrl: './add-user.component.html',
   styleUrl: './add-user.component.scss',
@@ -58,6 +61,7 @@ export class AddUserComponent implements OnInit {
   ngOnInit(): void {
     this.campusService.getCampuses().subscribe((data: any) => {
       this.campuses = data;
+      console.log('🔗 Campuses loaded:', this.campuses);
     });
   }
 

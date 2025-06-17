@@ -119,13 +119,12 @@ export class AuthService {
         this.user.set(null);
         this.userInfo = null;
         if (typeof window !== 'undefined') {
-          window.location.replace('/login'); // Use replace to prevent back navigation
+          window.location.replace('/login'); 
         }
       }
     );
   }
 
-  // Save refresh token
   saveTokens(access: string, refresh: string) {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem(this.TOKEN_NAME, access);
