@@ -19,7 +19,8 @@ export class AuthService {
   userInfo: UserModel | null = null;
   private refreshKey = 'refresh_token';
   private userActivityEvents = ['mousemove', 'keydown', 'click', 'touchstart'];
-  private inactivityTimeout = 60 * 1000; // 60 seconds
+  private inactivityTimeout = 10 * 60 * 1000; // 10 minutes
+  //  private inactivityTimeout = 60 * 1000; // 60 seconds
   private inactivityTimer?: Subscription;
   private apiUrl = '/api/auth';
 

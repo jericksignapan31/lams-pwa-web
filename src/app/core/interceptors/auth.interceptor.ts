@@ -11,8 +11,11 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private auth: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Always get the latest token from localStorage
-    const token = localStorage.getItem('access_token');
+    // Always get the latest token from localStorage (SSR safe)
+    let token: string | null = null;
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      token = localStorage.getItem('access_token');
+    }
     let authReq = req;
     if (token) {
       authReq = req.clone({

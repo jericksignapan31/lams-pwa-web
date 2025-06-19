@@ -1,0 +1,38 @@
+<p>add-laboratory works!</p>
+<form [formGroup]="form" (ngSubmit)="submit()" class="add-laboratory-form">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="laboratory_name">Laboratory Name</label>
+      <input
+        pInputText
+        id="laboratory_name"
+        formControlName="laboratory_name"
+      />
+    </div>
+    <div class="p-field">
+      <label for="location">Location</label>
+      <input pInputText id="location" formControlName="location" />
+    </div>
+    <div class="p-field">
+      <label for="room_no">Room No</label>
+      <input pInputText id="room_no" formControlName="room_no" />
+    </div>
+    <div class="p-field p-mt-3" style="display: flex; gap: 1rem">
+      <button
+        pButton
+        type="submit"
+        label="Create"
+        [disabled]="form.invalid || loading"
+        [icon]="loading ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+        class="p-button-success"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        class="p-button-secondary"
+        (click)="onClose()"
+      ></button>
+    </div>
+  </div>
+</form>
