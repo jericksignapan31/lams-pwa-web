@@ -78,4 +78,17 @@
       (created)="onLaboratoryCreated($event)"
     ></app-add-laboratory>
   </p-dialog>
+  <p-dialog
+    header="Edit Laboratory"
+    [(visible)]="showEditModal"
+    [modal]="true"
+    [closable]="true"
+    (onHide)="onEditModalClose()"
+  >
+    <app-edit-laboratory
+      [laboratory]="selectedLaboratory"
+      (close)="onEditModalClose()"
+      (updated)="onLaboratoryUpdated($event)"
+    ></app-edit-laboratory>
+  </p-dialog>
 </div>

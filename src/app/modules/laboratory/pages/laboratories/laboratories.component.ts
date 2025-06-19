@@ -5,10 +5,17 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ImportsModule } from '../../../../imports';
 import { AddLaboratoryComponent } from '../../components/add-laboratory/add-laboratory.component';
+import { EditLaboratoryComponent } from '../../components/edit-laboratory/edit-laboratory.component';
 
 @Component({
   selector: 'app-laboratories',
-  imports: [CommonModule, FormsModule, ImportsModule, AddLaboratoryComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ImportsModule,
+    AddLaboratoryComponent,
+    EditLaboratoryComponent,
+  ],
   templateUrl: './laboratories.component.html',
   styleUrl: './laboratories.component.scss',
 })
@@ -16,6 +23,8 @@ export class LaboratoriesComponent {
   laboratories: any[] = [];
   searchTerm: string = '';
   showAddModal = false;
+  showEditModal = false;
+  selectedLaboratory: any = null;
 
   constructor(private laboratoryService: LaboratoryService) {
     this.laboratoryService.getLaboratories().subscribe((data) => {
@@ -38,7 +47,24 @@ export class LaboratoriesComponent {
   }
 
   onEdit(lab: any) {
-    alert('Edit: ' + lab.laboratory_name);
+    this.selectedLaboratory = lab;
+    this.showEditModal = true;
+  }
+
+  onEditModalClose() {
+    this.showEditModal = false;
+    this.selectedLaboratory = null;
+  }
+
+  onLaboratoryUpdated(updatedLab: any) {
+    const idx = this.laboratories.findIndex(
+      (l) => l.laboratory_id === updatedLab.laboratory_id
+    );
+    if (idx > -1) {
+      this.laboratories[idx] = updatedLab;
+    }
+    this.showEditModal = false;
+    this.selectedLaboratory = null;
   }
 
   onDelete(lab: any) {
