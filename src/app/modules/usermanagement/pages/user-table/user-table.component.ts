@@ -9,6 +9,7 @@ import { UserModel } from '../../models/user.interface';
 import { AddUserComponent } from '../../components/modals/add-user/add-user.component';
 import { DialogModule } from 'primeng/dialog';
 import Swal from 'sweetalert2';
+import { ImportsModule } from '../../../../imports';
 
 @Component({
   selector: 'app-user-table',
@@ -21,6 +22,7 @@ import Swal from 'sweetalert2';
     InputTextModule,
     AddUserComponent,
     DialogModule,
+    ImportsModule,
   ],
   templateUrl: './user-table.component.html',
   styleUrl: './user-table.component.scss',

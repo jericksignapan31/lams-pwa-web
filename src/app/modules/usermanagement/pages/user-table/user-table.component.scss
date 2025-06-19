@@ -262,6 +262,16 @@
   overflow-x: unset !important;
 }
 
+.p-tag-success {
+  color: #01c908 !important;
+  border: none !important;
+}
+.p-tag-danger {
+  background: #ef4444 !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+
 @media (max-width: 900px) {
   .user-table-container {
     padding: 1rem;

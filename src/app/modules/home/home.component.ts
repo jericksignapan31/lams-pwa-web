@@ -62,9 +62,7 @@ export class HomeComponent {
   }));
 
   panelMenuItems: any[] = [];
-
   dashboardMenuItems = dashboardMenuItems;
-
   laboratoryPanelMenuModel = laboratoryPanelMenuModel;
 
   @HostListener('window:resize', [])

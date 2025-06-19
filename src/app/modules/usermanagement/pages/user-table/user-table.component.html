@@ -86,13 +86,9 @@
           <td>
             <span
               class="p-tag"
-              [ngClass]="{
-                'p-tag-success': user.status === 'Active',
-                'p-tag-danger': user.status === 'Inactive',
-                'p-tag-info': user.status === 'Prospect'
-              }"
+              [ngClass]="user.is_active ? 'p-tag-success' : 'p-tag-danger'"
             >
-              {{ user.status }}
+              {{ user.is_active ? 'Active' : 'Inactive' }}
             </span>
           </td>
           <td>

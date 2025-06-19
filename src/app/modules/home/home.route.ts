@@ -36,6 +36,14 @@ export const homeRoute: Route[] = [
           (m) => m.LaboratoriesComponent
         ),
     },
+    
+     {
+      path: 'schedules',
+      loadComponent: () =>
+        import('../schedule/pages/schedules/schedules.component').then(
+          (m) => m.SchedulesComponent
+        ),
+    },
   {
     path: '',
     redirectTo: 'dashboard',

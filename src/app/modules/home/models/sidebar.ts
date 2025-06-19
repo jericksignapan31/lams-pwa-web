@@ -118,9 +118,19 @@ export const laboratoryPanelMenuModel = [
     label: 'Laboratory',
     icon: 'pi pi-flask',
     items: [
-      { label: 'Laboratories', icon: 'pi pi-building', items: [], routerLink: '/home/laboratories' },
+      {
+        label: 'Laboratories',
+        icon: 'pi pi-building',
+        items: [],
+        routerLink: '/home/laboratories',
+      },
       { label: 'Rooms', icon: 'pi pi-home', items: [] },
-      { label: 'Schedule', icon: 'pi pi-calendar', items: [] },
+      {
+        label: 'Schedule',
+        icon: 'pi pi-calendar',
+        items: [],
+        routerLink: '/home/schedules',
+      },
     ],
   },
 ];
