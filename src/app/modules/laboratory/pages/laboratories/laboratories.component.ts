@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ImportsModule } from '../../../../imports';
 import { AddLaboratoryComponent } from '../../components/add-laboratory/add-laboratory.component';
 import { EditLaboratoryComponent } from '../../components/edit-laboratory/edit-laboratory.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-laboratories',
@@ -68,7 +69,30 @@ export class LaboratoriesComponent {
   }
 
   onDelete(lab: any) {
-    alert('Delete: ' + lab.laboratory_name);
+    if (!lab?.laboratory_id) return;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This will permanently delete the laboratory.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.laboratoryService.deleteLaboratory(lab.laboratory_id).subscribe({
+          next: () => {
+            this.laboratories = this.laboratories.filter(
+              (l) => l.laboratory_id !== lab.laboratory_id
+            );
+            Swal.fire('Deleted!', 'The laboratory has been deleted.', 'success');
+          },
+          error: () => {
+            Swal.fire('Error', 'Failed to delete laboratory.', 'error');
+          },
+        });
+      }
+    });
   }
 
   get filteredLaboratories() {
