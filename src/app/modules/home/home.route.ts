@@ -29,6 +29,13 @@ export const homeRoute: Route[] = [
           (m) => m.EquipmentComponent
         ),
     },
+     {
+      path: 'laboratories',
+      loadComponent: () =>
+        import('../laboratory/pages/laboratories/laboratories.component').then(
+          (m) => m.LaboratoriesComponent
+        ),
+    },
   {
     path: '',
     redirectTo: 'dashboard',

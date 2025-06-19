@@ -57,30 +57,6 @@
             </ng-template>
           </li>
 
-          <!-- <li>
-            <a routerLink="/campus">
-              <i
-                class="pi pi-building"
-                pTooltip="Campuses"
-                [tooltipDisabled]="!sidebarCollapsed || isMobile"
-                tooltipPosition="right"
-              ></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Campuses</span>
-            </a>
-          </li> -->
-
-          <!-- <li>
-            <a routerLink="/department">
-              <i
-                class="pi pi-building-columns"
-                pTooltip="Department"
-                [tooltipDisabled]="!sidebarCollapsed || isMobile"
-                tooltipPosition="right"
-              ></i>
-              <span *ngIf="!sidebarCollapsed || isMobile">Department</span>
-            </a>
-          </li> -->
-
           <li>
             <ng-container
               *ngIf="!sidebarCollapsed || isMobile; else inventoryIconOnly"
@@ -121,6 +97,14 @@
               <span *ngIf="!sidebarCollapsed || isMobile">Maintenance</span>
             </a>
           </li> -->
+          <li *ngIf="user?.role === 'campus admin'">
+            <div class="card flex justify-center">
+              <p-panelmenu
+                [model]="laboratoryPanelMenuModel"
+                styleClass="w-full md:w-80"
+              />
+            </div>
+          </li>
         </ul>
       </div>
       <div class="sidebar-profile" [class.expanded]="profileExpanded">

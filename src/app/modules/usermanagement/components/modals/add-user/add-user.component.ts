@@ -15,7 +15,6 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../../services/user.service';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { log } from 'node:console';
 
 @Component({
   selector: 'app-add-user',
@@ -80,7 +79,7 @@ export class AddUserComponent implements OnInit {
     formData.append('role', 'Campus Admin');
     formData.append(
       'campus',
-      this.form.value.campus ? `/api/campuses/${this.form.value.campus}/` : ''
+      this.form.value.campus ? this.form.value.campus : ''
     );
     formData.append('contact_number', this.form.value.contact_number || '');
     if (this.form.value.profile_picture) {

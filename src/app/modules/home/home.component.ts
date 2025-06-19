@@ -13,7 +13,12 @@ import {
 import { AuthService } from '../../core/services/auth.service';
 import { ImportsModule } from '../../imports';
 import { UserService } from '../../modules/usermanagement/services/user.service';
-import { campuses as campusesData } from './models/data';
+import {
+  campuses as campusesData,
+  getPanelMenuItems,
+  dashboardMenuItems,
+  laboratoryPanelMenuModel,
+} from './models/sidebar';
 
 @Component({
   selector: 'app-home',
@@ -54,58 +59,26 @@ export class HomeComponent {
   isDarkMode = false;
   _auth = inject(AuthService);
   userService = inject(UserService);
-
   inventoryOpen = false;
+
   campuses = campusesData.map((campus) => ({
     ...campus,
     open: false,
     departments: campus.departments.map((dept) => ({ ...dept, open: false })),
   }));
 
-  panelMenuItems = [
-    {
-      label: 'Inventory',
-      icon: 'pi pi-warehouse',
-      items: this.campuses.map((campus) => ({
-        label: campus.name,
-        icon: 'pi pi-building',
-        items: campus.departments.map((dept) => ({
-          label: dept.name,
-          icon: 'pi pi-building-columns',
-          items: dept.rooms.map((room) => ({
-            label: room,
-            icon: 'pi pi-home',
-          })),
-        })),
-      })),
-    },
-  ];
+  panelMenuItems: any[] = [];
 
-  dashboardMenuItems = [
-    {
-      label: 'Dashboard',
-      icon: 'pi pi-objects-column',
-      items: [
-        {
-          label: 'Analytics',
-          icon: 'pi pi-chart-bar',
-          routerLink: '/home/dashboard',
-        },
-        {
-          label: 'Reports',
-          icon: 'pi pi-file',
-          routerLink: '/home/reports',
-        },
-      ],
-    },
-  ];
+  dashboardMenuItems = dashboardMenuItems;
+
+  laboratoryPanelMenuModel = laboratoryPanelMenuModel;
 
   @HostListener('window:resize', [])
   onResize() {
     if (typeof window !== 'undefined') {
       this.isMobile = window.innerWidth <= 768;
       if (!this.isMobile) {
-        this.sidebarCollapsed = false; // Reset collapse on desktop
+        this.sidebarCollapsed = false;
       }
     }
   }
@@ -136,6 +109,13 @@ export class HomeComponent {
 
     this.userService.getUser().subscribe((profile: any) => {
       this.user = profile;
+      // TEMP: fallback to balubal campus if campusName is missing for campus admin
+      let campusName = profile.campusName;
+      if (profile.role === 'campus admin' && !campusName) {
+        campusName = 'balubal campus';
+      }
+      console.log('User profile:', profile, 'campusName used:', campusName);
+      this.panelMenuItems = getPanelMenuItems(profile.role, campusName);
     });
   }
 
