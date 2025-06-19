@@ -9,20 +9,35 @@
         icon="pi pi-bars"
       ></button>
       <span class="logo">Laboratory Asset Management System</span>
-      <button
-        pButton
-        type="button"
-        icon="pi pi-moon"
-        class="p-button-text ml-2"
-        (click)="toggleDarkMode()"
-        aria-label="Toggle dark mode"
-      ></button>
     </div>
     <div class="navbar-right">
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      <i class="pi pi-spin pi-cog" style="font-size: 2rem"></i>
+      <i
+        class="pi pi-spin pi-cog"
+        style="font-size: 2rem; cursor: pointer"
+        (click)="drawerVisible = true"
+      ></i>
     </div>
   </nav>
+  <p-drawer
+    [(visible)]="drawerVisible"
+    position="right"
+    [modal]="true"
+    [dismissible]="true"
+    [showCloseIcon]="true"
+  >
+    <h3>Settings</h3>
+    <div class="toggle-darkmode-setting">
+      <button
+        pButton
+        type="button"
+        [label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        (click)="toggleDarkMode()"
+        [icon]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
+        class="p-button-text"
+      ></button>
+    </div>
+  </p-drawer>
   <div class="main-content">
     <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
       <div class="sidebar-nav">

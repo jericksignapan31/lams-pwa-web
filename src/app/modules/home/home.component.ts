@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu';
-
 import {
   trigger,
   state,
@@ -23,13 +22,7 @@ import {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ImportsModule,
-    RouterOutlet,
-    PanelMenuModule,
-  ],
+  imports: [CommonModule, RouterModule, ImportsModule, RouterOutlet],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -60,6 +53,7 @@ export class HomeComponent {
   _auth = inject(AuthService);
   userService = inject(UserService);
   inventoryOpen = false;
+  drawerVisible = false;
 
   campuses = campusesData.map((campus) => ({
     ...campus,
