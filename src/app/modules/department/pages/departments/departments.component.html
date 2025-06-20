@@ -78,5 +78,18 @@
       (created)="onDepartmentCreated($event)"
     ></app-add-department>
   </p-dialog>
+  <p-dialog
+    header="Edit Department"
+    [(visible)]="showEditModal"
+    [modal]="true"
+    [closable]="true"
+    (onHide)="onEditModalClose()"
+  >
+    <app-edit-department
+      [department]="selectedDepartment"
+      (close)="onEditModalClose()"
+      (updated)="onDepartmentUpdated($event)"
+    ></app-edit-department>
+  </p-dialog>
   <!-- Add/Edit dialogs can be implemented here -->
 </div>

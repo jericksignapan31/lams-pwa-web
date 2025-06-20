@@ -6,6 +6,8 @@ import { TableModule } from 'primeng/table';
 import { ImportsModule } from '../../../../imports';
 import { AddDepartmentComponent } from '../../components/add-department/add-department.component';
 import { DialogModule } from 'primeng/dialog';
+import { EditDepartmentComponent } from '../../components/edit-department/edit-department.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-departments',
@@ -17,7 +19,8 @@ import { DialogModule } from 'primeng/dialog';
     ImportsModule,
     AddDepartmentComponent,
     DialogModule,
-  ],
+    EditDepartmentComponent
+],
   templateUrl: './departments.component.html',
   styleUrl: './departments.component.scss',
 })
@@ -25,6 +28,8 @@ export class DepartmentsComponent implements OnInit {
   departments: any[] = [];
   searchTerm: string = '';
   showAddModal = false;
+  showEditModal = false;
+  selectedDepartment: any = null;
 
   constructor(private departmentService: DepartmentService) {}
 
@@ -54,11 +59,55 @@ export class DepartmentsComponent implements OnInit {
   }
 
   onEdit(dept: any) {
-    alert('Edit Department: ' + dept.department_name);
+    this.selectedDepartment = dept;
+    this.showEditModal = true;
+  }
+
+  onEditModalClose() {
+    this.showEditModal = false;
+    this.selectedDepartment = null;
+  }
+
+  onDepartmentUpdated(updatedDept: any) {
+    const idx = this.departments.findIndex(
+      (d) => d.department_id === updatedDept.department_id
+    );
+    if (idx > -1) {
+      this.departments[idx] = updatedDept;
+    }
+    this.showEditModal = false;
+    this.selectedDepartment = null;
   }
 
   onDelete(dept: any) {
-    alert('Delete Department: ' + dept.department_name);
+    if (!dept?.department_id) return;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This will permanently delete the department.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.departmentService.deleteDepartment(dept.department_id).subscribe({
+          next: () => {
+            this.departments = this.departments.filter(
+              (d) => d.department_id !== dept.department_id
+            );
+            Swal.fire(
+              'Deleted!',
+              'The department has been deleted.',
+              'success'
+            );
+          },
+          error: () => {
+            Swal.fire('Error', 'Failed to delete department.', 'error');
+          },
+        });
+      }
+    });
   }
 
   get filteredDepartments() {

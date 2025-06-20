@@ -1,0 +1,68 @@
+<form
+  [formGroup]="departmentForm"
+  (ngSubmit)="onSubmit()"
+  class="edit-department-form"
+>
+  <div class="p-fluid">
+    <div class="p-field p-grid">
+      <p-floatlabel variant="on" class="p-col-12">
+        <input
+          pInputText
+          id="department_name"
+          formControlName="department_name"
+          autocomplete="off"
+        />
+        <label for="department_name">Department Name</label>
+      </p-floatlabel>
+      <small
+        *ngIf="
+          departmentForm.get('department_name')?.invalid &&
+          departmentForm.get('department_name')?.touched
+        "
+        class="p-error"
+      >
+        Department name is required.
+      </small>
+    </div>
+    <div class="p-field p-grid">
+      <p-floatlabel variant="on" class="p-col-12">
+        <input
+          pInputText
+          id="department_head"
+          formControlName="department_head"
+          autocomplete="off"
+        />
+        <label for="department_head">Department Head</label>
+      </p-floatlabel>
+      <small
+        *ngIf="
+          departmentForm.get('department_head')?.invalid &&
+          departmentForm.get('department_head')?.touched
+        "
+        class="p-error"
+      >
+        Department head is required.
+      </small>
+    </div>
+    <div *ngIf="error" class="p-error" style="margin-bottom: 1rem">
+      {{ error }}
+    </div>
+    <div class="p-d-flex p-jc-end" style="margin-top: 1.5rem; gap: 1rem">
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        class="p-button-text p-button-secondary"
+        (click)="onClose()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Update Department"
+        icon="pi pi-check"
+        class="p-button-success"
+        [disabled]="departmentForm.invalid || loading"
+      ></button>
+    </div>
+  </div>
+</form>
