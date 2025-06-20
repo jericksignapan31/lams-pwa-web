@@ -125,7 +125,10 @@
           <li *ngIf="user?.role === 'super admin'">
             <ng-container *ngIf="!sidebarCollapsed || isMobile">
               <div class="card flex justify-center">
-                <p-panelmenu [model]="campusPanelMenu" styleClass="w-full md:w-80"></p-panelmenu>
+                <p-panelmenu
+                  [model]="campusPanelMenu"
+                  styleClass="w-full md:w-80"
+                ></p-panelmenu>
               </div>
             </ng-container>
           </li>

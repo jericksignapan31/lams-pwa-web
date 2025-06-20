@@ -19,8 +19,8 @@ import Swal from 'sweetalert2';
     ImportsModule,
     AddDepartmentComponent,
     DialogModule,
-    EditDepartmentComponent
-],
+    EditDepartmentComponent,
+  ],
   templateUrl: './departments.component.html',
   styleUrl: './departments.component.scss',
 })
