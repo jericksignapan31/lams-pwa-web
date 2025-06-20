@@ -1,0 +1,70 @@
+<div class="department-table-container">
+  <div
+    class="table-actions"
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    "
+  >
+    <input
+      pInputText
+      type="text"
+      placeholder="Search departments..."
+      [(ngModel)]="searchTerm"
+      class="search-bar"
+      style="flex: 1 1 auto; max-width: 300px"
+    />
+    <button
+      pButton
+      type="button"
+      label="Add Department"
+      icon="pi pi-plus"
+      (click)="onAddDepartment()"
+      style="margin-left: auto"
+    ></button>
+  </div>
+  <p-table
+    [value]="filteredDepartments"
+    [paginator]="true"
+    [rows]="10"
+    [responsiveLayout]="'scroll'"
+  >
+    <ng-template pTemplate="header">
+      <tr style="background-color: #f8f9fa">
+        <th>ID</th>
+        <th>Department Name</th>
+        <th>Department Head</th>
+        <th>Campus</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-dept>
+      <tr>
+        <td>{{ dept.department_id }}</td>
+        <td>{{ dept.department_name }}</td>
+        <td>{{ dept.department_head }}</td>
+        <td>{{ dept.campus }}</td>
+        <td>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            class="p-button-text p-button-sm"
+            (click)="onEdit(dept)"
+          ></button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-sm"
+            (click)="onDelete(dept)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <!-- Add/Edit dialogs can be implemented here -->
+</div>

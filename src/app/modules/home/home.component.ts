@@ -17,6 +17,8 @@ import {
   getPanelMenuItems,
   dashboardMenuItems,
   laboratoryPanelMenuModel,
+  campusPanelMenu,
+  schoolManagementPanelMenu,
 } from './models/sidebar';
 
 @Component({
@@ -64,6 +66,9 @@ export class HomeComponent {
   panelMenuItems: any[] = [];
   dashboardMenuItems = dashboardMenuItems;
   laboratoryPanelMenuModel = laboratoryPanelMenuModel;
+
+  campusPanelMenu = campusPanelMenu;
+  schoolManagementPanelMenu = schoolManagementPanelMenu;
 
   @HostListener('window:resize', [])
   onResize() {
@@ -137,5 +142,9 @@ export class HomeComponent {
   }
   toggleDepartment(dept: any) {
     dept.open = !dept.open;
+  }
+
+  get isSuperAdmin() {
+    return this.user?.role === 'super admin';
   }
 }

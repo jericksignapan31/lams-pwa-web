@@ -113,12 +113,14 @@
             </a>
           </li> -->
           <li *ngIf="user?.role === 'campus admin'">
-            <div class="card flex justify-center">
-              <p-panelmenu
-                [model]="laboratoryPanelMenuModel"
-                styleClass="w-full md:w-80"
-              />
-            </div>
+            <ng-container *ngIf="!sidebarCollapsed || isMobile">
+              <div class="card flex justify-center">
+                <p-panelmenu
+                  [model]="schoolManagementPanelMenu"
+                  styleClass="w-full md:w-80"
+                ></p-panelmenu>
+              </div>
+            </ng-container>
           </li>
         </ul>
       </div>

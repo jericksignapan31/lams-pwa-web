@@ -134,3 +134,38 @@ export const laboratoryPanelMenuModel = [
     ],
   },
 ];
+
+export const campusPanelMenu = [
+  {
+    label: 'Campus',
+    icon: 'pi pi-building',
+    items: [
+      {
+        label: 'Campuses',
+        icon: 'pi pi-building',
+        items: [],
+        routerLink: '/home/campuses',
+      },
+    ],
+  },
+];
+
+export const schoolManagementPanelMenu = [
+  {
+    label: 'School Management',
+    icon: 'pi pi-sitemap',
+    items: [
+      {
+        label: 'Departments',
+        icon: 'pi pi-building-columns',
+        items: [],
+        routerLink: '/home/departments',
+      },
+      {
+        label: 'Rooms',
+        icon: 'pi pi-home',
+        items: [],
+      },
+    ],
+  },
+];

@@ -44,6 +44,20 @@ export const homeRoute: Route[] = [
           (m) => m.SchedulesComponent
         ),
     },
+     {
+      path: 'campuses',
+      loadComponent: () =>
+        import('../campus/pages/campuses/campuses.component').then(
+          (m) => m.CampusesComponent
+        ),
+    },
+     {
+      path: 'departments',
+      loadComponent: () =>
+        import('../department/pages/departments/departments.component').then(
+          (m) => m.DepartmentsComponent
+        ),
+    },
   {
     path: '',
     redirectTo: 'dashboard',

@@ -1,5 +1,4 @@
 import { AlertService } from './../../../../../core/services/alert.service';
-import { CampusService } from './../../../../../core/services/campus.service';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
@@ -15,6 +14,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../../services/user.service';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { CampusService } from '../../../../campus/services/campus.service';
 
 @Component({
   selector: 'app-add-user',
