@@ -1,0 +1,31 @@
+/* Modern PrimeNG modal form styles */
+.add-department-form {
+  min-width: 320px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.p-field {
+  margin-bottom: 1.5rem;
+}
+.p-error {
+  color: #f44336;
+  font-size: 0.95em;
+}
+.p-success {
+  color: #388e3c;
+  font-size: 1em;
+  font-weight: 500;
+}
+.p-d-flex {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+button[pButton] {
+  min-width: 120px;
+  font-size: 1rem;
+}
+.p-fluid {
+  padding-bottom: 1rem;
+  background: #fff;
+}

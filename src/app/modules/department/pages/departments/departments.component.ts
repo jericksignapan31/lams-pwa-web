@@ -4,17 +4,27 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ImportsModule } from '../../../../imports';
+import { AddDepartmentComponent } from '../../components/add-department/add-department.component';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-departments',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ImportsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TableModule,
+    ImportsModule,
+    AddDepartmentComponent,
+    DialogModule,
+  ],
   templateUrl: './departments.component.html',
   styleUrl: './departments.component.scss',
 })
 export class DepartmentsComponent implements OnInit {
   departments: any[] = [];
   searchTerm: string = '';
+  showAddModal = false;
 
   constructor(private departmentService: DepartmentService) {}
 
@@ -31,17 +41,23 @@ export class DepartmentsComponent implements OnInit {
   }
 
   onAddDepartment() {
-    // Logic to open add department dialog/modal
-    alert('Add Department clicked!');
+    this.showAddModal = true;
+  }
+
+  onAddModalClose() {
+    this.showAddModal = false;
+  }
+
+  onDepartmentCreated(dept: any) {
+    this.departments.push(dept);
+    this.showAddModal = false;
   }
 
   onEdit(dept: any) {
-    // Logic to open edit department dialog/modal
     alert('Edit Department: ' + dept.department_name);
   }
 
   onDelete(dept: any) {
-    // Logic to delete department
     alert('Delete Department: ' + dept.department_name);
   }
 

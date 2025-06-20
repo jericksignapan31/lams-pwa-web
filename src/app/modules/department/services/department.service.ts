@@ -22,7 +22,13 @@ export class DepartmentService {
     return this.http.get(this.baseUrl, { headers, params });
   }
 
-  createDepartment(data: any): Observable<any> {
+  createDepartment(data: {
+    department_name: string;
+    department_head: string;
+  }): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
     const accessToken = localStorage.getItem('access_token');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
