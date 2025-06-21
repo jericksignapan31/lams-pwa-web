@@ -64,32 +64,16 @@
   <button class="toggle-btn" (click)="showTopDiv = true">Add Schdule</button>
 </div>
 <!-- Add your other content below -->
-<table class="schedule-table">
-  <thead>
-    <tr>
-      <th>Class Name</th>
-      <th>Faculty</th>
-      <th>Day of Week</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-      <th>Course Code</th>
-      <th>Course</th>
-      <th>Year</th>
-      <th>Section</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Example row, replace with *ngFor if you have data -->
-    <tr>
-      <td>Sample Class</td>
-      <td>Prof. Juan</td>
-      <td>Monday</td>
-      <td>08:00</td>
-      <td>10:00</td>
-      <td>CS101</td>
-      <td>Computer Science</td>
-      <td>1</td>
-      <td>A</td>
-    </tr>
-  </tbody>
-</table>
+<div class="schedule-container">
+  <div class="schedule-header">
+    <div class="time-label empty"></div>
+    <div class="day" *ngFor="let day of days">{{ day }}</div>
+  </div>
+
+  <div class="schedule-grid">
+    <div class="time-row" *ngFor="let time of timeSlots">
+      <div class="time-label">{{ time }}</div>
+      <div class="cell" *ngFor="let day of days"></div>
+    </div>
+  </div>
+</div>
