@@ -168,3 +168,30 @@
     }
   }
 }
+
+.schedule-cell-card {
+  background: #e3f2fd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem 0.75rem;
+  margin: 2px 0;
+  font-size: 0.95rem;
+  min-width: 120px;
+  z-index: 4; /* Ensure card is always on top */
+  position: relative;
+}
+
+.card-header {
+  font-weight: bold;
+  color: #388e3c;
+  margin-bottom: 0.2rem;
+}
+
+.card-body {
+  font-size: 0.95rem;
+}
+
+.cell {
+  position: relative;
+  z-index: 1;
+}

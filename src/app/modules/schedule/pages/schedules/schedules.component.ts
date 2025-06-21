@@ -10,10 +10,12 @@ import { ImportsModule } from '../../../../imports';
 import { Select } from 'primeng/select';
 import { DropdownModule } from 'primeng/dropdown';
 import { AlertService } from '../../../../core/services/alert.service';
+import { To24HourPipe } from '../../pipes/to24-hour.pipe';
 
 @Component({
   selector: 'app-schedules',
   imports: [CommonModule, FormsModule, ImportsModule, DropdownModule],
+  providers: [To24HourPipe],
   templateUrl: './schedules.component.html',
   styleUrl: './schedules.component.scss',
 })
@@ -35,12 +37,14 @@ export class SchedulesComponent implements OnInit {
     year: null,
     section: '',
   };
+  schedules: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private laboratoryService: LaboratoryService,
     private scheduleService: ScheduleService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private to24Hour: To24HourPipe
   ) {}
 
   timeSlots = timeSlots;
@@ -54,7 +58,6 @@ export class SchedulesComponent implements OnInit {
           next: (lab) => {
             console.log('API response for laboratory:', lab);
             this.laboratoryName = lab?.laboratory_name || '';
-            console.log('laboratoryName:', this.laboratoryName);
           },
           error: (err) => {
             console.error('Failed to fetch laboratory:', err);
@@ -69,14 +72,13 @@ export class SchedulesComponent implements OnInit {
               ':',
               schedules
             );
+            this.schedules = schedules;
           },
           error: (err) => {
             console.error('Failed to fetch class schedules:', err);
           },
         });
       }
-      console.log('laboratoryId:', this.laboratoryId);
-      console.log('roomName:', this.roomName);
     });
   }
 
@@ -105,5 +107,31 @@ export class SchedulesComponent implements OnInit {
           this.alertService.handleError('Failed to create schedule!');
         },
       });
+  }
+
+  getSchedulesForCell(day: string, time: string) {
+    const gridDay = day.toLowerCase();
+    const gridTime = this.to24Hour.transform(time).slice(0, 5); // 'HH:mm'
+    return this.schedules.filter((s) => {
+      const schedDay = (s.day_of_week || '').toLowerCase();
+      const schedTime = (s.start_time || '').slice(0, 5); // 'HH:mm'
+      return schedDay === gridDay && schedTime === gridTime;
+    });
+  }
+
+  getSchedulesForDay(day: string) {
+    const gridDay = day.toLowerCase();
+    return this.schedules.filter(
+      (s) => (s.day_of_week || '').toLowerCase() === gridDay
+    );
+  }
+
+  getUnmatchedSchedules() {
+    return this.schedules.filter(
+      (s) =>
+        !this.timeSlots.some((t) =>
+          this.getSchedulesForCell(s.day_of_week, t).includes(s)
+        )
+    );
   }
 }

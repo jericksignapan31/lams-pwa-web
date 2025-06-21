@@ -127,17 +127,55 @@
 <div *ngIf="!showTopDiv" class="show-btn-row">
   <button class="toggle-btn" (click)="showTopDiv = true">Add Schdule</button>
 </div>
+
 <!-- Add your other content below -->
 <div class="schedule-container">
   <div class="schedule-header">
     <div class="time-label empty"></div>
-    <div class="day" *ngFor="let day of days">{{ day }}</div>
+    <div class="day" *ngFor="let day of days">{{ day | titlecase }}</div>
   </div>
-
   <div class="schedule-grid">
     <div class="time-row" *ngFor="let time of timeSlots">
       <div class="time-label">{{ time }}</div>
-      <div class="cell" *ngFor="let day of days"></div>
+      <div class="cell" *ngFor="let day of days">
+        <ng-container *ngFor="let sched of getSchedulesForCell(day, time)">
+          <div class="schedule-cell-card">
+            <div class="card-header">
+              <span class="time">{{ sched.time_display }}</span>
+            </div>
+            <div class="card-body">
+              <div>
+                <strong>{{ sched.class_name }}</strong>
+              </div>
+              <div>{{ sched.faculty_name }}</div>
+              <div>{{ sched.course_code }} - {{ sched.course }}</div>
+              <div>Section: {{ sched.section }}</div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- List schedules that do not fit any slot -->
+<div class="unmatched-schedules" *ngIf="getUnmatchedSchedules().length">
+  <h3>Other Schedules (Not in Grid)</h3>
+  <div *ngFor="let sched of getUnmatchedSchedules()">
+    <div class="schedule-cell-card">
+      <div class="card-header">
+        <span class="time">{{ sched.time_display }}</span>
+      </div>
+      <div class="card-body">
+        <div>
+          <strong>{{ sched.class_name }}</strong>
+        </div>
+        <div>{{ sched.faculty_name }}</div>
+        <div>{{ sched.course_code }} - {{ sched.course }}</div>
+        <div>Section: {{ sched.section }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
