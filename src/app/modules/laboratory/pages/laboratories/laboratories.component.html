@@ -51,8 +51,18 @@
           <button
             pButton
             type="button"
+            icon="pi pi-eye"
+            class="p-button-text p-button-sm"
+            pTooltip="View Schedule"
+            tooltipPosition="top"
+          ></button>
+          <button
+            pButton
+            type="button"
             icon="pi pi-pencil"
             class="p-button-text p-button-sm"
+            pTooltip="Edit"
+            tooltipPosition="top"
             (click)="onEdit(lab)"
           ></button>
           <button
@@ -60,6 +70,8 @@
             type="button"
             icon="pi pi-trash"
             class="p-button-text p-button-sm"
+            pTooltip="Delete"
+            tooltipPosition="top"
             (click)="onDelete(lab)"
           ></button>
         </td>
