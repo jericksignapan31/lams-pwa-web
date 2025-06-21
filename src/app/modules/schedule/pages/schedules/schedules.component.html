@@ -1,0 +1,66 @@
+<div *ngIf="showTopDiv" class="top-row">
+  <form (ngSubmit)="onSubmit()" #scheduleForm="ngForm" class="schedule-form">
+    <input
+      type="text"
+      name="class_name"
+      [(ngModel)]="form.class_name"
+      placeholder="Class Name"
+      required
+    />
+    <input
+      type="text"
+      name="faculty"
+      [(ngModel)]="form.faculty"
+      placeholder="Faculty"
+    />
+    <input
+      type="text"
+      name="day_of_week"
+      [(ngModel)]="form.day_of_week"
+      placeholder="Day of Week"
+    />
+    <input
+      type="time"
+      name="start_time"
+      [(ngModel)]="form.start_time"
+      placeholder="Start Time"
+    />
+    <input
+      type="time"
+      name="end_time"
+      [(ngModel)]="form.end_time"
+      placeholder="End Time"
+    />
+    <input
+      type="text"
+      name="course_code"
+      [(ngModel)]="form.course_code"
+      placeholder="Course Code"
+    />
+    <input
+      type="text"
+      name="course"
+      [(ngModel)]="form.course"
+      placeholder="Course"
+    />
+    <input
+      type="number"
+      name="year"
+      [(ngModel)]="form.year"
+      placeholder="Year"
+      min="1"
+    />
+    <input
+      type="text"
+      name="section"
+      [(ngModel)]="form.section"
+      placeholder="Section"
+    />
+    <button type="submit" class="submit-btn">Submit</button>
+  </form>
+  <button class="toggle-btn" (click)="showTopDiv = false">cancel</button>
+</div>
+<div *ngIf="!showTopDiv" class="show-btn-row">
+  <button class="toggle-btn" (click)="showTopDiv = true">Add Schdule</button>
+</div>
+<!-- Add your other content below -->
