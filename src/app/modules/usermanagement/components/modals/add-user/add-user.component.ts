@@ -60,7 +60,7 @@ export class AddUserComponent implements OnInit {
   ngOnInit(): void {
     this.campusService.getCampuses().subscribe((data: any) => {
       this.campuses = data;
-      console.log('🔗 Campuses loaded:', this.campuses);
+      // console.log('🔗 Campuses loaded:', this.campuses);
     });
   }
 

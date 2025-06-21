@@ -65,33 +65,39 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
         })),
       },
     ];
-  } else if (role === 'campus admin' && assignedCampus) {
-    // Make the comparison case-insensitive and trimmed
-    const campus = campuses.find(
-      (c) => c.name.trim().toLowerCase() === assignedCampus.trim().toLowerCase()
-    );
-    if (!campus) {
-      console.warn('No campus found for assignedCampus:', assignedCampus);
+  } else if (role === 'campus admin') {
+    let inventoryMenu = {
+      label: 'Inventory',
+      icon: 'pi pi-warehouse',
+      items: [] as any[],
+    };
+    if (assignedCampus) {
+      const campus = campuses.find(
+        (c) =>
+          c.name.trim().toLowerCase() === assignedCampus.trim().toLowerCase()
+      );
+      if (campus) {
+        inventoryMenu.items = campus.departments.map((dept) => ({
+          label: dept.name,
+          icon: 'pi pi-building-columns',
+          items: dept.rooms.map((room) => ({
+            label: room,
+            icon: 'pi pi-home',
+            items: [],
+          })),
+        }));
+      } else {
+        inventoryMenu.items = [
+          { label: 'No departments found', icon: '', items: [] },
+        ];
+      }
+    } else {
+      inventoryMenu.items = [
+        { label: 'No campus assigned', icon: '', items: [] },
+      ];
     }
-    return [
-      {
-        label: 'Inventory',
-        icon: 'pi pi-warehouse',
-        items: campus
-          ? campus.departments.map((dept) => ({
-              label: dept.name,
-              icon: 'pi pi-building-columns',
-              items: dept.rooms.map((room) => ({
-                label: room,
-                icon: 'pi pi-home',
-                items: [],
-              })),
-            }))
-          : [{ label: 'No departments found', icon: '', items: [] }],
-      },
-    ];
+    return [inventoryMenu, ...laboratoryPanelMenuModel];
   }
-  // Add logic for Faculty and Laboratory Technician as needed
   return [];
 }
 
@@ -125,12 +131,10 @@ export const laboratoryPanelMenuModel = [
         items: [],
         routerLink: '/home/laboratories',
       },
-      { label: 'Rooms', icon: 'pi pi-home', items: [] },
       {
         label: 'Schedule',
         icon: 'pi pi-calendar',
-        items: [],
-        routerLink: '/home/schedules',
+        items: [], 
       },
     ],
   },

@@ -12,6 +12,7 @@ import {
 import { AuthService } from '../../core/services/auth.service';
 import { ImportsModule } from '../../imports';
 import { UserService } from '../../modules/usermanagement/services/user.service';
+import { LaboratoryService } from '../laboratory/services/laboratory.service';
 import {
   campuses as campusesData,
   getPanelMenuItems,
@@ -53,7 +54,6 @@ export class HomeComponent {
   user: any;
   isDarkMode = false;
   _auth = inject(AuthService);
-  userService = inject(UserService);
   inventoryOpen = false;
   drawerVisible = false;
 
@@ -69,6 +69,12 @@ export class HomeComponent {
 
   campusPanelMenu = campusPanelMenu;
   schoolManagementPanelMenu = schoolManagementPanelMenu;
+
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private laboratoryService: LaboratoryService
+  ) {}
 
   @HostListener('window:resize', [])
   onResize() {
@@ -111,8 +117,42 @@ export class HomeComponent {
       if (profile.role === 'campus admin' && !campusName) {
         campusName = 'balubal campus';
       }
-      console.log('User profile:', profile, 'campusName used:', campusName);
+      // console.log('User profile:', profile, 'campusName used:', campusName);
       this.panelMenuItems = getPanelMenuItems(profile.role, campusName);
+      // Dynamically populate Schedule submenu in laboratoryPanelMenuModel
+      this.laboratoryService.getLaboratories().subscribe((labs: any[]) => {
+        // Find the 'Schedule' menu
+        const labMenu = this.panelMenuItems.find(
+          (item: any) => item.label === 'Laboratory'
+        );
+        if (labMenu) {
+          const scheduleMenu = labMenu.items.find(
+            (item: any) => item.label === 'Schedule'
+          );
+          if (scheduleMenu) {
+            // Group labs by laboratory_name, collecting all room_no for each
+            const grouped: { [labName: string]: string[] } = {};
+            labs.forEach((lab) => {
+              if (!grouped[lab.laboratory_name]) {
+                grouped[lab.laboratory_name] = [];
+              }
+              grouped[lab.laboratory_name].push(lab.room_no);
+            });
+            // Build submenu: each laboratory with its rooms
+            scheduleMenu.items = Object.entries(grouped).map(
+              ([labName, rooms]) => ({
+                label: labName,
+                icon: 'pi pi-calendar',
+                items: rooms.map((room) => ({
+                  label: room,
+                  icon: 'pi pi-home',
+                  items: [],
+                })),
+              })
+            );
+          }
+        }
+      });
     });
   }
 

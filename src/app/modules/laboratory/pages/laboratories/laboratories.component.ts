@@ -29,7 +29,7 @@ export class LaboratoriesComponent {
 
   constructor(private laboratoryService: LaboratoryService) {
     this.laboratoryService.getLaboratories().subscribe((data) => {
-      console.log('Laboratories:', data);
+      // console.log('Laboratories:', data);
       this.laboratories = data;
     });
   }

@@ -137,7 +137,7 @@ export class LoginComponent {
           localStorage.setItem('access_token', response.access);
           this.userService.getUser().subscribe({
             next: (userProfile: any) => {
-              console.log('🔗 User profile from /api/profile/:', userProfile);
+              // console.log('🔗 User profile from /api/profile/:', userProfile);
               this.user = userProfile;
             },
             error: (err: any) => {

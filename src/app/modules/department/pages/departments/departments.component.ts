@@ -37,7 +37,7 @@ export class DepartmentsComponent implements OnInit {
     this.departmentService.getDepartments().subscribe({
       next: (data) => {
         this.departments = data;
-        console.log('Departments:', data);
+        // console.log('Departments:', data);
       },
       error: (err) => {
         console.error('Failed to fetch departments:', err);

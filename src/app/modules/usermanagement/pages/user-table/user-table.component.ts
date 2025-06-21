@@ -34,7 +34,7 @@ export class UserTableComponent {
   constructor(private userService: UserService) {
     this.userService.getAllUsers().subscribe({
       next: (userProfile: any) => {
-        console.log('🔗 User profile from /api/users/:', userProfile);
+        // console.log('🔗 User profile from /api/users/:', userProfile);
         this.users = userProfile;
       },
       error: (err: any) => {
