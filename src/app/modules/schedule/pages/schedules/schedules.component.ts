@@ -9,6 +9,7 @@ import { ScheduleService } from '../../services/schedule.service';
 import { ImportsModule } from '../../../../imports';
 import { Select } from 'primeng/select';
 import { DropdownModule } from 'primeng/dropdown';
+import { AlertService } from '../../../../core/services/alert.service';
 
 @Component({
   selector: 'app-schedules',
@@ -38,7 +39,8 @@ export class SchedulesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private laboratoryService: LaboratoryService,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
+    private alertService: AlertService
   ) {}
 
   timeSlots = timeSlots;
@@ -79,6 +81,29 @@ export class SchedulesComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('Form submitted:', this.form);
+    if (!this.laboratoryId) {
+      this.alertService.handleError('No laboratoryId found!');
+      return;
+    }
+    const dayValue =
+      (this.form.day_of_week && (this.form.day_of_week as any).value) ||
+      this.form.day_of_week;
+    const data = {
+      ...this.form,
+      day_of_week: dayValue,
+    };
+    console.log('Submitting schedule:', data);
+    this.scheduleService
+      .createClassSchedule(this.laboratoryId, data)
+      .subscribe({
+        next: (response) => {
+          console.log('Schedule created successfully:', response);
+          this.alertService.handleSuccess('Schedule created successfully!');
+        },
+        error: (err) => {
+          console.error('Failed to create schedule:', err);
+          this.alertService.handleError('Failed to create schedule!');
+        },
+      });
   }
 }
