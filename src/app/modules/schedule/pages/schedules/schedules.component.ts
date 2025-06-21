@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AddScheduleComponent } from '../../components/add-schedule/add-schedule.component';
 
 @Component({
   selector: 'app-schedules',
-  imports: [CommonModule],
+  imports: [CommonModule, AddScheduleComponent],
   templateUrl: './schedules.component.html',
   styleUrl: './schedules.component.scss',
+  providers: [AddScheduleComponent],
 })
 export class SchedulesComponent implements OnInit {
   laboratoryName: string = '';

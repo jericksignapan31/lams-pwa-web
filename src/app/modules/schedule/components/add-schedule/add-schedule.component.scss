@@ -1,0 +1,26 @@
+.add-schedule-container {
+  margin: 0;
+  padding: 0;
+
+  .schedule-forms {
+    width: 100%;
+    height: 30vh;
+    background-color: aqua;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-30px) scaleY(0.95);
+    transition: opacity 0.3s, transform 0.3s;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scaleY(1);
+    }
+
+    &.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-30px) scaleY(0.95);
+    }
+  }
+}
