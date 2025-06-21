@@ -70,3 +70,51 @@
   background: #1976d2;
   color: #fff;
 }
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-size: 0.98rem;
+}
+.schedule-table th,
+.schedule-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+.schedule-table th {
+  background: #1976d2;
+  color: #fff;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.schedule-table tr:nth-child(even) td {
+  background: #f5f7fa;
+}
+.schedule-table tr:hover td {
+  background: #e3f0fd;
+}
+.schedule-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 900px) {
+  .schedule-table th,
+  .schedule-table td {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.92rem;
+  }
+  .schedule-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-right: 0;
+  }
+}

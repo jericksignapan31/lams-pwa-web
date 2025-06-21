@@ -130,24 +130,29 @@ export class HomeComponent {
             (item: any) => item.label === 'Schedule'
           );
           if (scheduleMenu) {
-            // Group labs by laboratory_name, collecting all room_no for each
-            const grouped: { [labName: string]: string[] } = {};
+            // Group labs by laboratory_id and laboratory_name
+            const grouped: {
+              [labId: string]: { laboratory_name: string; rooms: string[] };
+            } = {};
             labs.forEach((lab) => {
-              if (!grouped[lab.laboratory_name]) {
-                grouped[lab.laboratory_name] = [];
+              if (!grouped[lab.laboratory_id]) {
+                grouped[lab.laboratory_id] = {
+                  laboratory_name: lab.laboratory_name,
+                  rooms: [],
+                };
               }
-              grouped[lab.laboratory_name].push(lab.room_no);
+              grouped[lab.laboratory_id].rooms.push(lab.room_no);
             });
-            // Build submenu: each laboratory with its rooms
+            // Build submenu: each laboratory with its rooms, including laboratory_id in routerLink
             scheduleMenu.items = Object.entries(grouped).map(
-              ([labName, rooms]) => ({
-                label: labName,
+              ([labId, { laboratory_name, rooms }]) => ({
+                label: laboratory_name,
                 icon: 'pi pi-calendar',
                 items: rooms.map((room) => ({
                   label: room,
                   icon: 'pi pi-home',
                   items: [],
-                  routerLink: ['/home/schedules', labName, room], // Add routerLink for routing
+                  routerLink: ['/home/schedules', labId, room], // Now using laboratory_id
                 })),
               })
             );
