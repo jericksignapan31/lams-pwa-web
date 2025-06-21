@@ -128,7 +128,25 @@
   <button class="toggle-btn" (click)="showTopDiv = true">Add Schdule</button>
 </div>
 
-<!-- Add your other content below -->
+<div class="unmatched-schedules" *ngIf="getUnmatchedSchedules().length">
+  <h3>Other Schedules (Not in Grid)</h3>
+  <div *ngFor="let sched of getUnmatchedSchedules()">
+    <div class="schedule-cell-card">
+      <div class="card-header">
+        <span class="time">{{ sched.time_display }}</span>
+      </div>
+      <div class="card-body">
+        <div>
+          <strong>{{ sched.class_name }}</strong>
+        </div>
+        <div>{{ sched.faculty_name }}</div>
+        <div>{{ sched.course_code }} - {{ sched.course }}</div>
+        <div>Section: {{ sched.section }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="schedule-container">
   <div class="schedule-header">
     <div class="time-label empty"></div>
@@ -157,25 +175,3 @@
     </div>
   </div>
 </div>
-
-<!-- List schedules that do not fit any slot -->
-<div class="unmatched-schedules" *ngIf="getUnmatchedSchedules().length">
-  <h3>Other Schedules (Not in Grid)</h3>
-  <div *ngFor="let sched of getUnmatchedSchedules()">
-    <div class="schedule-cell-card">
-      <div class="card-header">
-        <span class="time">{{ sched.time_display }}</span>
-      </div>
-      <div class="card-body">
-        <div>
-          <strong>{{ sched.class_name }}</strong>
-        </div>
-        <div>{{ sched.faculty_name }}</div>
-        <div>{{ sched.course_code }} - {{ sched.course }}</div>
-        <div>Section: {{ sched.section }}</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-

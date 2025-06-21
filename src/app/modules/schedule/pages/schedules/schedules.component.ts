@@ -94,13 +94,12 @@ export class SchedulesComponent implements OnInit {
       ...this.form,
       day_of_week: dayValue,
     };
-    console.log('Submitting schedule:', data);
     this.scheduleService
       .createClassSchedule(this.laboratoryId, data)
       .subscribe({
         next: (response) => {
-          console.log('Schedule created successfully:', response);
           this.alertService.handleSuccess('Schedule created successfully!');
+          window.location.reload();
         },
         error: (err) => {
           console.error('Failed to create schedule:', err);
