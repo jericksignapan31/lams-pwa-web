@@ -22,62 +22,104 @@
 
 <div *ngIf="showTopDiv" class="top-row">
   <form (ngSubmit)="onSubmit()" #scheduleForm="ngForm" class="schedule-form">
-    <input
-      type="text"
-      name="class_name"
-      [(ngModel)]="form.class_name"
-      placeholder="Class Name"
-      required
-    />
-    <input
-      type="text"
-      name="faculty"
-      [(ngModel)]="form.faculty"
-      placeholder="Faculty"
-    />
-    <input
-      type="text"
-      name="day_of_week"
-      [(ngModel)]="form.day_of_week"
-      placeholder="Day of Week"
-    />
-    <input
-      type="time"
-      name="start_time"
-      [(ngModel)]="form.start_time"
-      placeholder="Start Time"
-    />
-    <input
-      type="time"
-      name="end_time"
-      [(ngModel)]="form.end_time"
-      placeholder="End Time"
-    />
-    <input
-      type="text"
-      name="course_code"
-      [(ngModel)]="form.course_code"
-      placeholder="Course Code"
-    />
-    <input
-      type="text"
-      name="course"
-      [(ngModel)]="form.course"
-      placeholder="Course"
-    />
-    <input
-      type="number"
-      name="year"
-      [(ngModel)]="form.year"
-      placeholder="Year"
-      min="1"
-    />
-    <input
-      type="text"
-      name="section"
-      [(ngModel)]="form.section"
-      placeholder="Section"
-    />
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        id="class_name"
+        name="class_name"
+        [(ngModel)]="form.class_name"
+        autocomplete="off"
+        required
+      />
+      <label for="class_name">Class Name</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        id="faculty"
+        name="faculty"
+        [(ngModel)]="form.faculty"
+        autocomplete="off"
+      />
+      <label for="faculty">Faculty</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <p-dropdown
+        [options]="daysOptions"
+        [(ngModel)]="form.day_of_week"
+        name="day_of_week"
+        optionLabel="name"
+        placeholder="Day of week"
+        class="w-full"
+        inputId="day_of_week"
+        required
+      ></p-dropdown>
+      <label for="day_of_week">Day of Week</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        type="time"
+        id="start_time"
+        name="start_time"
+        [(ngModel)]="form.start_time"
+        autocomplete="off"
+      />
+      <label for="start_time">Start Time</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        type="time"
+        id="end_time"
+        name="end_time"
+        [(ngModel)]="form.end_time"
+        autocomplete="off"
+      />
+      <label for="end_time">End Time</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        id="course_code"
+        name="course_code"
+        [(ngModel)]="form.course_code"
+        autocomplete="off"
+      />
+      <label for="course_code">Course Code</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        id="course"
+        name="course"
+        [(ngModel)]="form.course"
+        autocomplete="off"
+      />
+      <label for="course">Course</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        type="number"
+        id="year"
+        name="year"
+        [(ngModel)]="form.year"
+        min="1"
+        autocomplete="off"
+      />
+      <label for="year">Year</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input
+        pInputText
+        id="section"
+        name="section"
+        [(ngModel)]="form.section"
+        autocomplete="off"
+      />
+      <label for="section">Section</label>
+    </p-floatlabel>
     <button type="submit" class="submit-btn">Submit</button>
   </form>
   <button class="toggle-btn" (click)="showTopDiv = false">cancel</button>

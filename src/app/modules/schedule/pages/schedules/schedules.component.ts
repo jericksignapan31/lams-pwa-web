@@ -6,13 +6,15 @@ import { AddScheduleComponent } from '../../components/add-schedule/add-schedule
 import { timeSlots, days } from '../../model/schedule';
 import { LaboratoryService } from '../../../laboratory/services/laboratory.service';
 import { ScheduleService } from '../../services/schedule.service';
+import { ImportsModule } from '../../../../imports';
+import { Select } from 'primeng/select';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-schedules',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ImportsModule, DropdownModule],
   templateUrl: './schedules.component.html',
   styleUrl: './schedules.component.scss',
-  providers: [AddScheduleComponent],
 })
 export class SchedulesComponent implements OnInit {
   laboratoryId: string = '';
@@ -20,6 +22,7 @@ export class SchedulesComponent implements OnInit {
   roomName: string = '';
   showTopDiv = false;
   days = days;
+  daysOptions = days.map((day) => ({ name: day, value: day }));
   form = {
     class_name: '',
     faculty: null,
