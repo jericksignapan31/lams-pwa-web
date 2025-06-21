@@ -7,6 +7,7 @@ import { ImportsModule } from '../../../../imports';
 import { AddLaboratoryComponent } from '../../components/add-laboratory/add-laboratory.component';
 import { EditLaboratoryComponent } from '../../components/edit-laboratory/edit-laboratory.component';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-laboratories',
@@ -27,7 +28,10 @@ export class LaboratoriesComponent {
   showEditModal = false;
   selectedLaboratory: any = null;
 
-  constructor(private laboratoryService: LaboratoryService) {
+  constructor(
+    private laboratoryService: LaboratoryService,
+    private router: Router
+  ) {
     this.laboratoryService.getLaboratories().subscribe((data) => {
       // console.log('Laboratories:', data);
       this.laboratories = data;
@@ -85,7 +89,11 @@ export class LaboratoriesComponent {
             this.laboratories = this.laboratories.filter(
               (l) => l.laboratory_id !== lab.laboratory_id
             );
-            Swal.fire('Deleted!', 'The laboratory has been deleted.', 'success');
+            Swal.fire(
+              'Deleted!',
+              'The laboratory has been deleted.',
+              'success'
+            );
           },
           error: () => {
             Swal.fire('Error', 'Failed to delete laboratory.', 'error');
@@ -93,6 +101,15 @@ export class LaboratoriesComponent {
         });
       }
     });
+  }
+
+  onView(lab: any) {
+    // Navigate to the SchedulesComponent for this laboratory and room
+    const labName = encodeURIComponent(lab.laboratory_name);
+    const roomNo = encodeURIComponent(lab.room_no);
+    if (labName && roomNo) {
+      this.router.navigate(['home', 'schedules', labName, roomNo]);
+    }
   }
 
   get filteredLaboratories() {
