@@ -1,3 +1,25 @@
+<div class="schedule-header">
+  <p class="country">Republic of the Philippines</p>
+
+  <div class="university">
+    <h1>University of Science and Technology of Southern Philippines</h1>
+  </div>
+
+  <p class="campuses">
+    Alubijid | Cagayan de Oro | Claveria | Jasaan | Oroquieta | Panaon |
+    Villanueva
+  </p>
+
+  <h2>CLASS ROOM SCHEDULE</h2>
+
+  <p class="term">
+    Academic Year & Term : <strong>2025-2026 - 1nd Semester</strong><br />
+    <strong>{{ laboratoryName }}</strong>
+
+    Room Name : <strong>{{ roomName }}</strong>
+  </p>
+</div>
+
 <div *ngIf="showTopDiv" class="top-row">
   <form (ngSubmit)="onSubmit()" #scheduleForm="ngForm" class="schedule-form">
     <input

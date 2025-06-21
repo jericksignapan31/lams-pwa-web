@@ -36,9 +36,8 @@ export const homeRoute: Route[] = [
         (m) => m.LaboratoriesComponent
       ),
   },
-
   {
-    path: 'schedules/:laboratoryName/:roomName',
+    path: 'schedules/:laboratoryId/:roomName',
     loadComponent: () =>
       import('../schedule/pages/schedules/schedules.component').then(
         (m) => m.SchedulesComponent

@@ -7,6 +7,7 @@
   justify-content: flex-end;
   padding: 1rem;
   box-sizing: border-box;
+  margin-bottom: 2rem;
 }
 
 .toggle-btn {
@@ -117,6 +118,53 @@
           background-color: #f0f8ff;
         }
       }
+    }
+  }
+}
+
+.schedule-header {
+  text-align: center;
+  font-family: "Georgia", serif;
+  padding: 20px;
+
+  .country {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .university {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .logo {
+      width: 80px;
+      margin-bottom: 5px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: bold;
+      margin: 0;
+    }
+  }
+
+  .campuses {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0 5px;
+  }
+
+  .term {
+    font-size: 15px;
+    strong {
+      font-weight: bold;
     }
   }
 }
