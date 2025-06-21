@@ -147,6 +147,7 @@ export class HomeComponent {
                   label: room,
                   icon: 'pi pi-home',
                   items: [],
+                  routerLink: ['/home/schedules', labName, room], // Add routerLink for routing
                 })),
               })
             );

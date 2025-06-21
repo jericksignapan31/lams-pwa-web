@@ -134,7 +134,7 @@ export const laboratoryPanelMenuModel = [
       {
         label: 'Schedule',
         icon: 'pi pi-calendar',
-        items: [], 
+        items: [],
       },
     ],
   },
@@ -169,6 +169,7 @@ export const schoolManagementPanelMenu = [
       {
         label: 'Rooms',
         icon: 'pi pi-home',
+        routerLink: '/home/schedules',
         items: [],
       },
     ],

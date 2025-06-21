@@ -5,7 +5,6 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
-import { UserModel } from '../../models/user.interface';
 import { AddUserComponent } from '../../components/modals/add-user/add-user.component';
 import { DialogModule } from 'primeng/dialog';
 import Swal from 'sweetalert2';
