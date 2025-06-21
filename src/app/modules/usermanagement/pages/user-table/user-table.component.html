@@ -66,11 +66,7 @@
           <td>
             <div class="p-d-flex p-ai-center">
               <p-avatar
-                [image]="
-                  user.profile_picture
-                    ? user.profile_picture.replace('/media/', '')
-                    : 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
-                "
+                [image]="user.profile_picture"
                 size="large"
                 shape="circle"
                 [style]="{ 'margin-right': '0.5rem' }"
@@ -88,7 +84,7 @@
               class="p-tag"
               [ngClass]="user.is_active ? 'p-tag-success' : 'p-tag-danger'"
             >
-              {{ user.is_active ? 'Active' : 'Inactive' }}
+              {{ user.is_active ? "Active" : "Inactive" }}
             </span>
           </td>
           <td>
@@ -106,7 +102,6 @@
               pButton
               icon="pi pi-trash"
               class="p-button-rounded p-button-text p-button-danger"
-
               (click)="deleteUser(user)"
             ></button>
           </td>

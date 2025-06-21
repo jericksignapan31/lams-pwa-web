@@ -30,7 +30,7 @@ export class UserService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
-    return this.http.get(`${this.baseUrl}/profile/`, { headers });
+    return this.http.get(`${this.baseUrl}/users/profile/`, { headers });
   }
 
   createAccount(data: any) {

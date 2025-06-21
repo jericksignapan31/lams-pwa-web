@@ -58,6 +58,7 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
             items: dept.rooms.map((room) => ({
               label: room,
               icon: 'pi pi-home',
+              routerLink: '/home/equipments',
               items: [],
             })),
           })),
