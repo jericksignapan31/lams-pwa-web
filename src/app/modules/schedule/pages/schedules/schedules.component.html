@@ -125,7 +125,34 @@
   <button class="toggle-btn" (click)="showTopDiv = false">cancel</button>
 </div>
 <div *ngIf="!showTopDiv" class="show-btn-row">
-  <button class="toggle-btn" (click)="showTopDiv = true">Add Schdule</button>
+  <button class="toggle-btn" (click)="showTopDiv = true">Add Schedule</button>
+</div>
+
+<!-- Year Level Legend -->
+<div class="legend-container">
+  <h4>Year Level Color Guide</h4>
+  <div class="legend-items">
+    <div class="legend-item year-1">
+      <span class="legend-color"></span>
+      <span class="legend-text">1st Year</span>
+    </div>
+    <div class="legend-item year-2">
+      <span class="legend-color"></span>
+      <span class="legend-text">2nd Year</span>
+    </div>
+    <div class="legend-item year-3">
+      <span class="legend-color"></span>
+      <span class="legend-text">3rd Year</span>
+    </div>
+    <div class="legend-item year-4">
+      <span class="legend-color"></span>
+      <span class="legend-text">4th Year</span>
+    </div>
+    <div class="legend-item year-5">
+      <span class="legend-color"></span>
+      <span class="legend-text">5th Year</span>
+    </div>
+  </div>
 </div>
 
 <div class="unmatched-schedules" *ngIf="getUnmatchedSchedules().length">
@@ -148,26 +175,48 @@
 </div>
 
 <div class="schedule-container">
-  <div class="schedule-header">
-    <div class="time-label empty"></div>
-    <div class="day" *ngFor="let day of days">{{ day | titlecase }}</div>
+  <div class="schedule-header-grid">
+    <div class="time-label empty">
+      <span class="header-text">Time</span>
+    </div>
+    <div class="day" *ngFor="let day of days">
+      <span class="day-text">{{ day | titlecase }}</span>
+    </div>
   </div>
   <div class="schedule-grid">
     <div class="time-row" *ngFor="let time of timeSlots">
       <div class="time-label">{{ time }}</div>
       <div class="cell" *ngFor="let day of days">
         <ng-container *ngFor="let sched of getSchedulesForCell(day, time)">
-          <div class="schedule-cell-card">
+          <div
+            class="schedule-cell-card {{ getYearColorClass(sched.year) }}"
+            [style.height]="calculateScheduleHeight(sched)"
+            [style.z-index]="10 + getSchedulePriority(sched)"
+          >
             <div class="card-header">
-              <span class="time">{{ sched.time_display }}</span>
+              <div class="time-info">
+                <span class="time"
+                  >{{ sched.start_time }} - {{ sched.end_time }}</span
+                >
+                <span class="grade-badge">{{ getGradeLevel(sched.year) }}</span>
+              </div>
             </div>
-            <div class="card-body">
-              <div>
+            <div
+              class="card-body"
+              [style.height]="
+                'calc(' + calculateScheduleHeight(sched) + ' - 35px)'
+              "
+            >
+              <div class="class-info">
                 <strong>{{ sched.class_name }}</strong>
               </div>
-              <div>{{ sched.faculty_name }}</div>
-              <div>{{ sched.course_code }} - {{ sched.course }}</div>
-              <div>Section: {{ sched.section }}</div>
+              <div class="faculty-info">
+                {{ sched.faculty_name || sched.faculty }}
+              </div>
+              <div class="course-info">
+                {{ sched.course_code }} - {{ sched.course }}
+              </div>
+              <div class="section-info">Section: {{ sched.section }}</div>
             </div>
           </div>
         </ng-container>

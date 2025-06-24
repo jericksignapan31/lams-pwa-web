@@ -36,6 +36,13 @@ export const homeRoute: Route[] = [
         (m) => m.LaboratoriesComponent
       ),
   },
+   {
+    path: 'rooms',
+    loadComponent: () =>
+      import('../laboratory/pages/rooms/rooms.component').then(
+        (m) => m.RoomsComponent
+      ),
+  },
   {
     path: 'schedules/:laboratoryId/:roomName',
     loadComponent: () =>

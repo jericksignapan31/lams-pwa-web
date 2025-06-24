@@ -169,7 +169,7 @@ export const schoolManagementPanelMenu = [
       {
         label: 'Rooms',
         icon: 'pi pi-home',
-        routerLink: '/home/schedules',
+        routerLink: '/home/rooms',
         items: [],
       },
     ],
