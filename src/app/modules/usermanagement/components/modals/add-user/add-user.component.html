@@ -102,8 +102,16 @@
             <i class="pi pi-check-circle"></i>
             <span>Image uploaded successfully!</span>
           </div>
-        </div>        <!-- Supabase Test Buttons (for debugging) -->
-        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+        </div>
+        <!-- Supabase Test Buttons (for debugging) -->
+        <div
+          style="
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+          "
+        >
           <button
             type="button"
             pButton
@@ -112,7 +120,7 @@
             class="p-button-sm p-button-outlined"
             (click)="testSupabaseConnection()"
           ></button>
-          
+
           <button
             type="button"
             pButton
