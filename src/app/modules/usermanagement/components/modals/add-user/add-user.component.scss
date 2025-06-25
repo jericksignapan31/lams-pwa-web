@@ -81,3 +81,80 @@
     justify-content: space-between;
   }
 }
+
+.profile-upload-section {
+  .file-upload-container {
+    margin-top: 0.5rem;
+
+    input[type="file"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px dashed #ccc;
+      border-radius: 4px;
+      background: #f9f9f9;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+
+      &:hover {
+        border-color: #007ad9;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .selected-file-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: #e3f2fd;
+      border-radius: 4px;
+      font-size: 0.9rem;
+
+      .pi-image {
+        color: #1976d2;
+      }
+
+      .file-size {
+        color: #666;
+        font-size: 0.8rem;
+      }
+    }
+
+    .upload-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: #fff3e0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: #f57c00;
+
+      .pi-spinner {
+        color: #f57c00;
+      }
+    }
+
+    .upload-success {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: #e8f5e8;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: #2e7d32;
+
+      .pi-check-circle {
+        color: #4caf50;
+      }
+    }
+  }
+}

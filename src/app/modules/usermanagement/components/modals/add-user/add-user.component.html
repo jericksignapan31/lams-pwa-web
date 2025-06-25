@@ -77,13 +77,51 @@
         />
         <label for="contact_number">Contact Number</label>
       </p-floatlabel>
-      <div class="p-field">
+      <div class="p-field profile-upload-section">
         <label for="profile_picture">Profile Picture</label>
-        <input
-          id="profile_picture"
-          type="file"
-          (change)="onFileChange($event)"
-        />
+        <div class="file-upload-container">
+          <input
+            id="profile_picture"
+            type="file"
+            accept="image/*"
+            (change)="onFileChange($event)"
+            [disabled]="uploadingImage || loading"
+          />
+          <div *ngIf="selectedFile" class="selected-file-info">
+            <i class="pi pi-image"></i>
+            <span>{{ selectedFile.name }}</span>
+            <span class="file-size"
+              >({{ formatFileSize(selectedFile.size) }})</span
+            >
+          </div>
+          <div *ngIf="uploadingImage" class="upload-status">
+            <i class="pi pi-spin pi-spinner"></i>
+            <span>Uploading to Supabase...</span>
+          </div>
+          <div *ngIf="profileImageUrl" class="upload-success">
+            <i class="pi pi-check-circle"></i>
+            <span>Image uploaded successfully!</span>
+          </div>
+        </div>        <!-- Supabase Test Buttons (for debugging) -->
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+          <button
+            type="button"
+            pButton
+            label="Test Connection"
+            icon="pi pi-cloud"
+            class="p-button-sm p-button-outlined"
+            (click)="testSupabaseConnection()"
+          ></button>
+          
+          <button
+            type="button"
+            pButton
+            label="Test Storage"
+            icon="pi pi-upload"
+            class="p-button-sm p-button-outlined"
+            (click)="testStorageUpload()"
+          ></button>
+        </div>
       </div>
     </div>
   </div>

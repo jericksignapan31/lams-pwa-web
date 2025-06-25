@@ -36,7 +36,7 @@ export const homeRoute: Route[] = [
         (m) => m.LaboratoriesComponent
       ),
   },
-   {
+  {
     path: 'rooms',
     loadComponent: () =>
       import('../laboratory/pages/rooms/rooms.component').then(
@@ -55,6 +55,13 @@ export const homeRoute: Route[] = [
     loadComponent: () =>
       import('../schedule/pages/schedules/schedules.component').then(
         (m) => m.SchedulesComponent
+      ),
+  },
+  {
+    path: 'file-upload',
+    loadComponent: () =>
+      import('../../shared/components/file-upload/file-upload.component').then(
+        (m) => m.FileUploadComponent
       ),
   },
   {
