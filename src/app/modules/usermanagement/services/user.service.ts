@@ -13,12 +13,21 @@ export class UserService {
 
   getAllUsers() {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      console.log('🔍 Window or localStorage undefined, returning empty array');
       return of([]);
     }
+
     const accessToken = localStorage.getItem('lams_authToken123');
+    console.log('🔍 Getting all users from:', `${this.baseUrl}/users/`);
+    console.log(
+      '🔍 Using token:',
+      accessToken ? 'Token found' : 'No token found'
+    );
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
+
     return this.http.get(`${this.baseUrl}/users/`, { headers });
   }
 
@@ -77,5 +86,26 @@ export class UserService {
       Authorization: `Bearer ${accessToken}`,
     });
     return this.http.delete(`${this.baseUrl}/users/${id}/`, { headers });
+  }
+
+  // Test method to verify API connectivity
+  testApiConnection() {
+    console.log('🔍 Testing API connection...');
+    console.log('🔍 Base URL:', this.baseUrl);
+    console.log('🔍 Full endpoint:', `${this.baseUrl}/users/`);
+
+    const accessToken = localStorage.getItem('lams_authToken123');
+    console.log('🔍 Token:', accessToken ? 'Available' : 'Missing');
+
+    if (!accessToken) {
+      console.error('❌ No access token found!');
+      return of({ error: 'No access token' });
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+
+    return this.http.get(`${this.baseUrl}/users/`, { headers });
   }
 }

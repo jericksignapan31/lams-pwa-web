@@ -31,6 +31,8 @@
         />
         <label for="email">Email</label>
       </p-floatlabel>
+    </div>
+    <div class="form-col">
       <p-floatlabel variant="on">
         <input
           pInputText
@@ -41,21 +43,9 @@
         />
         <label for="password">Password</label>
       </p-floatlabel>
-    </div>
-    <div class="form-col">
-      <p-floatlabel variant="on">
-        <input
-          pInputText
-          id="role"
-          formControlName="role"
-          type="text"
-          [value]="assignedRole"
-          [disabled]="true"
-          autocomplete="off"
-        />
-        <label for="role">Role</label>
-      </p-floatlabel>
-      <p-floatlabel variant="on">
+
+      <!-- Campus dropdown - only show for Super Admin -->
+      <p-floatlabel variant="on" *ngIf="isSuperAdmin()">
         <p-dropdown
           id="campus"
           formControlName="campus"
@@ -67,6 +57,7 @@
         ></p-dropdown>
         <label for="campus">Campus</label>
       </p-floatlabel>
+
       <p-floatlabel variant="on">
         <input
           pInputText
@@ -77,13 +68,17 @@
         />
         <label for="contact_number">Contact Number</label>
       </p-floatlabel>
-      <div class="p-field">
-        <label for="profile_picture">Profile Picture</label>
-        <input
-          id="profile_picture"
-          type="file"
-          (change)="onFileChange($event)"
-        />
+
+      <!-- Show assigned role and campus info for non-Super Admin users -->
+      <div *ngIf="!isSuperAdmin()" class="auto-assignment-info">
+        <p><strong>Role to be assigned:</strong> {{ assignedRole }}</p>
+        <p *ngIf="campuses.length > 0">
+          <strong>Campus:</strong>
+          {{ campuses[0]?.campus_name || "Auto-assigned" }}
+        </p>
+        <p *ngIf="campuses.length === 0" style="color: #e74c3c">
+          <strong>Warning:</strong> No campus assigned to your account
+        </p>
       </div>
     </div>
   </div>

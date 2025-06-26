@@ -29,7 +29,50 @@
   </div>
 
   <div style="overflow-x: auto; width: 100%">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="p-text-center p-p-4">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>Loading users...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="p-text-center p-p-4">
+      <i
+        class="pi pi-exclamation-triangle"
+        style="font-size: 2rem; color: #e74c3c"
+      ></i>
+      <p>{{ error }}</p>
+      <div
+        class="p-d-flex p-jc-center p-ai-center"
+        style="gap: 10px; margin-top: 15px"
+      >
+        <button
+          pButton
+          label="Try Again"
+          (click)="retryLoadUsers()"
+          class="p-button-sm"
+          icon="pi pi-refresh"
+        ></button>
+        <button
+          pButton
+          label="Test Backend"
+          (click)="testBackendHealth()"
+          class="p-button-sm p-button-secondary"
+          icon="pi pi-heart"
+        ></button>
+        <button
+          pButton
+          label="Add User Instead"
+          (click)="openAddUserModal()"
+          class="p-button-sm p-button-help"
+          icon="pi pi-plus"
+        ></button>
+      </div>
+    </div>
+
+    <!-- Users Table -->
     <p-table
+      *ngIf="!loading && !error"
       [value]="users"
       [scrollable]="true"
       scrollHeight="400px"
@@ -62,7 +105,7 @@
           <td>
             <p-tableCheckbox [value]="user"></p-tableCheckbox>
           </td>
-          <td>{{ user.user_id }}</td>
+          <td>{{ user.user_id || user.id }}</td>
           <td>
             <div class="p-d-flex p-ai-center">
               <p-avatar
@@ -71,7 +114,7 @@
                 shape="circle"
                 [style]="{ 'margin-right': '0.5rem' }"
               ></p-avatar>
-              <span>{{ user.username }}</span>
+              <span>{{ user.username || user.email }}</span>
             </div>
           </td>
           <td>{{ user.email }}</td>
@@ -103,6 +146,20 @@
               icon="pi pi-trash"
               class="p-button-rounded p-button-text p-button-danger"
               (click)="deleteUser(user)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="10" class="p-text-center p-p-4">
+            <i class="pi pi-users" style="font-size: 2rem; color: #6c757d"></i>
+            <p>No users found</p>
+            <button
+              pButton
+              label="Add First User"
+              (click)="openAddUserModal()"
+              class="p-button-sm"
             ></button>
           </td>
         </tr>

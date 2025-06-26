@@ -112,7 +112,6 @@ export class AuthService {
           throw new Error('No access token received');
         }
 
-        console.log('✅ Token found:', token.substring(0, 20) + '...');
 
         this._isLoggedIn$.next(true);
         if (typeof window !== 'undefined' && window.localStorage) {
@@ -148,7 +147,7 @@ export class AuthService {
 
         this.userInfo = userInfo;
         this.user.set(userInfo);
-        this.userProfile = userProfile; // Store original profile for template compatibility
+        this.userProfile = userProfile; 
 
         console.log('✅ User info mapped and set:', this.userInfo);
       })

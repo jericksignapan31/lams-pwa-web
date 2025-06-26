@@ -1,0 +1,179 @@
+import { AlertService } from './../../../../../core/services/alert.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ButtonModule } from 'primeng/button';
+import { UserService } from '../../../services/user.service';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { CampusService } from '../../../../campus/services/campus.service';
+import { AuthService } from '../../../../../core/services/auth.service';
+
+@Component({
+  selector: 'app-add-user',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DropdownModule,
+    InputTextModule,
+    FileUploadModule,
+    ButtonModule,
+    FloatLabelModule,
+  ],
+  templateUrl: './add-user.component.html',
+  styleUrl: './add-user.component.scss',
+})
+export class AddUserComponent implements OnInit {
+  form: FormGroup;
+  campuses: any[] = [];
+  loading = false;
+  assignedRole = '';
+
+  @Output() close = new EventEmitter<void>();
+
+  constructor(
+    private campusService: CampusService,
+    private fb: FormBuilder,
+    private userService: UserService,
+    private alertService: AlertService,
+    private authService: AuthService
+  ) {
+    // Determine the role to assign based on current user's role
+    this.assignedRole = this.getAssignedRole();
+
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      role: [{ value: this.assignedRole, disabled: true }, Validators.required],
+      campus: ['', Validators.required],
+      contact_number: ['', Validators.required],
+      profile_picture: [null],
+    });
+  }
+
+  private getAssignedRole(): string {
+    const currentUserRole =
+      this.authService.userProfile?.role?.toLowerCase() ||
+      this.authService.userInfo?.accountType?.toLowerCase() ||
+      '';
+
+    console.log('🔍 Current user role:', currentUserRole);
+
+    switch (currentUserRole) {
+      case 'super admin':
+        return 'Campus Admin';
+      case 'campus admin':
+        return 'Faculty';
+      case 'faculty':
+        return 'Laboratory Technician';
+      default:
+        // Fallback to Campus Admin if role is unclear
+        return 'Campus Admin';
+    }
+  }
+
+  ngOnInit(): void {
+    console.log('🔍 AddUserComponent - Loading campuses...');
+    this.loadCampusesBasedOnRole();
+  }
+      next: (data: any) => {
+        console.log('✅ Campuses loaded successfully:', data);
+
+        // Handle different response formats
+        if (Array.isArray(data)) {
+          this.campuses = data;
+        } else if (data && Array.isArray(data.data)) {
+          this.campuses = data.data;
+        } else if (data && Array.isArray(data.results)) {
+          this.campuses = data.results;
+        } else {
+          console.warn('⚠️ Unexpected campuses response format:', data);
+          this.campuses = [];
+        }
+
+        console.log('🔍 Campuses array:', this.campuses);
+        console.log('� Campuses count:', this.campuses.length);
+      },
+      error: (error: any) => {
+        console.error('❌ Error loading campuses:', error);
+        console.error('❌ Error status:', error.status);
+        console.error('❌ Error details:', error.error);
+
+        let errorMessage = 'Failed to load campuses.';
+
+        if (error.status === 403) {
+          errorMessage =
+            'Access denied to campuses. You may not have permission to view campuses.';
+          console.error(
+            '🚫 403 Forbidden - Check user permissions for /api/campuses/'
+          );
+        } else if (error.status === 401) {
+          errorMessage = 'Authentication failed. Please log in again.';
+        } else if (error.status === 500) {
+          errorMessage = 'Server error when loading campuses.';
+        }
+
+        // Set empty array so form still works
+        this.campuses = [];
+
+        // Show user-friendly error (but don't block the modal)
+        this.alertService.handleError(errorMessage);
+      },
+    });
+  }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    this.form.patchValue({ profile_picture: file });
+  }
+
+  submit() {
+    if (this.form.invalid) return;
+    const formData = new FormData();
+    formData.append('email', this.form.value.email || '');
+    formData.append('password', this.form.value.password || '');
+    formData.append('first_name', this.form.value.first_name || '');
+    formData.append('last_name', this.form.value.last_name || '');
+    formData.append('role', this.assignedRole); // Use the dynamically assigned role
+    formData.append(
+      'campus',
+      this.form.value.campus ? this.form.value.campus : ''
+    );
+    formData.append('contact_number', this.form.value.contact_number || '');
+    if (this.form.value.profile_picture) {
+      formData.append('profile_picture', this.form.value.profile_picture);
+    }
+
+    console.log('🔍 Creating account with role:', this.assignedRole);
+
+    this.loading = true;
+    this.userService.createAccount(formData).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        this.alertService.handleSuccess(
+          `Account created successfully with role: ${this.assignedRole}!`
+        );
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        this.close.emit();
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.alertService.handleError('Failed to create account.');
+      },
+    });
+  }
+}

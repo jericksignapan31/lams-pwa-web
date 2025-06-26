@@ -81,3 +81,65 @@
     justify-content: space-between;
   }
 }
+
+// Styles for disabled campus field
+.disabled-field {
+  background-color: #f8f9fa !important;
+  border-color: #e9ecef !important;
+  color: #6c757d !important;
+  cursor: not-allowed !important;
+}
+
+:host ::ng-deep .disabled-field .p-dropdown {
+  background-color: #f8f9fa !important;
+  border-color: #e9ecef !important;
+  color: #6c757d !important;
+  cursor: not-allowed !important;
+}
+
+:host ::ng-deep .disabled-field .p-dropdown-label {
+  color: #6c757d !important;
+}
+
+// Style for auto-assignment note
+.auto-assigned-note {
+  font-size: 0.8em;
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+// Auto-assignment info styles
+.auto-assignment-info {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 1rem;
+
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  strong {
+    color: #495057;
+  }
+}
+
+// Responsive adjustments for smaller forms
+.add-user-grid {
+  .form-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
