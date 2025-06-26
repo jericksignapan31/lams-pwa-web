@@ -58,10 +58,17 @@ export class UserService {
       return of({});
     }
     const accessToken = localStorage.getItem('lams_authToken123');
+    
+    // For FormData, don't set Content-Type - let browser set it with boundary
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
     });
+    
+    // If data is not FormData, add Content-Type for JSON
+    if (!(data instanceof FormData)) {
+      headers.set('Content-Type', 'application/json');
+    }
+    
     return this.http.put(`${this.baseUrl}/users/${id}/`, data, { headers });
   }
 
@@ -70,10 +77,17 @@ export class UserService {
       return of({});
     }
     const accessToken = localStorage.getItem('lams_authToken123');
+    
+    // For FormData, don't set Content-Type - let browser set it with boundary
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
     });
+    
+    // If data is not FormData, add Content-Type for JSON
+    if (!(data instanceof FormData)) {
+      headers.set('Content-Type', 'application/json');
+    }
+    
     return this.http.put(`${this.baseUrl}/users/profile/`, data, { headers });
   }
 

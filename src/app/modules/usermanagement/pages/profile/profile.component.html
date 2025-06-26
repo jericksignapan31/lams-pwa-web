@@ -3,14 +3,34 @@
 <div class="profile-container">
   <div class="profile-card main-profile">
     <div class="profile-avatar-section">
-      <p-avatar
-        [image]="
-          user?.avatar ||
-          'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
-        "
-        size="xlarge"
-        shape="circle"
-      ></p-avatar>
+      <div class="avatar-container">
+        <p-avatar
+          [image]="getCurrentProfilePicture()"
+          size="xlarge"
+          shape="circle"
+        ></p-avatar>
+        
+        <!-- Profile picture edit button - only show in edit mode -->
+        <div class="avatar-edit-overlay" *ngIf="editMode">
+          <input
+            type="file"
+            #fileInput
+            (change)="onProfilePictureSelect($event)"
+            accept="image/*"
+            style="display: none;"
+          />
+          <button
+            pButton
+            type="button"
+            icon="pi pi-camera"
+            class="avatar-edit-btn p-button-rounded p-button-secondary"
+            (click)="fileInput.click()"
+            [disabled]="loading"
+            pTooltip="Change Profile Picture"
+          ></button>
+        </div>
+      </div>
+      
       <div class="profile-info">
         <h2 class="profile-name">
           {{ user?.first_name }} {{ user?.last_name }}
@@ -37,6 +57,7 @@
           label="Save"
           class="save-btn"
           [disabled]="editForm.invalid || loading"
+          [loading]="loading"
           (click)="onSave()"
         ></button>
         <button
@@ -45,6 +66,7 @@
           icon="pi pi-times"
           label="Cancel"
           class="cancel-btn p-button-secondary"
+          [disabled]="loading"
           (click)="toggleEditMode()"
         ></button>
       </div>

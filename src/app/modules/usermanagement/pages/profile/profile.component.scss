@@ -49,6 +49,30 @@
   margin-bottom: 2rem;
 }
 
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-edit-overlay {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+}
+
+.avatar-edit-btn {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.avatar-edit-btn:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
 .profile-info {
   flex: 1;
 }

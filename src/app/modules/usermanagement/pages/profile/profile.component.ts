@@ -12,6 +12,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { FileUploadModule } from 'primeng/fileupload';
+import { TooltipModule } from 'primeng/tooltip';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,6 +26,8 @@ import Swal from 'sweetalert2';
     InputTextModule,
     DropdownModule,
     CommonModule,
+    FileUploadModule,
+    TooltipModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -35,6 +39,8 @@ export class ProfileComponent implements OnInit {
   editMode = false;
   editForm!: FormGroup;
   loading = false;
+  selectedProfilePicture: File | null = null;
+  profilePicturePreview: string | null = null;
 
   constructor(private authService: AuthService, private fb: FormBuilder) {
     this.initializeForm();
@@ -86,7 +92,63 @@ export class ProfileComponent implements OnInit {
     if (!this.editMode) {
       // Reset form when canceling edit
       this.populateForm();
+      this.resetProfilePicture();
     }
+  }
+
+  // Handle profile picture file selection
+  onProfilePictureSelect(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid File Type',
+          text: 'Please select an image file (PNG, JPG, JPEG, etc.)',
+          confirmButtonColor: '#f5a623',
+        });
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        Swal.fire({
+          icon: 'error',
+          title: 'File Too Large',
+          text: 'Please select an image smaller than 5MB',
+          confirmButtonColor: '#f5a623',
+        });
+        return;
+      }
+
+      this.selectedProfilePicture = file;
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.profilePicturePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      console.log('🖼️ Profile picture selected:', file.name);
+    }
+  }
+
+  // Reset profile picture selection
+  resetProfilePicture() {
+    this.selectedProfilePicture = null;
+    this.profilePicturePreview = null;
+  }
+
+  // Get current profile picture URL for display
+  getCurrentProfilePicture(): string {
+    if (this.profilePicturePreview) {
+      return this.profilePicturePreview;
+    }
+    return this.user?.profile_picture || 
+           this.user?.avatar || 
+           'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
   }
 
   onSave() {
@@ -95,12 +157,25 @@ export class ProfileComponent implements OnInit {
 
     if (this.editForm.valid && userId) {
       this.loading = true;
-      const formData = this.editForm.value;
+      
+      // Use FormData for file upload support
+      const formData = new FormData();
+      
+      // Add form fields
+      Object.keys(this.editForm.value).forEach(key => {
+        formData.append(key, this.editForm.value[key] || '');
+      });
 
-      console.log('🔍 Full userProfile object:', this.userProfile);
+      // Add profile picture if selected
+      if (this.selectedProfilePicture) {
+        formData.append('profile_picture', this.selectedProfilePicture);
+        console.log('�️ Including profile picture in update');
+      }
+
+      console.log('�🔍 Full userProfile object:', this.userProfile);
       console.log('🔍 Attempting to update user with ID:', userId);
       console.log('🔍 ID type:', typeof userId);
-      console.log('🔍 Form data:', formData);
+      console.log('🔍 Form data keys:', Array.from(formData.keys()));
       console.log(
         '🔍 API URL will be:',
         `${this.userService['baseUrl']}/users/${userId}/`
@@ -110,7 +185,7 @@ export class ProfileComponent implements OnInit {
       // First try with specific user ID
       this.userService.updateUser(userId, formData).subscribe({
         next: (response: any) => {
-          this.handleUpdateSuccess(response, formData);
+          this.handleUpdateSuccess(response, this.editForm.value);
         },
         error: (error: any) => {
           console.error('❌ Error updating with user ID:', error);
@@ -120,7 +195,7 @@ export class ProfileComponent implements OnInit {
             console.log('🔄 Trying profile endpoint instead...');
             this.userService.updateCurrentUserProfile(formData).subscribe({
               next: (response: any) => {
-                this.handleUpdateSuccess(response, formData);
+                this.handleUpdateSuccess(response, this.editForm.value);
               },
               error: (profileError: any) => {
                 this.handleUpdateError(profileError);
@@ -133,6 +208,10 @@ export class ProfileComponent implements OnInit {
       });
     } else {
       console.log('❌ Form is invalid or user ID is missing');
+      console.log('❌ Form errors:', this.editForm.errors);
+      console.log('❌ Form valid?', this.editForm.valid);
+      console.log('❌ User ID:', userId);
+      
       Swal.fire({
         icon: 'warning',
         title: 'Invalid Data',
@@ -152,6 +231,12 @@ export class ProfileComponent implements OnInit {
     this.user = { ...this.user, ...formData };
     this.userProfile = { ...this.userProfile, ...formData };
 
+    // Update profile picture if it was changed
+    if (response.profile_picture) {
+      this.user.profile_picture = response.profile_picture;
+      this.userProfile.profile_picture = response.profile_picture;
+    }
+
     // Update AuthService userProfile
     this.authService.userProfile = this.userProfile;
 
@@ -165,6 +250,9 @@ export class ProfileComponent implements OnInit {
       this.authService.userInfo = updatedUserInfo;
       this.authService.user.set(updatedUserInfo);
     }
+
+    // Reset profile picture selection
+    this.resetProfilePicture();
 
     Swal.fire({
       icon: 'success',

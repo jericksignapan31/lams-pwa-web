@@ -203,7 +203,7 @@ export class AuthService {
         this._alert.simpleAlert(
           'info',
           'Logged out',
-          'Your account was automatically logged out due to 60 seconds of inactivity.',
+          'Your session has expired. Please log in again.',
           () => {
             this._isLoggedIn$.next(false);
             if (typeof window !== 'undefined' && window.localStorage) {
@@ -244,7 +244,8 @@ export class AuthService {
       localStorage.setItem(this.refreshKey, refresh);
     }
     this._isLoggedIn$.next(true);
-    this.resetInactivityTimer();
+    // Commented out - inactivity timer is disabled
+    // this.resetInactivityTimer();
   }
 
   getRefreshToken(): string | null {
@@ -269,6 +270,12 @@ export class AuthService {
   }
 
   private resetInactivityTimer() {
+    // Don't set timer if inactivity timeout is disabled (0)
+    if (this.inactivityTimeout <= 0) {
+      console.log('🔍 Inactivity timer disabled - not setting timer');
+      return;
+    }
+
     this.clearInactivityTimer();
     this.ngZone.runOutsideAngular(() => {
       this.inactivityTimer = timer(this.inactivityTimeout).subscribe(() => {
