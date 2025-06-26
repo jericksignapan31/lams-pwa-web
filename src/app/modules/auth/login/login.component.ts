@@ -13,8 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { LoginService } from '../../../core/services/login.service';
-import { UserService } from '../../../modules/usermanagement/services/user.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   standalone: true,
@@ -86,7 +85,7 @@ import { UserService } from '../../../modules/usermanagement/services/user.servi
   `,
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [UserService],
+  providers: [],
 })
 export class LoginComponent {
   loginForm!: FormGroup;
@@ -98,8 +97,7 @@ export class LoginComponent {
   constructor(
     public fb: FormBuilder,
     private router: Router,
-    private loginService: LoginService,
-    private userService: UserService
+    private authService: AuthService
   ) {}
 
   toggleDarkMode() {
@@ -131,23 +129,17 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.loading = true;
       const loginData = this.loginForm.value;
-      this.loginService.login(loginData).subscribe({
+      this.authService.login(loginData.email, loginData.password).subscribe({
         next: (response: any) => {
           this.loading = false;
-          localStorage.setItem('access_token', response.access);
-          this.userService.getUser().subscribe({
-            next: (userProfile: any) => {
-              // console.log('🔗 User profile from /api/profile/:', userProfile);
-              this.user = userProfile;
-            },
-            error: (err: any) => {
-              console.error('❌ Error fetching user profile:', err);
-            },
-          });
+          // User info is now automatically set in authService.userInfo and authService.user signal
+          const userInfo = this.authService.userInfo;
+          console.log('🔗 User info from AuthService:', userInfo);
+
           Swal.fire({
             icon: 'success',
             title: 'Login Successful',
-            text: 'Welcome back!',
+            text: `Welcome back, ${userInfo?.name || 'User'}!`,
             confirmButtonColor: '#f5a623',
             timer: 1000,
             showConfirmButton: false,

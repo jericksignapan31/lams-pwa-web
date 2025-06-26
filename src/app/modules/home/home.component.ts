@@ -108,57 +108,78 @@ export class HomeComponent {
       } else {
         this.isDarkMode = false;
       }
-    }
-
-    this.userService.getUser().subscribe((profile: any) => {
-      this.user = profile;
+    }    // Get user info from AuthService instead of making a separate API call
+    const userInfo = this.authService.userInfo;
+    const userProfile = this.authService.userProfile;
+    
+    if (userInfo && userProfile) {
+      this.user = userProfile; // Use original profile for template compatibility
+      console.log('🔗 User info from AuthService:', userInfo);
+      console.log('🔗 User profile for template:', userProfile);
+      
       // TEMP: fallback to balubal campus if campusName is missing for campus admin
-      let campusName = profile.campusName;
-      if (profile.role === 'campus admin' && !campusName) {
+      let campusName = userInfo.accountType;
+      if (userInfo.accountType === 'campus admin' && !campusName) {
         campusName = 'balubal campus';
       }
-      // console.log('User profile:', profile, 'campusName used:', campusName);
-      this.panelMenuItems = getPanelMenuItems(profile.role, campusName);
-      // Dynamically populate Schedule submenu in laboratoryPanelMenuModel
-      this.laboratoryService.getLaboratories().subscribe((labs: any[]) => {
-        // Find the 'Schedule' menu
-        const labMenu = this.panelMenuItems.find(
-          (item: any) => item.label === 'Laboratory'
-        );
-        if (labMenu) {
-          const scheduleMenu = labMenu.items.find(
-            (item: any) => item.label === 'Schedule'
-          );
-          if (scheduleMenu) {
-            // Group labs by laboratory_id and laboratory_name
-            const grouped: {
-              [labId: string]: { laboratory_name: string; rooms: string[] };
-            } = {};
-            labs.forEach((lab) => {
-              if (!grouped[lab.laboratory_id]) {
-                grouped[lab.laboratory_id] = {
-                  laboratory_name: lab.laboratory_name,
-                  rooms: [],
-                };
-              }
-              grouped[lab.laboratory_id].rooms.push(lab.room_no);
-            });
-            // Build submenu: each laboratory with its rooms, including laboratory_id in routerLink
-            scheduleMenu.items = Object.entries(grouped).map(
-              ([labId, { laboratory_name, rooms }]) => ({
-                label: laboratory_name,
-                icon: 'pi pi-calendar',
-                items: rooms.map((room) => ({
-                  label: room,
-                  icon: 'pi pi-home',
-                  items: [],
-                  routerLink: ['/home/schedules', labId, room], // Now using laboratory_id
-                })),
-              })
-            );
-          }
+      this.panelMenuItems = getPanelMenuItems(userInfo.accountType, campusName);
+      this.loadLaboratoryData();
+    } else {
+      // Fallback: use UserService if userInfo is not yet available in AuthService
+      this.userService.getUser().subscribe((profile: any) => {
+        this.user = profile;
+        // TEMP: fallback to balubal campus if campusName is missing for campus admin
+        let campusName = profile.campusName;
+        if (profile.role === 'campus admin' && !campusName) {
+          campusName = 'balubal campus';
         }
+        // console.log('User profile:', profile, 'campusName used:', campusName);
+        this.panelMenuItems = getPanelMenuItems(profile.role, campusName);
+        this.loadLaboratoryData();
       });
+    }
+  }
+
+  private loadLaboratoryData() {
+    // Dynamically populate Schedule submenu in laboratoryPanelMenuModel
+    this.laboratoryService.getLaboratories().subscribe((labs: any[]) => {
+      // Find the 'Schedule' menu
+      const labMenu = this.panelMenuItems.find(
+        (item: any) => item.label === 'Laboratory'
+      );
+      if (labMenu) {
+        const scheduleMenu = labMenu.items.find(
+          (item: any) => item.label === 'Schedule'
+        );
+        if (scheduleMenu) {
+          // Group labs by laboratory_id and laboratory_name
+          const grouped: {
+            [labId: string]: { laboratory_name: string; rooms: string[] };
+          } = {};
+          labs.forEach((lab) => {
+            if (!grouped[lab.laboratory_id]) {
+              grouped[lab.laboratory_id] = {
+                laboratory_name: lab.laboratory_name,
+                rooms: [],
+              };
+            }
+            grouped[lab.laboratory_id].rooms.push(lab.room_no);
+          });
+          // Build submenu: each laboratory with its rooms, including laboratory_id in routerLink
+          scheduleMenu.items = Object.entries(grouped).map(
+            ([labId, { laboratory_name, rooms }]) => ({
+              label: laboratory_name,
+              icon: 'pi pi-calendar',
+              items: rooms.map((room) => ({
+                label: room,
+                icon: 'pi pi-home',
+                items: [],
+                routerLink: ['/home/schedules', labId, room], // Now using laboratory_id
+              })),
+            })
+          );
+        }
+      }
     });
   }
 

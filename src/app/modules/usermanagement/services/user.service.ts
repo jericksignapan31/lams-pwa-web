@@ -15,7 +15,7 @@ export class UserService {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of([]);
     }
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -26,7 +26,7 @@ export class UserService {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of({});
     }
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -37,7 +37,7 @@ export class UserService {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of({});
     }
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -48,7 +48,7 @@ export class UserService {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of({});
     }
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
