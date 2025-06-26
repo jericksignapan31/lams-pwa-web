@@ -1,9 +1,250 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { environment } from '../../../../environments/environment.development';
+import { Equipment, Product } from '../model/product';
+
+// Equipment interface for API operations
+
+/**
+ * EquipmentService - API service for equipment management
+ *
+ * API Endpoints:
+ * GET    /api/equipments/               # List equipment (campus-filtered)
+ * POST   /api/equipments/               # Create equipment (auto-assigns creator as user)
+ * GET    /api/equipments/{id}/          # Get equipment details
+ * PUT    /api/equipments/{id}/          # Update equipment
+ * PATCH  /api/equipments/{id}/          # Partial update equipment
+ * DELETE /api/equipments/{id}/          # Delete equipment
+ *
+ * Usage Examples:
+ *
+ * // Get all equipment
+ * equipmentService.getEquipments().subscribe(equipment => { ... });
+ *
+ * // Create new equipment
+ * equipmentService.createEquipment({
+ *   name: 'Microscope',
+ *   category: 'Lab Equipment',
+ *   quantity: 5
+ * }).subscribe(result => { ... });
+ *
+ * // Update equipment status
+ * equipmentService.updateEquipmentStatus('123', 'MAINTENANCE').subscribe(...);
+ *
+ * // Search equipment
+ * equipmentService.searchEquipment('microscope').subscribe(...);
+ *
+ * // Legacy methods (deprecated):
+ * equipmentService.getProducts() - use getEquipmentsAsPromise() instead
+ */
 
 @Injectable({
   providedIn: 'root',
 })
 export class EquipmentService {
+  private baseUrl = environment.baseUrl + '/equipments/';
+
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Get authentication headers
+   */
+  private getHeaders(): HttpHeaders {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return new HttpHeaders();
+    }
+    const accessToken = localStorage.getItem('lams_authToken123');
+    console.log(
+      '🔍 EquipmentService - Using token:',
+      accessToken ? 'Token found' : 'No token'
+    );
+
+    return new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+  }
+
+  /**
+   * GET /api/equipments/ - List equipment (campus-filtered)
+   */
+  getEquipments(): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    console.log('🔍 EquipmentService - Getting all equipment');
+    console.log('🔍 EquipmentService - API URL:', this.baseUrl);
+
+    const headers = this.getHeaders();
+    return this.http.get(this.baseUrl, { headers });
+  }
+
+  /**
+   * GET /api/equipments/{id}/ - Get equipment details
+   */
+  getEquipment(id: string): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+
+    console.log('🔍 EquipmentService - Getting equipment by ID:', id);
+    console.log('🔍 EquipmentService - API URL:', `${this.baseUrl}${id}/`);
+
+    const headers = this.getHeaders();
+    return this.http.get(`${this.baseUrl}${id}/`, { headers });
+  }
+
+  /**
+   * POST /api/equipments/ - Create equipment (auto-assigns creator as user)
+   */
+  createEquipment(equipmentData: any): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+
+    console.log('🔍 EquipmentService - Creating equipment:', equipmentData);
+    console.log('🔍 EquipmentService - API URL:', this.baseUrl);
+
+    const headers = this.getHeaders();
+    return this.http.post(this.baseUrl, equipmentData, { headers });
+  }
+
+  /**
+   * PUT /api/equipments/{id}/ - Update equipment (full update)
+   */
+  updateEquipment(id: string, equipmentData: any): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+
+    console.log('🔍 EquipmentService - Updating equipment:', id, equipmentData);
+    console.log('🔍 EquipmentService - API URL:', `${this.baseUrl}${id}/`);
+
+    const headers = this.getHeaders();
+    return this.http.put(`${this.baseUrl}${id}/`, equipmentData, { headers });
+  }
+
+  /**
+   * PATCH /api/equipments/{id}/ - Partial update equipment
+   */
+  partialUpdateEquipment(id: string, equipmentData: any): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+
+    console.log(
+      '🔍 EquipmentService - Partially updating equipment:',
+      id,
+      equipmentData
+    );
+    console.log('🔍 EquipmentService - API URL:', `${this.baseUrl}${id}/`);
+
+    const headers = this.getHeaders();
+    return this.http.patch(`${this.baseUrl}${id}/`, equipmentData, { headers });
+  }
+
+  /**
+   * DELETE /api/equipments/{id}/ - Delete equipment
+   */
+  deleteEquipment(id: string): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+
+    console.log('🔍 EquipmentService - Deleting equipment:', id);
+    console.log('🔍 EquipmentService - API URL:', `${this.baseUrl}${id}/`);
+
+    const headers = this.getHeaders();
+    return this.http.delete(`${this.baseUrl}${id}/`, { headers });
+  }
+
+  /**
+   * Helper method to get equipment by status
+   */
+  getEquipmentByStatus(status: string): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    console.log('🔍 EquipmentService - Getting equipment by status:', status);
+
+    const headers = this.getHeaders();
+    return this.http.get(`${this.baseUrl}?status=${status}`, { headers });
+  }
+
+  /**
+   * Helper method to get equipment by category
+   */
+  getEquipmentByCategory(category: string): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    console.log(
+      '🔍 EquipmentService - Getting equipment by category:',
+      category
+    );
+
+    const headers = this.getHeaders();
+    return this.http.get(`${this.baseUrl}?category=${category}`, { headers });
+  }
+
+  /**
+   * Helper method to search equipment by name or description
+   */
+  searchEquipment(query: string): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    console.log('🔍 EquipmentService - Searching equipment:', query);
+
+    const headers = this.getHeaders();
+    return this.http.get(
+      `${this.baseUrl}?search=${encodeURIComponent(query)}`,
+      { headers }
+    );
+  }
+
+  /**
+   * Helper method to update equipment status only
+   */
+  updateEquipmentStatus(id: string, status: string): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+
+    console.log('🔍 EquipmentService - Updating equipment status:', id, status);
+
+    const headers = this.getHeaders();
+    return this.http.patch(`${this.baseUrl}${id}/`, { status }, { headers });
+  }
+
+  /**
+   * Helper method to update equipment quantity
+   */
+  updateEquipmentQuantity(id: string, quantity: number): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+
+    console.log(
+      '🔍 EquipmentService - Updating equipment quantity:',
+      id,
+      quantity
+    );
+
+    const headers = this.getHeaders();
+    return this.http.patch(`${this.baseUrl}${id}/`, { quantity }, { headers });
+  }
+
+  // Legacy methods for backward compatibility (using mock data)
+  // These can be removed once all components are updated to use the new API methods
+
+  /**
+   * @deprecated Use getEquipments() instead for real API data
+   */
   getProductsData() {
     return [
       {
@@ -1221,5 +1462,54 @@ export class EquipmentService {
 
   getProductsWithOrders() {
     return Promise.resolve(this.getProductsWithOrdersData());
+  }
+
+  // ============================================================================
+  // TRANSITION HELPERS
+  // ============================================================================
+
+  /**
+   * New method that returns real API data as Promise (for easy migration)
+   * Use this to replace getProducts() calls gradually
+   */
+  getEquipmentsAsPromise(): Promise<Equipment[]> {
+    return this.getEquipments().toPromise() as Promise<Equipment[]>;
+  }
+
+  /**
+   * Get a subset of equipment for testing/demo purposes
+   */
+  getEquipmentsMini(): Promise<Equipment[]> {
+    return this.getEquipmentsAsPromise().then((data) => data.slice(0, 5));
+  }
+
+  /**
+   * Get equipment with status and category filters
+   */
+  getFilteredEquipments(
+    options: {
+      status?: string;
+      category?: string;
+      search?: string;
+      limit?: number;
+    } = {}
+  ): Observable<Equipment[]> {
+    let url = this.baseUrl;
+    const params: string[] = [];
+
+    if (options.status) params.push(`status=${options.status}`);
+    if (options.category) params.push(`category=${options.category}`);
+    if (options.search)
+      params.push(`search=${encodeURIComponent(options.search)}`);
+    if (options.limit) params.push(`limit=${options.limit}`);
+
+    if (params.length > 0) {
+      url += '?' + params.join('&');
+    }
+
+    console.log('🔍 EquipmentService - Getting filtered equipment:', url);
+
+    const headers = this.getHeaders();
+    return this.http.get<Equipment[]>(url, { headers });
   }
 }
