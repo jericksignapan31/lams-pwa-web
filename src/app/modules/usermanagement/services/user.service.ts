@@ -56,7 +56,6 @@ export class UserService {
     return this.http.put(`${this.baseUrl}/users/${id}/`, data, { headers });
   }
 
-  // Method specifically for updating current user's own profile
   updateCurrentUserProfile(data: any) {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of({});
@@ -66,7 +65,6 @@ export class UserService {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     });
-    // Try using the profile endpoint for current user updates
     return this.http.put(`${this.baseUrl}/users/profile/`, data, { headers });
   }
 
