@@ -1,7 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription, tap, timer, switchMap, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  tap,
+  timer,
+  switchMap,
+  of,
+} from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { UserModel } from '../../modules/usermanagement/models/user.interface';
 import { LoginService } from './login.service';
@@ -17,11 +25,11 @@ export class AuthService {
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   user = signal<UserModel | null>(null);
   userInfo: UserModel | null = null;
-  userProfile: any = null; // Original user profile from API for template compatibility
+  userProfile: any = null; 
   private refreshKey = 'refresh_token';
   private userActivityEvents = ['mousemove', 'keydown', 'click', 'touchstart'];
-  private inactivityTimeout = 10 * 60 * 1000; // 10 minutes
-  //  private inactivityTimeout = 60 * 1000; // 60 seconds
+  // private inactivityTimeout = 10 * 60 * 1000; // 10 minutes
+   private inactivityTimeout = 60 * 1000; // 60 seconds
   private inactivityTimer?: Subscription;
   private apiUrl = '/api/auth';
 
@@ -32,36 +40,42 @@ export class AuthService {
     private ngZone: NgZone
   ) {
     this._isLoggedIn$.next(!!this.token);
-    
+
     // If there's a token, try to fetch user info
     if (this.token) {
       this.fetchUserProfile(this.token).subscribe({
         next: (userProfile: any) => {
           console.log('🔍 Restored user profile:', userProfile);
-          
+
           const userInfo: UserModel = {
             id: userProfile.id || userProfile.user_id || 0,
-            name: userProfile.name || userProfile.username || 
-                  (userProfile.first_name && userProfile.last_name ? 
-                   `${userProfile.first_name} ${userProfile.last_name}` : 
-                   userProfile.first_name || userProfile.last_name || 'User'),
+            name:
+              userProfile.name ||
+              userProfile.username ||
+              (userProfile.first_name && userProfile.last_name
+                ? `${userProfile.first_name} ${userProfile.last_name}`
+                : userProfile.first_name || userProfile.last_name || 'User'),
             email: userProfile.email || '',
             address: userProfile.address || userProfile.location || '',
-            accountType: userProfile.role || userProfile.account_type || userProfile.accountType || 'user'
+            accountType:
+              userProfile.role ||
+              userProfile.account_type ||
+              userProfile.accountType ||
+              'user',
           };
-          
+
           this.userInfo = userInfo;
           this.user.set(userInfo);
-          this.userProfile = userProfile; // Store original profile for template compatibility
+          this.userProfile = userProfile; 
         },
         error: (err) => {
           console.log('⚠️ Could not fetch user profile on init:', err);
           // Token might be expired, clear it
           this.logout(true);
-        }
+        },
       });
     }
-    
+
     if (typeof window !== 'undefined') {
       this.initInactivityListener();
     }
@@ -85,17 +99,21 @@ export class AuthService {
       tap((response: any) => {
         // Debug: log the response to see the actual structure
         console.log('🔍 Login response:', response);
-        
+
         // Handle multiple possible response formats
-        const token = response.access_token || response.access || response.token;
-        
+        const token =
+          response.access_token || response.access || response.token;
+
         if (!token) {
-          console.error('❌ No access token found in response. Response keys:', Object.keys(response));
+          console.error(
+            '❌ No access token found in response. Response keys:',
+            Object.keys(response)
+          );
           throw new Error('No access token received');
         }
-        
+
         console.log('✅ Token found:', token.substring(0, 20) + '...');
-        
+
         this._isLoggedIn$.next(true);
         if (typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem(this.TOKEN_NAME, token);
@@ -103,28 +121,35 @@ export class AuthService {
       }),
       switchMap((response: any) => {
         // After storing the token, fetch user profile
-        const token = response.access_token || response.access || response.token;
+        const token =
+          response.access_token || response.access || response.token;
         return this.fetchUserProfile(token);
       }),
       tap((userProfile: any) => {
         console.log('🔍 User profile response:', userProfile);
-        
+
         // Map the user profile to our UserModel interface
         const userInfo: UserModel = {
           id: userProfile.id || userProfile.user_id || 0,
-          name: userProfile.name || userProfile.username || 
-                (userProfile.first_name && userProfile.last_name ? 
-                 `${userProfile.first_name} ${userProfile.last_name}` : 
-                 userProfile.first_name || userProfile.last_name || 'User'),
+          name:
+            userProfile.name ||
+            userProfile.username ||
+            (userProfile.first_name && userProfile.last_name
+              ? `${userProfile.first_name} ${userProfile.last_name}`
+              : userProfile.first_name || userProfile.last_name || 'User'),
           email: userProfile.email || '',
           address: userProfile.address || userProfile.location || '',
-          accountType: userProfile.role || userProfile.account_type || userProfile.accountType || 'user'
+          accountType:
+            userProfile.role ||
+            userProfile.account_type ||
+            userProfile.accountType ||
+            'user',
         };
-        
+
         this.userInfo = userInfo;
         this.user.set(userInfo);
         this.userProfile = userProfile; // Store original profile for template compatibility
-        
+
         console.log('✅ User info mapped and set:', this.userInfo);
       })
     );

@@ -108,15 +108,15 @@ export class HomeComponent {
       } else {
         this.isDarkMode = false;
       }
-    }    // Get user info from AuthService instead of making a separate API call
+    } // Get user info from AuthService instead of making a separate API call
     const userInfo = this.authService.userInfo;
     const userProfile = this.authService.userProfile;
-    
+
     if (userInfo && userProfile) {
       this.user = userProfile; // Use original profile for template compatibility
       console.log('🔗 User info from AuthService:', userInfo);
       console.log('🔗 User profile for template:', userProfile);
-      
+
       // TEMP: fallback to balubal campus if campusName is missing for campus admin
       let campusName = userInfo.accountType;
       if (userInfo.accountType === 'campus admin' && !campusName) {
