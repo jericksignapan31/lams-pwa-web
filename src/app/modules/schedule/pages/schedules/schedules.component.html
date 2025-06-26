@@ -18,9 +18,94 @@
 
     Room Name : <strong>{{ roomName }}</strong>
   </p>
+
+  <!-- Debug Info -->
+  <div
+    class="debug-info"
+    style="
+      background: #f0f0f0;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    "
+  >
+    <strong>Debug Info:</strong>
+    Total Schedules Loaded: {{ schedules.length }} | Laboratory ID:
+    {{ laboratoryId }} | Room Name: {{ roomName }} | Loading: {{ isLoading }} |
+    Unmatched Schedules: {{ getUnmatchedSchedules().length }}
+    <br />
+    <button
+      style="
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: 3px;
+        cursor: pointer;
+      "
+      (click)="testApiCall()"
+    >
+      Test API Call
+    </button>
+    <button
+      style="
+        background: #2196f3;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: 3px;
+        cursor: pointer;
+      "
+      (click)="debugTimeSlotMatching()"
+    >
+      Debug Time Slots
+    </button>
+  </div>
 </div>
 
-<div *ngIf="showTopDiv" class="top-row">
+<!-- Loading state -->
+<div
+  *ngIf="isLoading"
+  class="loading-state"
+  style="text-align: center; padding: 40px"
+>
+  <h3>Loading schedules...</h3>
+  <p>Please wait while we fetch the class schedules.</p>
+</div>
+
+<!-- Error state -->
+<div
+  *ngIf="loadingError && !isLoading"
+  class="error-state"
+  style="
+    text-align: center;
+    padding: 40px;
+    background: #ffebee;
+    margin: 20px 0;
+    border-radius: 10px;
+    border-left: 4px solid #f44336;
+  "
+>
+  <h3 style="color: #d32f2f">Error Loading Schedules</h3>
+  <p style="color: #666">{{ loadingError }}</p>
+  <button
+    style="
+      background: #2196f3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    "
+    (click)="ngOnInit()"
+  >
+    Retry
+  </button>
+</div>
+
+<div *ngIf="showTopDiv && !isLoading" class="top-row">
   <form (ngSubmit)="onSubmit()" #scheduleForm="ngForm" class="schedule-form">
     <p-floatlabel variant="on">
       <input
@@ -124,7 +209,7 @@
   </form>
   <button class="toggle-btn" (click)="showTopDiv = false">cancel</button>
 </div>
-<div *ngIf="!showTopDiv" class="show-btn-row">
+<div *ngIf="!showTopDiv && !isLoading" class="show-btn-row">
   <button class="toggle-btn" (click)="showTopDiv = true">Add Schedule</button>
 </div>
 
@@ -152,6 +237,28 @@
       <span class="legend-color"></span>
       <span class="legend-text">5th Year</span>
     </div>
+  </div>
+</div>
+
+<!-- Show all schedules if there are any (for debugging) -->
+<div
+  *ngIf="schedules.length > 0 && !isLoading"
+  class="all-schedules-debug"
+  style="background: #e8f4f8; padding: 15px; margin: 15px 0; border-radius: 5px"
+>
+  <h4>All Loaded Schedules (Debug)</h4>
+  <div
+    *ngFor="let sched of schedules; let i = index"
+    style="margin: 5px 0; padding: 5px; background: white; border-radius: 3px"
+  >
+    <strong>{{ i + 1 }}. {{ sched.class_name }}</strong
+    ><br />
+    <small>
+      Day: "{{ sched.day_of_week }}" | Time: "{{ sched.start_time }}" - "{{
+        sched.end_time
+      }}" | Faculty: {{ sched.faculty_name || sched.faculty || "N/A" }} | Year:
+      {{ sched.year || "N/A" }}
+    </small>
   </div>
 </div>
 
@@ -186,7 +293,26 @@
   </div>
 </div>
 
-<div class="schedule-container">
+<!-- Empty state message -->
+<div
+  *ngIf="schedules.length === 0 && !isLoading && !loadingError"
+  class="empty-state"
+  style="
+    text-align: center;
+    padding: 40px;
+    background: #f9f9f9;
+    margin: 20px 0;
+    border-radius: 10px;
+  "
+>
+  <h3 style="color: #666">No Schedules Found</h3>
+  <p style="color: #888">
+    There are no class schedules for this laboratory yet.<br />
+    Use the "Add Schedule" button above to create the first schedule.
+  </p>
+</div>
+
+<div class="schedule-container" *ngIf="!isLoading">
   <div class="schedule-header-grid">
     <div class="time-label empty">
       <span class="header-text">Time</span>

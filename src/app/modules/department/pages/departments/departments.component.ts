@@ -38,7 +38,7 @@ export class DepartmentsComponent implements OnInit {
     this.departmentService.getDepartments().subscribe({
       next: (data) => {
         console.log('✅ Departments loaded successfully:', data);
-        
+
         // Handle different response formats
         if (Array.isArray(data)) {
           this.departments = data;
@@ -50,7 +50,7 @@ export class DepartmentsComponent implements OnInit {
           console.warn('⚠️ Unexpected departments response format:', data);
           this.departments = [];
         }
-        
+
         console.log('🔍 Final departments array:', this.departments);
         console.log('🔍 Departments count:', this.departments.length);
       },
@@ -58,18 +58,20 @@ export class DepartmentsComponent implements OnInit {
         console.error('❌ Failed to fetch departments:', err);
         console.error('❌ Error status:', err.status);
         console.error('❌ Error details:', err.error);
-        
+
         let errorMessage = 'Failed to load departments.';
         if (err.status === 403) {
-          errorMessage = 'Access denied to departments. Check user permissions.';
+          errorMessage =
+            'Access denied to departments. Check user permissions.';
         } else if (err.status === 401) {
           errorMessage = 'Authentication failed. Please log in again.';
         } else if (err.status === 500) {
           errorMessage = 'Server error when loading departments.';
         } else if (err.status === 0) {
-          errorMessage = 'Cannot connect to server. Check if backend is running.';
+          errorMessage =
+            'Cannot connect to server. Check if backend is running.';
         }
-        
+
         Swal.fire({
           icon: 'error',
           title: 'Error Loading Departments',

@@ -24,6 +24,8 @@ export class SchedulesComponent implements OnInit {
   laboratoryName: string = '';
   roomName: string = '';
   showTopDiv = false;
+  isLoading = false;
+  loadingError: string | null = null;
   days = days;
   daysOptions = days.map((day) => ({ name: day, value: day }));
   form: ScheduleForm = {
@@ -50,10 +52,22 @@ export class SchedulesComponent implements OnInit {
   timeSlots = timeSlots;
 
   ngOnInit() {
+    console.log('🔍 SchedulesComponent - ngOnInit started');
+    console.log('🔍 Current URL:', window.location.href);
+
     this.route.paramMap.subscribe((params) => {
       this.laboratoryId = params.get('laboratoryId') || '';
       this.roomName = params.get('roomName') || '';
+
+      console.log('🔍 Route params:', {
+        laboratoryId: this.laboratoryId,
+        roomName: this.roomName,
+        allParams: params.keys.map((key) => ({ key, value: params.get(key) })),
+      });
+
       if (this.laboratoryId) {
+        this.isLoading = true;
+        this.loadingError = null;
         this.laboratoryService.getLaboratory(this.laboratoryId).subscribe({
           next: (lab) => {
             console.log('API response for laboratory:', lab);
@@ -67,15 +81,29 @@ export class SchedulesComponent implements OnInit {
         this.scheduleService.getClassSchedules(this.laboratoryId).subscribe({
           next: (schedules) => {
             console.log(
-              'Class schedules for labId',
+              '✅ Class schedules loaded successfully for labId',
               this.laboratoryId,
               ':',
               schedules
             );
-            this.schedules = schedules;
+
+            // Handle different response formats
+            if (Array.isArray(schedules)) {
+              this.schedules = schedules;
+            } else if (schedules && Array.isArray(schedules.data)) {
+              this.schedules = schedules.data;
+            } else if (schedules && Array.isArray(schedules.results)) {
+              this.schedules = schedules.results;
+            } else {
+              console.warn(
+                '⚠️ Unexpected schedules response format:',
+                schedules
+              );
+              this.schedules = [];
+            }
 
             // Enhanced logging to check year field availability
-            console.log('Total schedules received:', this.schedules.length);
+            console.log('🔍 Total schedules received:', this.schedules.length);
 
             // Log start_time and end_time for each schedule
             this.schedules.forEach((schedule, index) => {
@@ -100,16 +128,45 @@ export class SchedulesComponent implements OnInit {
             const yearLevels = this.schedules
               .map((s) => s.year)
               .filter((year) => year !== null && year !== undefined);
-            console.log('Year levels found:', [...new Set(yearLevels)]);
+            console.log('🔍 Year levels found:', [...new Set(yearLevels)]);
             console.log(
-              'Schedules without year:',
+              '🔍 Schedules without year:',
               this.schedules.filter((s) => !s.year).length
             );
+
+            // Debug time slot matching
+            this.debugTimeSlotMatching();
+            this.isLoading = false;
           },
           error: (err) => {
-            console.error('Failed to fetch class schedules:', err);
+            console.error('❌ Failed to fetch class schedules:', err);
+            console.error('❌ Error status:', err.status);
+            console.error('❌ Error details:', err.error);
+            console.error('❌ Laboratory ID:', this.laboratoryId);
+
+            let errorMessage = 'Failed to load schedules.';
+            if (err.status === 403) {
+              errorMessage =
+                'Access denied to schedules. Check user permissions.';
+            } else if (err.status === 401) {
+              errorMessage = 'Authentication failed. Please log in again.';
+            } else if (err.status === 404) {
+              errorMessage = 'Laboratory not found or no schedules available.';
+            } else if (err.status === 500) {
+              errorMessage = 'Server error when loading schedules.';
+            } else if (err.status === 0) {
+              errorMessage =
+                'Cannot connect to server. Check if backend is running.';
+            }
+
+            this.alertService.handleError(errorMessage);
+            this.isLoading = false;
+            this.loadingError = errorMessage;
           },
         });
+      } else {
+        console.error('❌ No laboratory ID found in route parameters');
+        this.loadingError = 'No laboratory ID provided in the URL.';
       }
     });
   }
@@ -154,11 +211,42 @@ export class SchedulesComponent implements OnInit {
   getSchedulesForCell(day: string, time: string) {
     const gridDay = day.toLowerCase();
     const gridTime = this.to24Hour.transform(time).slice(0, 5);
-    return this.schedules.filter((s) => {
+
+    const matchingSchedules = this.schedules.filter((s) => {
       const schedDay = (s.day_of_week || '').toLowerCase();
       const schedTime = (s.start_time || '').slice(0, 5);
-      return schedDay === gridDay && schedTime === gridTime;
+
+      // Convert 24-hour format if needed
+      let normalizedSchedTime = schedTime;
+      if (
+        schedTime.includes(':') &&
+        !schedTime.includes('AM') &&
+        !schedTime.includes('PM')
+      ) {
+        // Already in 24-hour format
+        normalizedSchedTime = schedTime;
+      } else if (s.start_time) {
+        // Convert from 12-hour to 24-hour format
+        normalizedSchedTime = this.to24Hour.transform(s.start_time).slice(0, 5);
+      }
+
+      const match = schedDay === gridDay && normalizedSchedTime === gridTime;
+
+      if (match) {
+        console.log(`✅ Schedule matched for ${gridDay} ${gridTime}:`, {
+          schedule: s.class_name,
+          schedDay,
+          gridDay,
+          schedTime: normalizedSchedTime,
+          gridTime,
+          originalStartTime: s.start_time,
+        });
+      }
+
+      return match;
     });
+
+    return matchingSchedules;
   }
 
   getSchedulesForDay(day: string) {
@@ -306,6 +394,96 @@ export class SchedulesComponent implements OnInit {
 
     return colors[Math.floor(Math.random() * colors.length)];
   }
+
+  /**
+   * Manual test of API call for debugging
+   */
+  testApiCall() {
+    if (!this.laboratoryId) {
+      console.error('❌ No laboratory ID available for test');
+      this.alertService.handleError('No laboratory ID available for test');
+      return;
+    }
+
+    console.log('🧪 Testing API call manually...');
+    this.isLoading = true;
+    this.loadingError = null;
+
+    this.scheduleService.getClassSchedules(this.laboratoryId).subscribe({
+      next: (response) => {
+        console.log('🧪 Manual API test - SUCCESS:', response);
+        this.alertService.handleSuccess(
+          'API test successful! Check console for details.'
+        );
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('🧪 Manual API test - ERROR:', err);
+        this.alertService.handleError(
+          `API test failed: ${err.message || 'Unknown error'}`
+        );
+        this.isLoading = false;
+        this.loadingError = `API test failed: ${
+          err.message || 'Unknown error'
+        }`;
+      },
+    });
+  }
+
+  /**
+   * Debug method to help troubleshoot schedule display issues
+   */
+  debugTimeSlotMatching() {
+    console.log('🔍 DEBUG: Time Slot Matching Analysis');
+    console.log('Available time slots:', this.timeSlots);
+    console.log('Available days:', this.days);
+    console.log('Total schedules:', this.schedules.length);
+
+    // Check each schedule against time slots
+    this.schedules.forEach((schedule, index) => {
+      const schedDay = (schedule.day_of_week || '').toLowerCase();
+      const schedStartTime = schedule.start_time || '';
+
+      console.log(`\n📅 Schedule ${index + 1}: "${schedule.class_name}"`);
+      console.log(
+        `  Day: "${schedule.day_of_week}" -> normalized: "${schedDay}"`
+      );
+      console.log(`  Start time: "${schedStartTime}"`);
+
+      // Check if day exists in days array
+      const dayExists = this.days.some((d) => d.toLowerCase() === schedDay);
+      console.log(`  Day exists in grid: ${dayExists}`);
+
+      // Check time format conversion
+      if (schedStartTime) {
+        const convertedTime = this.to24Hour.transform(schedStartTime);
+        const timeSlice = convertedTime.slice(0, 5);
+        console.log(
+          `  Converted time: "${convertedTime}" -> slice: "${timeSlice}"`
+        );
+
+        // Check if any time slot matches
+        const matchingSlots = this.timeSlots.filter((slot) => {
+          const slotConverted = this.to24Hour.transform(slot).slice(0, 5);
+          return slotConverted === timeSlice;
+        });
+
+        console.log(
+          `  Matching time slots: ${
+            matchingSlots.length > 0 ? matchingSlots : 'NONE'
+          }`
+        );
+      }
+    });
+
+    // Check unmatched schedules
+    const unmatchedSchedules = this.getUnmatchedSchedules();
+    console.log(`\n⚠️ Unmatched schedules: ${unmatchedSchedules.length}`);
+    unmatchedSchedules.forEach((s) => {
+      console.log(`  - "${s.class_name}" (${s.day_of_week} ${s.start_time})`);
+    });
+  }
+
   /**
    * Get consistent random color based on schedule ID or class name
    */ getConsistentRandomColor(schedule: Schedule): string {

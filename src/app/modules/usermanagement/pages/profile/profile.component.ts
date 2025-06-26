@@ -123,7 +123,7 @@ export class ProfileComponent implements OnInit {
       }
 
       this.selectedProfilePicture = file;
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -146,9 +146,11 @@ export class ProfileComponent implements OnInit {
     if (this.profilePicturePreview) {
       return this.profilePicturePreview;
     }
-    return this.user?.profile_picture || 
-           this.user?.avatar || 
-           'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
+    return (
+      this.user?.profile_picture ||
+      this.user?.avatar ||
+      'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
+    );
   }
 
   onSave() {
@@ -157,12 +159,12 @@ export class ProfileComponent implements OnInit {
 
     if (this.editForm.valid && userId) {
       this.loading = true;
-      
+
       // Use FormData for file upload support
       const formData = new FormData();
-      
+
       // Add form fields
-      Object.keys(this.editForm.value).forEach(key => {
+      Object.keys(this.editForm.value).forEach((key) => {
         formData.append(key, this.editForm.value[key] || '');
       });
 
@@ -211,7 +213,7 @@ export class ProfileComponent implements OnInit {
       console.log('❌ Form errors:', this.editForm.errors);
       console.log('❌ Form valid?', this.editForm.valid);
       console.log('❌ User ID:', userId);
-      
+
       Swal.fire({
         icon: 'warning',
         title: 'Invalid Data',

@@ -9,7 +9,7 @@
           size="xlarge"
           shape="circle"
         ></p-avatar>
-        
+
         <!-- Profile picture edit button - only show in edit mode -->
         <div class="avatar-edit-overlay" *ngIf="editMode">
           <input
@@ -17,7 +17,7 @@
             #fileInput
             (change)="onProfilePictureSelect($event)"
             accept="image/*"
-            style="display: none;"
+            style="display: none"
           />
           <button
             pButton
@@ -30,7 +30,7 @@
           ></button>
         </div>
       </div>
-      
+
       <div class="profile-info">
         <h2 class="profile-name">
           {{ user?.first_name }} {{ user?.last_name }}

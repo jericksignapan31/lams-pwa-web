@@ -16,9 +16,12 @@ export class DepartmentService {
       return of([]);
     }
     const accessToken = localStorage.getItem('lams_authToken123');
-    console.log('🔍 DepartmentService - Getting departments with token:', accessToken ? 'Token found' : 'No token');
+    console.log(
+      '🔍 DepartmentService - Getting departments with token:',
+      accessToken ? 'Token found' : 'No token'
+    );
     console.log('🔍 DepartmentService - API URL:', this.baseUrl);
-    
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
