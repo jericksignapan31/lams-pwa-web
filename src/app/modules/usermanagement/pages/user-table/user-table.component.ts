@@ -9,6 +9,7 @@ import { AddUserComponent } from '../../components/modals/add-user/add-user.comp
 import { DialogModule } from 'primeng/dialog';
 import Swal from 'sweetalert2';
 import { ImportsModule } from '../../../../imports';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-user-table',
@@ -32,10 +33,65 @@ export class UserTableComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadUsers();
+  }
+
+  // Get current user's role
+  getCurrentUserRole(): string {
+    const currentUserRole =
+      this.authService.userProfile?.role?.toLowerCase() ||
+      this.authService.userInfo?.accountType?.toLowerCase() ||
+      '';
+
+    console.log('🔍 Current user role in UserTable:', currentUserRole);
+    return currentUserRole;
+  }
+
+  // Filter users based on current user's role
+  filterUsersByRole(users: any[]): any[] {
+    const currentUserRole = this.getCurrentUserRole();
+
+    switch (currentUserRole) {
+      case 'super admin':
+        // Super Admin can see all users
+        console.log('🔍 Super Admin - showing all users');
+        return users;
+
+      case 'campus admin':
+        // Campus Admin can see Faculty and Laboratory Technicians
+        const campusAdminFiltered = users.filter((user) => {
+          const userRole = (user.role || '').toLowerCase();
+          return userRole === 'faculty' || userRole === 'laboratory technician';
+        });
+        console.log(
+          '🔍 Campus Admin - showing Faculty and Lab Technicians:',
+          campusAdminFiltered.length
+        );
+        return campusAdminFiltered;
+
+      case 'faculty':
+        // Faculty can only see Laboratory Technicians
+        const facultyFiltered = users.filter((user) => {
+          const userRole = (user.role || '').toLowerCase();
+          return userRole === 'laboratory technician';
+        });
+        console.log(
+          '🔍 Faculty - showing only Laboratory Technicians:',
+          facultyFiltered.length
+        );
+        return facultyFiltered;
+
+      default:
+        // For other roles or unknown roles, show no users
+        console.log('🔍 Unknown role - showing no users');
+        return [];
+    }
   }
 
   loadUsers() {
@@ -45,21 +101,33 @@ export class UserTableComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (response: any) => {
         // Check if response is an array or has a data property
+        let allUsers: any[] = [];
         if (Array.isArray(response)) {
-          this.users = response;
+          allUsers = response;
         } else if (response && Array.isArray(response.data)) {
-          this.users = response.data;
+          allUsers = response.data;
         } else if (response && Array.isArray(response.results)) {
-          this.users = response.results;
+          allUsers = response.results;
         } else {
           console.warn('⚠️ Unexpected response format:', response);
-          this.users = [];
+          allUsers = [];
         }
 
-        console.log('🔍 Users array:', this.users);
-        console.log('🔍 Users count:', this.users.length);
+        console.log('🔍 All users from API:', allUsers);
+        console.log('🔍 All users count:', allUsers.length);
+
+        // Apply role-based filtering
+        this.users = this.filterUsersByRole(allUsers);
+
+        console.log('🔍 Filtered users array:', this.users);
+        console.log('🔍 Filtered users count:', this.users.length);
 
         this.loading = false;
+      },
+      error: (error: any) => {
+        console.error('❌ Error loading users:', error);
+        this.loading = false;
+        this.error = 'Failed to load users';
       },
     });
   }

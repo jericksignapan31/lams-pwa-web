@@ -25,11 +25,12 @@ export class AuthService {
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   user = signal<UserModel | null>(null);
   userInfo: UserModel | null = null;
-  userProfile: any = null; 
+  userProfile: any = null;
   private refreshKey = 'refresh_token';
   private userActivityEvents = ['mousemove', 'keydown', 'click', 'touchstart'];
   // private inactivityTimeout = 10 * 60 * 1000; // 10 minutes
-   private inactivityTimeout = 60 * 1000; // 60 seconds
+  // private inactivityTimeout = 60 * 1000; // 60 seconds - COMMENTED OUT
+  private inactivityTimeout = 0; // Disabled - no auto logout
   private inactivityTimer?: Subscription;
   private apiUrl = '/api/auth';
 
@@ -66,7 +67,7 @@ export class AuthService {
 
           this.userInfo = userInfo;
           this.user.set(userInfo);
-          this.userProfile = userProfile; 
+          this.userProfile = userProfile;
         },
         error: (err) => {
           console.log('⚠️ Could not fetch user profile on init:', err);
@@ -77,7 +78,8 @@ export class AuthService {
     }
 
     if (typeof window !== 'undefined') {
-      this.initInactivityListener();
+      // Commented out inactivity listener - no more auto logout
+      // this.initInactivityListener();
     }
   }
 
@@ -111,7 +113,6 @@ export class AuthService {
           );
           throw new Error('No access token received');
         }
-
 
         this._isLoggedIn$.next(true);
         if (typeof window !== 'undefined' && window.localStorage) {
@@ -147,7 +148,7 @@ export class AuthService {
 
         this.userInfo = userInfo;
         this.user.set(userInfo);
-        this.userProfile = userProfile; 
+        this.userProfile = userProfile;
 
         console.log('✅ User info mapped and set:', this.userInfo);
       })

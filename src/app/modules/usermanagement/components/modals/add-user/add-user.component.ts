@@ -113,7 +113,6 @@ export class AddUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('🔍 AddUserComponent - Loading campuses...');
     this.loadCampusesBasedOnRole();
   }
 
@@ -151,18 +150,21 @@ export class AddUserComponent implements OnInit {
   private loadUserAssignedCampus(): void {
     // For Campus Admin and Faculty, we don't show campus field in UI
     // But we still need to know their assigned campus for backend submission
+    console.log('🔍 User profile:', this.authService.userProfile);
+    console.log('🔍 User info:', this.authService.userInfo);
+
     const userCampus =
       this.authService.userProfile?.campus ||
-      this.authService.userProfile?.assigned_campus;
+      this.authService.userProfile?.assigned_campus ||
+      this.authService.userProfile?.campus_id;
 
-    console.log('🏢 Campus Admin/Faculty - User assigned campus:', userCampus);
+    console.log('🏢 Found user campus:', userCampus);
 
     if (userCampus) {
       // Store the campus for form submission, but don't show it in UI
       this.campuses = [userCampus];
-      console.log('🔒 Campus stored for automatic assignment:', userCampus);
     } else {
-      console.log('⚠️ No assigned campus found for Campus Admin/Faculty');
+      console.warn('⚠️ No campus found in user profile/info');
       this.campuses = [];
     }
   }
@@ -223,22 +225,57 @@ export class AddUserComponent implements OnInit {
     // Handle campus value based on user role
     let campusValue = '';
     if (this.isSuperAdmin()) {
-      // Super Admin: Get campus from form selection
-      campusValue = this.form.value.campus || '';
+      // Super Admin: Get campus from form selection (should be campus_id)
+      const selectedCampus = this.form.value.campus;
+      if (typeof selectedCampus === 'object' && selectedCampus !== null) {
+        campusValue = selectedCampus.campus_id || selectedCampus.id || '';
+      } else {
+        campusValue = selectedCampus || '';
+      }
+      console.log('🏢 Super Admin selected campus_id:', campusValue);
     } else {
       // Campus Admin/Faculty: Use their assigned campus
       const userCampus = this.campuses[0]; // First (and only) campus in array
-      campusValue = userCampus ? userCampus.campus_id || userCampus.id : '';
+      if (userCampus) {
+        // Always prioritize campus_id field
+        campusValue = userCampus.campus_id || userCampus.id || '';
+        console.log('🏢 Using assigned campus_id:', campusValue);
+        console.log('🏢 Campus object:', userCampus);
+      } else {
+        console.error('❌ No campus found for non-Super Admin user');
+        // Fallback: try to get campus_id directly from user profile
+        const fallbackCampus =
+          this.authService.userProfile?.campus ||
+          this.authService.userProfile?.assigned_campus ||
+          this.authService.userProfile?.campus_id;
+
+        if (fallbackCampus) {
+          if (typeof fallbackCampus === 'object') {
+            campusValue = fallbackCampus.campus_id || fallbackCampus.id || '';
+          } else {
+            campusValue = fallbackCampus;
+          }
+          console.log('🏢 Using fallback campus_id:', campusValue);
+        }
+      }
     }
     formData.append('campus', campusValue);
 
     formData.append('contact_number', this.form.value.contact_number || '');
 
-    // Profile picture is handled automatically by backend
-    // Role is determined by the logic above
+    // Always send the fixed profile picture URL
+    formData.append(
+      'profile_picture',
+      'https://znjhzkpekjdtzzsjfvhm.supabase.co/storage/v1/object/public/lems-storage/Profile-Pictures/b7e43cbb-e23c-44f8-8a70-99bf49fc33a9.jpg'
+    );
 
     console.log('🔍 Creating account with role:', this.assignedRole);
     console.log('🔍 Creating account with campus:', campusValue);
+    console.log('🔍 Campus value type:', typeof campusValue);
+    console.log(
+      '🔍 Campus value empty?',
+      campusValue === '' || campusValue === undefined || campusValue === null
+    );
     console.log(
       '🔍 User type:',
       this.isSuperAdmin() ? 'Super Admin' : 'Campus Admin/Faculty'
@@ -251,9 +288,10 @@ export class AddUserComponent implements OnInit {
         this.alertService.handleSuccess(
           `Account created successfully with role: ${this.assignedRole}!`
         );
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        // Commented out auto reload - no more 60sec auto logout
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 1000);
         this.close.emit();
       },
       error: (err: any) => {
