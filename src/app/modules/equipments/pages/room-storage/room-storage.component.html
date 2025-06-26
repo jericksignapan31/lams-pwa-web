@@ -1,0 +1,158 @@
+<div class="room-storage-container">
+  <!-- Header Section -->
+  <div class="storage-header mb-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">
+          {{ currentLaboratory || "Laboratory Equipment" }} Storage
+        </h2>
+        <p class="text-gray-600" *ngIf="currentLaboratory">
+          Equipment registered in {{ currentLaboratory }}
+        </p>
+        <p class="text-gray-600" *ngIf="!currentLaboratory">
+          All equipment across laboratories
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-500">Total Items:</span>
+        <span class="font-bold text-lg text-blue-600">{{
+          filteredEquipment.length
+        }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state text-center p-8">
+    <p-progressSpinner
+      strokeWidth="3"
+      animationDuration="1s"
+    ></p-progressSpinner>
+    <p class="mt-3 text-gray-600">Loading equipment...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-state text-center p-8">
+    <i class="pi pi-exclamation-triangle text-4xl text-red-500 mb-3"></i>
+    <p class="text-red-600">{{ error }}</p>
+  </div>
+
+  <!-- Equipment Table -->
+  <div *ngIf="!isLoading && !error" class="equipment-table">
+    <p-table
+      #dt
+      [value]="filteredEquipment"
+      [paginator]="true"
+      [rows]="10"
+      [responsiveLayout]="'scroll'"
+      [globalFilterFields]="[
+        'equipment_name',
+        'brand_name',
+        'model_number',
+        'serial_number'
+      ]"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-between items-center">
+          <span class="text-lg font-semibold">Equipment List</span>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Search equipment..."
+              #searchInput
+              (input)="
+                $any($event.target).value.length > 0
+                  ? dt.filterGlobal($any($event.target).value, 'contains')
+                  : dt.clear()
+              "
+            />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Equipment Name</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Serial Number</th>
+          <th>Unit Cost</th>
+          <th>Date Acquired</th>
+          <th>Status</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-equipment>
+        <tr>
+          <td>
+            <div class="flex flex-col">
+              <span class="font-medium">{{
+                equipment.equipment_name || "N/A"
+              }}</span>
+              <small class="text-gray-500">{{
+                equipment.description || equipment.equipment_id
+              }}</small>
+            </div>
+          </td>
+          <td>{{ equipment.brand_name || "N/A" }}</td>
+          <td>{{ equipment.model_number || "N/A" }}</td>
+          <td>
+            <span class="font-mono text-sm">{{
+              equipment.serial_number || "N/A"
+            }}</span>
+          </td>
+          <td>
+            <span *ngIf="equipment.unit_cost" class="font-medium">
+              ${{ equipment.unit_cost | number : "1.2-2" }}
+            </span>
+            <span *ngIf="!equipment.unit_cost" class="text-gray-400">N/A</span>
+          </td>
+          <td>
+            <span *ngIf="equipment.date_acquired">
+              {{ equipment.date_acquired | date : "MMM dd, yyyy" }}
+            </span>
+            <span *ngIf="!equipment.date_acquired" class="text-gray-400"
+              >N/A</span
+            >
+          </td>
+          <td>
+            <p-tag
+              [value]="equipment.status || 'AVAILABLE'"
+              [severity]="getStatusSeverity(equipment.status || 'AVAILABLE')"
+            ></p-tag>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center py-8">
+            <div class="flex flex-col items-center">
+              <i class="pi pi-inbox text-4xl text-gray-400 mb-3"></i>
+              <p class="text-gray-600" *ngIf="currentLaboratory">
+                No equipment found in {{ currentLaboratory }}
+              </p>
+              <p class="text-gray-600" *ngIf="!currentLaboratory">
+                No equipment found
+              </p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Debug Info (Optional - can be removed in production) -->
+  <div
+    *ngIf="!isLoading && !error"
+    class="debug-info mt-4 p-3 bg-gray-50 border rounded"
+    style="font-size: 12px"
+  >
+    <strong>Debug Info:</strong>
+    Laboratory: "{{ currentLaboratory }}" | Total Equipment:
+    {{ equipment.length }} | Filtered: {{ filteredEquipment.length }}
+  </div>
+</div>

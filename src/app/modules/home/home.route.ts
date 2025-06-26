@@ -72,6 +72,13 @@ export const homeRoute: Route[] = [
       ),
   },
   {
+    path: 'room-storage',
+    loadComponent: () =>
+      import('../equipments/pages/room-storage/room-storage.component').then(
+        (m) => m.RoomStorageComponent
+      ),
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full',

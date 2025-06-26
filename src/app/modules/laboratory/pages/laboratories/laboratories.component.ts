@@ -28,14 +28,33 @@ export class LaboratoriesComponent {
   showEditModal = false;
   selectedLaboratory: any = null;
 
+  // Group laboratories by laboratory_name for better display
+  groupedLaboratories: { [labName: string]: any[] } = {};
+
   constructor(
     private laboratoryService: LaboratoryService,
     private router: Router
   ) {
+    this.loadLaboratories();
+  }
+
+  private loadLaboratories() {
     this.laboratoryService.getLaboratories().subscribe((data) => {
-      // console.log('Laboratories:', data);
+      console.log('🏢 Laboratories loaded:', data);
       this.laboratories = data;
+      this.groupLaboratoriesByName();
     });
+  }
+
+  private groupLaboratoriesByName() {
+    this.groupedLaboratories = {};
+    this.laboratories.forEach((lab) => {
+      if (!this.groupedLaboratories[lab.laboratory_name]) {
+        this.groupedLaboratories[lab.laboratory_name] = [];
+      }
+      this.groupedLaboratories[lab.laboratory_name].push(lab);
+    });
+    console.log('📊 Grouped laboratories:', this.groupedLaboratories);
   }
 
   onAddLaboratoryRoom() {
@@ -48,6 +67,7 @@ export class LaboratoriesComponent {
 
   onLaboratoryCreated(lab: any) {
     this.laboratories.push(lab);
+    this.groupLaboratoriesByName(); // Regroup after adding
     this.showAddModal = false;
   }
 
@@ -68,6 +88,7 @@ export class LaboratoriesComponent {
     if (idx > -1) {
       this.laboratories[idx] = updatedLab;
     }
+    this.groupLaboratoriesByName(); // Regroup after updating
     this.showEditModal = false;
     this.selectedLaboratory = null;
   }
@@ -89,6 +110,7 @@ export class LaboratoriesComponent {
             this.laboratories = this.laboratories.filter(
               (l) => l.laboratory_id !== lab.laboratory_id
             );
+            this.groupLaboratoriesByName(); // Regroup after deleting
             Swal.fire(
               'Deleted!',
               'The laboratory has been deleted.',
@@ -103,8 +125,6 @@ export class LaboratoriesComponent {
     });
   }
   onView(lab: any) {
-    
-
     if (lab.laboratory_id && lab.room_no) {
       // Use laboratory_id as the main identifier and room_no as the room name
       // Ensure proper encoding of parameters for URL safety
@@ -142,5 +162,30 @@ export class LaboratoriesComponent {
         (lab.location && lab.location.toLowerCase().includes(term)) ||
         (lab.room_no && lab.room_no.toString().toLowerCase().includes(term))
     );
+  }
+
+  get filteredGroupedLaboratories() {
+    if (!this.searchTerm) {
+      return this.groupedLaboratories;
+    }
+
+    const term = this.searchTerm.toLowerCase();
+    const filtered: { [labName: string]: any[] } = {};
+
+    Object.entries(this.groupedLaboratories).forEach(([labName, rooms]) => {
+      const filteredRooms = rooms.filter(
+        (lab) =>
+          (lab.laboratory_name &&
+            lab.laboratory_name.toLowerCase().includes(term)) ||
+          (lab.location && lab.location.toLowerCase().includes(term)) ||
+          (lab.room_no && lab.room_no.toString().toLowerCase().includes(term))
+      );
+
+      if (filteredRooms.length > 0) {
+        filtered[labName] = filteredRooms;
+      }
+    });
+
+    return filtered;
   }
 }

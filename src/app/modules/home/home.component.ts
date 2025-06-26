@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject } from '@angular/core';
-import { RouterOutlet, RouterModule } from '@angular/router';
+import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import {
   trigger,
@@ -73,7 +73,8 @@ export class HomeComponent {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private laboratoryService: LaboratoryService
+    private laboratoryService: LaboratoryService,
+    private router: Router
   ) {}
 
   @HostListener('window:resize', [])
@@ -141,9 +142,11 @@ export class HomeComponent {
   }
 
   private loadLaboratoryData() {
-    // Dynamically populate Schedule submenu in laboratoryPanelMenuModel
+    // Dynamically populate laboratory-related menus with real API data
     this.laboratoryService.getLaboratories().subscribe((labs: any[]) => {
-      // Find the 'Schedule' menu
+      console.log('📋 Loading laboratory data for menus:', labs);
+
+      // 1. Populate Schedule submenu in laboratoryPanelMenuModel (existing functionality)
       const labMenu = this.panelMenuItems.find(
         (item: any) => item.label === 'Laboratory'
       );
@@ -177,6 +180,50 @@ export class HomeComponent {
                 routerLink: ['/home/schedules', labId, room], // Now using laboratory_id
               })),
             })
+          );
+        }
+      }
+
+      // 2. NEW: Populate Laboratories submenu in Inventory menu
+      const inventoryMenu = this.panelMenuItems.find(
+        (item: any) => item.label === 'Inventory'
+      );
+      if (inventoryMenu) {
+        const laboratoriesMenu = inventoryMenu.items.find(
+          (item: any) => item.label === 'Laboratories'
+        );
+        if (laboratoriesMenu) {
+          // Get unique laboratory names (no room submenus)
+          const uniqueLabs = labs.reduce((acc: any[], lab) => {
+            const existingLab = acc.find(
+              (l) => l.laboratory_name === lab.laboratory_name
+            );
+            if (!existingLab) {
+              acc.push({
+                laboratory_name: lab.laboratory_name,
+                laboratory_id: lab.laboratory_id,
+              });
+            }
+            return acc;
+          }, []);
+
+          // Build submenu: just laboratory names, clicking goes to room-storage page with lab filter
+          laboratoriesMenu.items = uniqueLabs.map((lab) => ({
+            label: lab.laboratory_name,
+            icon: 'pi pi-flask',
+            command: () => {
+              console.log(`🧪 Navigating to room storage for laboratory: ${lab.laboratory_name}`);
+              // Navigate to the room-storage page with laboratory filter
+              this.router.navigate(['/home/room-storage'], { 
+                queryParams: { laboratory: lab.laboratory_name, labId: lab.laboratory_id } 
+              });
+            },
+            items: [], // No room submenu
+          }));
+
+          console.log(
+            '🔧 Populated Laboratories submenu (names only):',
+            laboratoriesMenu.items
           );
         }
       }

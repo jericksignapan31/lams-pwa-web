@@ -56,6 +56,12 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
             routerLink: '/home/equipments',
             items: [],
           },
+          {
+            label: 'Laboratories',
+            icon: 'pi pi-flask',
+            routerLink: '/home/laboratories',
+            items: [],
+          },
           ...campuses.map((campus) => ({
             label: campus.name,
             icon: 'pi pi-building',
@@ -92,6 +98,12 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
             routerLink: '/home/equipments',
             items: [],
           },
+          {
+            label: 'Laboratories',
+            icon: 'pi pi-flask',
+            routerLink: '/home/laboratories',
+            items: [],
+          },
           ...campus.departments.map((dept) => ({
             label: dept.name,
             icon: 'pi pi-building-columns',
@@ -110,6 +122,12 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
             routerLink: '/home/equipments',
             items: [],
           },
+          {
+            label: 'Laboratories',
+            icon: 'pi pi-flask',
+            routerLink: '/home/laboratories',
+            items: [],
+          },
           { label: 'No departments found', icon: '', items: [] },
         ];
       }
@@ -119,6 +137,12 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
           label: 'Equipment',
           icon: 'pi pi-cog',
           routerLink: '/home/equipments',
+          items: [],
+        },
+        {
+          label: 'Laboratories',
+          icon: 'pi pi-flask',
+          routerLink: '/home/laboratories',
           items: [],
         },
         { label: 'No campus assigned', icon: '', items: [] },
