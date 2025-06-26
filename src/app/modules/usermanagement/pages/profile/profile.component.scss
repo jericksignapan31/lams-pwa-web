@@ -119,6 +119,51 @@
   font-weight: 500;
 }
 
+/* Edit Form Styles */
+.edit-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.save-btn {
+  background: #4caf50 !important;
+  border-color: #4caf50 !important;
+}
+
+.cancel-btn {
+  background: #6c757d !important;
+  border-color: #6c757d !important;
+}
+
+.edit-form {
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.profile-detail-card .form-input {
+  background: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.edit-buttons button {
+  min-width: 80px;
+}
+
 @media (max-width: 900px) {
   .profile-container {
     flex-direction: column;
@@ -138,5 +183,13 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8rem;
+  }
+
+  .edit-buttons {
+    flex-direction: column;
+  }
+
+  .edit-buttons button {
+    width: 100%;
   }
 }

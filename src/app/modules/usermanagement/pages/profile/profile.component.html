@@ -24,28 +24,107 @@
         icon="pi pi-pencil"
         label="Edit"
         class="edit-btn"
+        (click)="toggleEditMode()"
+        *ngIf="!editMode"
       ></button>
+
+      <!-- Save and Cancel buttons for edit mode -->
+      <div class="edit-buttons" *ngIf="editMode">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-check"
+          label="Save"
+          class="save-btn"
+          [disabled]="editForm.invalid || loading"
+          (click)="onSave()"
+        ></button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          label="Cancel"
+          class="cancel-btn p-button-secondary"
+          (click)="toggleEditMode()"
+        ></button>
+      </div>
     </div>
     <div class="profile-details">
-      <div class="profile-detail-card">
-        <div class="detail-label">Full Name</div>
-        <div class="detail-value">
-          {{ user?.first_name }} {{ user?.last_name }}
+      <!-- View Mode -->
+      <div *ngIf="!editMode">
+        <div class="profile-detail-card">
+          <div class="detail-label">Full Name</div>
+          <div class="detail-value">
+            {{ user?.first_name }} {{ user?.last_name }}
+          </div>
+        </div>
+        <div class="profile-detail-card">
+          <div class="detail-label">Email</div>
+          <div class="detail-value">{{ user?.email }}</div>
+        </div>
+        <div class="profile-detail-card">
+          <div class="detail-label">Role</div>
+          <div class="detail-value">{{ user?.role }}</div>
+        </div>
+        <div class="profile-detail-card">
+          <div class="detail-label">Contact</div>
+          <div class="detail-value">{{ user?.contact_number }}</div>
         </div>
       </div>
-      <div class="profile-detail-card">
-        <div class="detail-label">Email</div>
-        <div class="detail-value">{{ user?.email }}</div>
-      </div>
-      <div class="profile-detail-card">
-        <div class="detail-label">Role</div>
-        <div class="detail-value">{{ user?.role }}</div>
-      </div>
 
-      <div class="profile-detail-card">
-        <div class="detail-label">Contact</div>
-        <div class="detail-value">{{ user?.contact_number }}</div>
-      </div>
+      <!-- Edit Mode -->
+      <form [formGroup]="editForm" *ngIf="editMode" class="edit-form">
+        <div class="profile-detail-card">
+          <div class="detail-label">First Name</div>
+          <input
+            type="text"
+            pInputText
+            formControlName="first_name"
+            placeholder="Enter first name"
+            class="form-input"
+          />
+        </div>
+        <div class="profile-detail-card">
+          <div class="detail-label">Last Name</div>
+          <input
+            type="text"
+            pInputText
+            formControlName="last_name"
+            placeholder="Enter last name"
+            class="form-input"
+          />
+        </div>
+        <div class="profile-detail-card">
+          <div class="detail-label">Email</div>
+          <input
+            type="email"
+            pInputText
+            formControlName="email"
+            placeholder="Enter email"
+            class="form-input"
+          />
+        </div>
+        <div class="profile-detail-card">
+          <div class="detail-label">Contact Number</div>
+          <input
+            type="text"
+            pInputText
+            formControlName="contact_number"
+            placeholder="Enter contact number"
+            class="form-input"
+          />
+        </div>
+        <div class="profile-detail-card">
+          <div class="detail-label">Department</div>
+          <input
+            type="text"
+            pInputText
+            formControlName="department"
+            placeholder="Enter department"
+            class="form-input"
+          />
+        </div>
+      </form>
     </div>
   </div>
   <div class="profile-card extra-details">

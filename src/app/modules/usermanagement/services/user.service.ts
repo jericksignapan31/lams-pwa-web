@@ -44,6 +44,32 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/users/`, data, { headers });
   }
 
+  updateUser(id: string | number, data: any) {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of({});
+    }
+    const accessToken = localStorage.getItem('lams_authToken123');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.put(`${this.baseUrl}/users/${id}/`, data, { headers });
+  }
+
+  // Method specifically for updating current user's own profile
+  updateCurrentUserProfile(data: any) {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of({});
+    }
+    const accessToken = localStorage.getItem('lams_authToken123');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    });
+    // Try using the profile endpoint for current user updates
+    return this.http.put(`${this.baseUrl}/users/profile/`, data, { headers });
+  }
+
   deleteUser(id: string | number) {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of({});
