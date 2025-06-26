@@ -102,13 +102,31 @@ export class LaboratoriesComponent {
       }
     });
   }
-
   onView(lab: any) {
-    // Navigate to the SchedulesComponent for this laboratory and room
-    const labName = encodeURIComponent(lab.laboratory_name);
-    const roomNo = encodeURIComponent(lab.room_no);
-    if (labName && roomNo) {
-      this.router.navigate(['home', 'schedules', labName, roomNo]);
+    
+
+    if (lab.laboratory_id && lab.room_no) {
+      // Use laboratory_id as the main identifier and room_no as the room name
+      // Ensure proper encoding of parameters for URL safety
+      const laboratoryId = encodeURIComponent(lab.laboratory_id);
+      const roomName = encodeURIComponent(lab.room_no);
+
+      console.log('Navigating to:', [
+        'home',
+        'schedules',
+        laboratoryId,
+        roomName,
+      ]);
+
+      this.router.navigate(['home', 'schedules', laboratoryId, roomName]);
+    } else {
+      console.error('Missing required fields for navigation:', {
+        laboratory_id: lab.laboratory_id,
+        room_no: lab.room_no,
+        available_fields: Object.keys(lab),
+      });
+      // Show user-friendly error message
+      alert('Cannot view schedules: Missing laboratory ID or room number');
     }
   }
 

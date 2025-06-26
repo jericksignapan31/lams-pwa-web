@@ -49,12 +49,18 @@ export const homeRoute: Route[] = [
       import('../schedule/pages/schedules/schedules.component').then(
         (m) => m.SchedulesComponent
       ),
-  },
-  {
+  },  {
     path: 'schedules',
     loadComponent: () =>
       import('../schedule/pages/schedules/schedules.component').then(
         (m) => m.SchedulesComponent
+      ),
+  },
+  {
+    path: 'file-upload',
+    loadComponent: () =>
+      import('../../shared/components/file-upload/file-upload.component').then(
+        (m) => m.FileUploadComponent
       ),
   },
   {

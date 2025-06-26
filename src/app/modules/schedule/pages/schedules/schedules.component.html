@@ -158,17 +158,29 @@
 <div class="unmatched-schedules" *ngIf="getUnmatchedSchedules().length">
   <h3>Other Schedules (Not in Grid)</h3>
   <div *ngFor="let sched of getUnmatchedSchedules()">
-    <div class="schedule-cell-card">
+    <div
+      class="schedule-cell-card random-bg"
+      [style.background]="getConsistentRandomColor(sched)"
+    >
       <div class="card-header">
-        <span class="time">{{ sched.time_display }}</span>
+        <div class="time-info">
+          <span class="time"
+            >{{ sched.start_time }} - {{ sched.end_time }}</span
+          >
+          <span class="grade-badge">{{ getGradeLevel(sched.year) }}</span>
+        </div>
       </div>
       <div class="card-body">
-        <div>
+        <div class="class-info">
           <strong>{{ sched.class_name }}</strong>
         </div>
-        <div>{{ sched.faculty_name }}</div>
-        <div>{{ sched.course_code }} - {{ sched.course }}</div>
-        <div>Section: {{ sched.section }}</div>
+        <div class="faculty-info">
+          {{ sched.faculty_name || sched.faculty }}
+        </div>
+        <div class="course-info">
+          {{ sched.course_code }} - {{ sched.course }}
+        </div>
+        <div class="section-info">Section: {{ sched.section }}</div>
       </div>
     </div>
   </div>
@@ -189,9 +201,10 @@
       <div class="cell" *ngFor="let day of days">
         <ng-container *ngFor="let sched of getSchedulesForCell(day, time)">
           <div
-            class="schedule-cell-card {{ getYearColorClass(sched.year) }}"
+            class="schedule-cell-card random-bg"
             [style.height]="calculateScheduleHeight(sched)"
             [style.z-index]="10 + getSchedulePriority(sched)"
+            [style.background]="getConsistentRandomColor(sched)"
           >
             <div class="card-header">
               <div class="time-info">

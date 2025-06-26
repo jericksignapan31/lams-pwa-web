@@ -45,3 +45,34 @@ export const days = [
   'friday',
   'saturday',
 ];
+
+// Schedule interface to ensure proper typing
+export interface Schedule {
+  id?: string | number;
+  class_name: string;
+  faculty?: string;
+  faculty_name?: string;
+  day_of_week: string;
+  start_time: string;
+  end_time: string;
+  course_code?: string;
+  course?: string;
+  year?: number;
+  section?: string;
+  laboratory_id?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// Form interface for creating/editing schedules
+export interface ScheduleForm {
+  class_name: string;
+  faculty: string | null;
+  day_of_week: string | null;
+  start_time: string | null;
+  end_time: string | null;
+  course_code: string;
+  course: string;
+  year: number | null;
+  section: string;
+}

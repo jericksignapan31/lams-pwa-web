@@ -49,23 +49,31 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
       {
         label: 'Inventory',
         icon: 'pi pi-warehouse',
-        items: campuses.map((campus) => ({
-          label: campus.name,
-          icon: 'pi pi-building',
-          items: campus.departments.map((dept) => ({
-            label: dept.name,
-            icon: 'pi pi-building-columns',
-            items: dept.rooms.map((room) => ({
-              label: room,
-              icon: 'pi pi-home',
-              routerLink: '/home/equipments',
-              items: [],
+        items: [
+          {
+            label: 'Equipment',
+            icon: 'pi pi-cog',
+            routerLink: '/home/equipments',
+            items: [],
+          },
+          ...campuses.map((campus) => ({
+            label: campus.name,
+            icon: 'pi pi-building',
+            items: campus.departments.map((dept) => ({
+              label: dept.name,
+              icon: 'pi pi-building-columns',
+              items: dept.rooms.map((room) => ({
+                label: room,
+                icon: 'pi pi-home',
+                routerLink: '/home/equipments',
+                items: [],
+              })),
             })),
           })),
-        })),
+        ],
       },
     ];
-  } else if (role === 'campus admin') {
+  } else if (role === 'campus admin' || role === 'laboratory technician') {
     let inventoryMenu = {
       label: 'Inventory',
       icon: 'pi pi-warehouse',
@@ -77,22 +85,42 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
           c.name.trim().toLowerCase() === assignedCampus.trim().toLowerCase()
       );
       if (campus) {
-        inventoryMenu.items = campus.departments.map((dept) => ({
-          label: dept.name,
-          icon: 'pi pi-building-columns',
-          items: dept.rooms.map((room) => ({
-            label: room,
-            icon: 'pi pi-home',
+        inventoryMenu.items = [
+          {
+            label: 'Equipment',
+            icon: 'pi pi-cog',
+            routerLink: '/home/equipments',
             items: [],
+          },
+          ...campus.departments.map((dept) => ({
+            label: dept.name,
+            icon: 'pi pi-building-columns',
+            items: dept.rooms.map((room) => ({
+              label: room,
+              icon: 'pi pi-home',
+              items: [],
+            })),
           })),
-        }));
+        ];
       } else {
         inventoryMenu.items = [
+          {
+            label: 'Equipment',
+            icon: 'pi pi-cog',
+            routerLink: '/home/equipments',
+            items: [],
+          },
           { label: 'No departments found', icon: '', items: [] },
         ];
       }
     } else {
       inventoryMenu.items = [
+        {
+          label: 'Equipment',
+          icon: 'pi pi-cog',
+          routerLink: '/home/equipments',
+          items: [],
+        },
         { label: 'No campus assigned', icon: '', items: [] },
       ];
     }
