@@ -1,9 +1,15 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ImportsModule } from '../../../../imports';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Product, Equipment } from '../../model/product';
+import {
+  Product,
+  Equipment,
+  EquipmentForm,
+  Laboratory,
+} from '../../model/product';
 import { Table } from 'primeng/table';
 import { EquipmentService } from '../../services/equipment.service';
+import { LaboratoryService } from '../../../laboratory/services/laboratory.service';
 import { AlertService } from '../../../../core/services/alert.service';
 
 interface Column {
@@ -35,13 +41,27 @@ interface ExportColumn {
 })
 export class EquipmentComponent {
   productDialog: boolean = false;
+  equipmentDialog: boolean = false;
   isLoading: boolean = false;
   loadingError: string | null = null;
+  isLoadingLaboratories: boolean = false;
 
   products: Product[] = [];
   equipment: Equipment[] = [];
+  laboratories: Laboratory[] = [];
 
   product!: Product;
+
+  // Equipment form data
+  equipmentForm: EquipmentForm = {
+    equipment_name: '',
+    brand_name: '',
+    model_number: '',
+    serial_number: '',
+    date_acquired: null,
+    unit_cost: null,
+    laboratory_id: null,
+  };
 
   selectedProducts!: Product[] | null;
 
@@ -57,6 +77,7 @@ export class EquipmentComponent {
 
   constructor(
     private equipmentService: EquipmentService,
+    private laboratoryService: LaboratoryService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private cd: ChangeDetectorRef,
@@ -69,6 +90,7 @@ export class EquipmentComponent {
 
   ngOnInit() {
     this.loadEquipmentData();
+    this.loadLaboratories();
   }
 
   loadEquipmentData() {
@@ -138,6 +160,126 @@ export class EquipmentComponent {
         this.loadDemoData();
       },
     });
+  }
+
+  /**
+   * Load laboratories for the selector - filtered by user's campus
+   */
+  loadLaboratories() {
+    console.log(
+      '🔍 EquipmentComponent - Loading laboratories for selector (filtered by campus)...'
+    );
+    this.isLoadingLaboratories = true;
+
+    // Use campus-filtered method instead of getting all laboratories
+    this.laboratoryService.getLaboratoriesByCampus().subscribe({
+      next: (data: Laboratory[]) => {
+        console.log(
+          '✅ Laboratories loaded successfully (campus filtered):',
+          data
+        );
+        this.laboratories = data;
+        this.isLoadingLaboratories = false;
+        this.cd.markForCheck();
+      },
+      error: (err) => {
+        console.error('❌ Failed to load laboratories:', err);
+        this.isLoadingLaboratories = false;
+        this.alertService.handleError(
+          'Failed to load laboratories for selection.'
+        );
+
+        // Fallback: try to load all laboratories if campus filtering fails
+        console.log('🔄 Fallback: Loading all laboratories...');
+        this.laboratoryService.getLaboratories().subscribe({
+          next: (data: Laboratory[]) => {
+            console.log('✅ Fallback: All laboratories loaded:', data);
+            this.laboratories = data;
+            this.cd.markForCheck();
+          },
+          error: (fallbackErr) => {
+            console.error('❌ Fallback also failed:', fallbackErr);
+          },
+        });
+      },
+    });
+  }
+
+  /**
+   * Open new equipment dialog
+   */
+  openNewEquipment() {
+    this.equipmentForm = {
+      equipment_name: '',
+      brand_name: '',
+      model_number: '',
+      serial_number: '',
+      date_acquired: null,
+      unit_cost: null,
+      laboratory_id: null,
+    };
+    this.submitted = false;
+    this.equipmentDialog = true;
+  }
+
+  /**
+   * Hide equipment dialog
+   */
+  hideEquipmentDialog() {
+    this.equipmentDialog = false;
+    this.submitted = false;
+  }
+
+  /**
+   * Save equipment form
+   */
+  saveEquipment() {
+    this.submitted = true;
+
+    // Validate required fields
+    const isValid =
+      this.equipmentForm.equipment_name.trim() &&
+      this.equipmentForm.brand_name.trim() &&
+      this.equipmentForm.laboratory_id;
+
+    if (isValid) {
+      console.log('🔍 Creating equipment with data:', this.equipmentForm);
+
+      this.equipmentService.createEquipment(this.equipmentForm).subscribe({
+        next: (response) => {
+          console.log('✅ Equipment created successfully:', response);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Equipment created successfully!',
+            life: 3000,
+          });
+          this.equipmentDialog = false;
+          this.submitted = false;
+          // Reload equipment data
+          this.loadEquipmentData();
+        },
+        error: (err) => {
+          console.error('❌ Failed to create equipment:', err);
+          let errorMessage = 'Failed to create equipment. Please try again.';
+
+          if (err.status === 400) {
+            errorMessage = 'Invalid data provided. Please check all fields.';
+          } else if (err.status === 403) {
+            errorMessage =
+              'Access denied. You may not have permission to create equipment.';
+          } else if (err.status === 401) {
+            errorMessage = 'Authentication failed. Please log in again.';
+          }
+
+          this.alertService.handleError(errorMessage);
+        },
+      });
+    } else {
+      this.alertService.handleError(
+        'Please fill in all required fields: Equipment Name, Brand Name, and Laboratory.'
+      );
+    }
   }
 
   initializeStatuses() {
@@ -340,5 +482,81 @@ export class EquipmentComponent {
       this.productDialog = false;
       this.product = {};
     }
+  }
+
+  /**
+   * Test method to manually call the laboratories API
+   */
+  testLaboratoriesAPI() {
+    console.log('🧪 Testing Laboratories API manually...');
+    this.isLoadingLaboratories = true;
+
+    this.laboratoryService.getLaboratories().subscribe({
+      next: (response) => {
+        console.log(
+          '🧪 Manual Laboratory API test - SUCCESS (all labs):',
+          response
+        );
+
+        // Also test campus filtering
+        this.laboratoryService.getLaboratoriesByCampus().subscribe({
+          next: (filteredResponse) => {
+            console.log(
+              '🧪 Manual Laboratory API test - SUCCESS (campus filtered):',
+              filteredResponse
+            );
+            this.alertService.handleSuccess(
+              `Laboratory API test successful! Found ${response.length} total labs, ${filteredResponse.length} for your campus. Check console for details.`
+            );
+            this.isLoadingLaboratories = false;
+          },
+          error: (filterErr) => {
+            console.error('🧪 Campus filtering failed:', filterErr);
+            this.alertService.handleError(
+              'Campus filtering failed, but basic API works.'
+            );
+            this.isLoadingLaboratories = false;
+          },
+        });
+      },
+      error: (err) => {
+        console.error('🧪 Manual Laboratory API test - ERROR:', err);
+        this.alertService.handleError(
+          `Laboratory API test failed: ${err.message || 'Unknown error'}`
+        );
+        this.isLoadingLaboratories = false;
+      },
+    });
+  }
+
+  /**
+   * Debug method to show current form state
+   */
+  debugFormState() {
+    console.log('🔍 Current Equipment Form State:', this.equipmentForm);
+    console.log('🔍 Available Laboratories:', this.laboratories);
+    console.log('🔍 Form Submitted State:', this.submitted);
+    console.log('🔍 Dialog Visible:', this.equipmentDialog);
+
+    this.alertService.handleSuccess(
+      'Form state logged to console. Check developer tools.'
+    );
+  }
+
+  /**
+   * Reset equipment form to default state
+   */
+  resetEquipmentForm() {
+    this.equipmentForm = {
+      equipment_name: '',
+      brand_name: '',
+      model_number: '',
+      serial_number: '',
+      date_acquired: null,
+      unit_cost: null,
+      laboratory_id: null,
+    };
+    this.submitted = false;
+    console.log('🔄 Equipment form reset to default state');
   }
 }

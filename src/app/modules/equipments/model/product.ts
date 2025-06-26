@@ -52,3 +52,24 @@ export interface Equipment {
   inventoryStatus?: string;
   manufacturer?: string;
 }
+
+// Equipment form interface for creating equipment
+export interface EquipmentForm {
+  equipment_name: string;
+  brand_name: string;
+  model_number: string;
+  serial_number: string;
+  date_acquired: string | null;
+  unit_cost: number | null;
+  laboratory_id: string | null;
+}
+
+// Laboratory interface for selector
+export interface Laboratory {
+  laboratory_id: string;
+  laboratory_name: string;
+  location: string;
+  campus: string;
+  campus_id?: string | number;
+  room_no: string;
+}

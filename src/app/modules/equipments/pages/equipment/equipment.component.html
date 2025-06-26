@@ -3,10 +3,10 @@
   <p-toolbar styleClass="mb-6 gap-5">
     <ng-template #start>
       <p-button
-        label="New"
+        label="New Equipment"
         icon="pi pi-plus"
         class="mr-2"
-        (onClick)="openNew()"
+        (onClick)="openNewEquipment()"
       />
       <p-button
         severity="danger"
@@ -34,6 +34,23 @@
         class="ml-2"
         (onClick)="refreshEquipment()"
         [disabled]="isLoading"
+      />
+      <p-button
+        severity="secondary"
+        label="Test Labs"
+        icon="pi pi-building"
+        outlined
+        class="ml-2"
+        (onClick)="testLaboratoriesAPI()"
+        [disabled]="isLoadingLaboratories"
+      />
+      <p-button
+        severity="help"
+        label="Debug Form"
+        icon="pi pi-info-circle"
+        outlined
+        class="ml-2"
+        (onClick)="debugFormState()"
       />
     </ng-template>
 
@@ -68,6 +85,11 @@
       <span><strong>Loading:</strong> {{ isLoading ? "Yes" : "No" }}</span>
       <span><strong>Raw Equipment:</strong> {{ equipment.length }}</span>
       <span><strong>Display Products:</strong> {{ products.length || 0 }}</span>
+      <span><strong>Laboratories:</strong> {{ laboratories.length || 0 }}</span>
+      <span
+        ><strong>Labs Loading:</strong>
+        {{ isLoadingLaboratories ? "Yes" : "No" }}</span
+      >
       <span><strong>Error:</strong> {{ loadingError || "None" }}</span>
     </div>
     <!-- Equipment Sample Data -->
@@ -85,6 +107,24 @@
       <strong>Sample Equipment Data:</strong>
       <pre style="margin: 5px 0; white-space: pre-wrap">{{
         equipment[0] | json
+      }}</pre>
+    </div>
+    <!-- Laboratory Sample Data -->
+    <div
+      *ngIf="laboratories.length > 0"
+      style="
+        background: #e8e8f5;
+        padding: 10px;
+        border-radius: 3px;
+        font-size: 12px;
+        max-height: 150px;
+        overflow-y: auto;
+        margin-top: 10px;
+      "
+    >
+      <strong>Sample Laboratory Data:</strong>
+      <pre style="margin: 5px 0; white-space: pre-wrap">{{
+        laboratories[0] | json
       }}</pre>
     </div>
   </div>
@@ -337,6 +377,163 @@
     <ng-template #footer>
       <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
       <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- Add Equipment Dialog -->
+  <p-dialog
+    [(visible)]="equipmentDialog"
+    [style]="{ width: '450px' }"
+    header="Add Equipment"
+    [modal]="true"
+    class="p-fluid"
+  >
+    <ng-template #content>
+      <div class="flex flex-col gap-6">
+        <div>
+          <label for="equipment_name" class="block font-bold mb-3"
+            >Equipment Name *</label
+          >
+          <input
+            type="text"
+            pInputText
+            id="equipment_name"
+            [(ngModel)]="equipmentForm.equipment_name"
+            required
+            autofocus
+            fluid
+            [class.ng-invalid]="
+              submitted && !equipmentForm.equipment_name.trim()
+            "
+          />
+          <small
+            class="text-red-500"
+            *ngIf="submitted && !equipmentForm.equipment_name.trim()"
+          >
+            Equipment name is required.
+          </small>
+        </div>
+
+        <div>
+          <label for="brand_name" class="block font-bold mb-3"
+            >Brand Name *</label
+          >
+          <input
+            type="text"
+            pInputText
+            id="brand_name"
+            [(ngModel)]="equipmentForm.brand_name"
+            required
+            fluid
+            [class.ng-invalid]="submitted && !equipmentForm.brand_name.trim()"
+          />
+          <small
+            class="text-red-500"
+            *ngIf="submitted && !equipmentForm.brand_name.trim()"
+          >
+            Brand name is required.
+          </small>
+        </div>
+
+        <div>
+          <label for="model_number" class="block font-bold mb-3"
+            >Model Number</label
+          >
+          <input
+            type="text"
+            pInputText
+            id="model_number"
+            [(ngModel)]="equipmentForm.model_number"
+            fluid
+          />
+        </div>
+
+        <div>
+          <label for="serial_number" class="block font-bold mb-3"
+            >Serial Number</label
+          >
+          <input
+            type="text"
+            pInputText
+            id="serial_number"
+            [(ngModel)]="equipmentForm.serial_number"
+            fluid
+          />
+        </div>
+
+        <div>
+          <label for="laboratory" class="block font-bold mb-3"
+            >Laboratory *</label
+          >
+          <p-select
+            [(ngModel)]="equipmentForm.laboratory_id"
+            inputId="laboratory"
+            [options]="laboratories"
+            optionLabel="laboratory_name"
+            optionValue="laboratory_id"
+            placeholder="Select a Laboratory"
+            fluid
+            [loading]="isLoadingLaboratories"
+            [class.ng-invalid]="submitted && !equipmentForm.laboratory_id"
+          />
+          <small class="text-gray-600" *ngIf="laboratories.length > 0">
+            Showing {{ laboratories.length }} laboratory(s) from your campus
+          </small>
+          <small
+            class="text-orange-500"
+            *ngIf="!isLoadingLaboratories && laboratories.length === 0"
+          >
+            No laboratories found for your campus
+          </small>
+          <small
+            class="text-red-500"
+            *ngIf="submitted && !equipmentForm.laboratory_id"
+          >
+            Laboratory selection is required.
+          </small>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-6">
+            <label for="unit_cost" class="block font-bold mb-3"
+              >Unit Cost</label
+            >
+            <p-inputnumber
+              id="unit_cost"
+              [(ngModel)]="equipmentForm.unit_cost"
+              mode="currency"
+              currency="USD"
+              locale="en-US"
+              fluid
+            />
+          </div>
+          <div class="col-span-6">
+            <label for="date_acquired" class="block font-bold mb-3"
+              >Date Acquired</label
+            >
+            <p-datepicker
+              id="date_acquired"
+              [(ngModel)]="equipmentForm.date_acquired"
+              dateFormat="yy-mm-dd"
+              fluid
+            />
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #footer>
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        text
+        (click)="hideEquipmentDialog()"
+      />
+      <p-button
+        label="Save Equipment"
+        icon="pi pi-check"
+        (click)="saveEquipment()"
+      />
     </ng-template>
   </p-dialog>
 
