@@ -10,7 +10,7 @@ import { ImportsModule } from '../../../../imports';
   selector: 'app-room-storage',
   imports: [CommonModule, ImportsModule],
   templateUrl: './room-storage.component.html',
-  styleUrl: './room-storage.component.scss'
+  styleUrl: './room-storage.component.scss',
 })
 export class RoomStorageComponent implements OnInit {
   equipment: Equipment[] = [];
@@ -28,13 +28,13 @@ export class RoomStorageComponent implements OnInit {
 
   ngOnInit() {
     // Get laboratory parameters from route
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.currentLaboratory = params['laboratory'] || '';
       this.currentLaboratoryId = params['labId'] || '';
-      
+
       console.log('🏠 Room Storage - Laboratory:', this.currentLaboratory);
       console.log('🏠 Room Storage - Laboratory ID:', this.currentLaboratoryId);
-      
+
       if (this.currentLaboratory) {
         this.loadEquipmentForLaboratory();
       } else {
@@ -52,21 +52,26 @@ export class RoomStorageComponent implements OnInit {
       next: (data: Equipment[]) => {
         console.log('📦 All equipment loaded:', data);
         this.equipment = data;
-        
+
         // Filter equipment by laboratory name
-        this.filteredEquipment = data.filter(eq => 
-          eq.laboratory === this.currentLaboratory ||
-          eq.laboratory?.toLowerCase() === this.currentLaboratory.toLowerCase()
+        this.filteredEquipment = data.filter(
+          (eq) =>
+            eq.laboratory === this.currentLaboratory ||
+            eq.laboratory?.toLowerCase() ===
+              this.currentLaboratory.toLowerCase()
         );
-        
-        console.log(`🔍 Filtered equipment for ${this.currentLaboratory}:`, this.filteredEquipment);
+
+        console.log(
+          `🔍 Filtered equipment for ${this.currentLaboratory}:`,
+          this.filteredEquipment
+        );
         this.isLoading = false;
       },
       error: (err) => {
         console.error('❌ Failed to load equipment:', err);
         this.error = 'Failed to load equipment data';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -86,7 +91,7 @@ export class RoomStorageComponent implements OnInit {
         console.error('❌ Failed to load equipment:', err);
         this.error = 'Failed to load equipment data';
         this.isLoading = false;
-      }
+      },
     });
   }
 

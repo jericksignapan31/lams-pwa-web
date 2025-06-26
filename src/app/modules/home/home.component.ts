@@ -212,10 +212,15 @@ export class HomeComponent {
             label: lab.laboratory_name,
             icon: 'pi pi-flask',
             command: () => {
-              console.log(`🧪 Navigating to room storage for laboratory: ${lab.laboratory_name}`);
+              console.log(
+                `🧪 Navigating to room storage for laboratory: ${lab.laboratory_name}`
+              );
               // Navigate to the room-storage page with laboratory filter
-              this.router.navigate(['/home/room-storage'], { 
-                queryParams: { laboratory: lab.laboratory_name, labId: lab.laboratory_id } 
+              this.router.navigate(['/home/room-storage'], {
+                queryParams: {
+                  laboratory: lab.laboratory_name,
+                  labId: lab.laboratory_id,
+                },
               });
             },
             items: [], // No room submenu
