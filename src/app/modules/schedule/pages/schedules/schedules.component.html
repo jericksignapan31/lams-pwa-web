@@ -265,29 +265,24 @@
 <div class="unmatched-schedules" *ngIf="getUnmatchedSchedules().length">
   <h3>Other Schedules (Not in Grid)</h3>
   <div *ngFor="let sched of getUnmatchedSchedules()">
-    <div
-      class="schedule-cell-card random-bg"
-      [style.background]="getConsistentRandomColor(sched)"
-    >
+    <div class="schedule-cell-card" [class]="getYearColorClass(sched.year)">
       <div class="card-header">
-        <div class="time-info">
-          <span class="time"
-            >{{ sched.start_time }} - {{ sched.end_time }}</span
-          >
-          <span class="grade-badge">{{ getGradeLevel(sched.year) }}</span>
-        </div>
+        <div class="time-info"></div>
       </div>
       <div class="card-body">
-        <div class="class-info">
-          <strong>{{ sched.class_name }}</strong>
+        <div class="class-section-info">
+          <strong>{{ sched.class_name }} - {{ sched.section }}</strong>
+        </div>
+        <div class="course-info">
+          {{ sched.course_code }}
         </div>
         <div class="faculty-info">
           {{ sched.faculty_name || sched.faculty }}
         </div>
-        <div class="course-info">
-          {{ sched.course_code }} - {{ sched.course }}
+        <div class="duration-info">
+          {{ sched.duration_hours
+          }}{{ sched.duration_hours === 1 ? " hour" : " hours" }}
         </div>
-        <div class="section-info">Section: {{ sched.section }}</div>
       </div>
     </div>
   </div>
@@ -327,35 +322,33 @@
       <div class="cell" *ngFor="let day of days">
         <ng-container *ngFor="let sched of getSchedulesForCell(day, time)">
           <div
-            class="schedule-cell-card random-bg"
+            class="schedule-cell-card"
+            [class]="getYearColorClass(sched.year)"
             [style.height]="calculateScheduleHeight(sched)"
             [style.z-index]="10 + getSchedulePriority(sched)"
-            [style.background]="getConsistentRandomColor(sched)"
           >
             <div class="card-header">
-              <div class="time-info">
-                <span class="time"
-                  >{{ sched.start_time }} - {{ sched.end_time }}</span
-                >
-                <span class="grade-badge">{{ getGradeLevel(sched.year) }}</span>
-              </div>
+              <div class="time-info"></div>
             </div>
             <div
               class="card-body"
               [style.height]="
-                'calc(' + calculateScheduleHeight(sched) + ' - 35px)'
+                'calc(' + calculateScheduleHeight(sched) + ' - 25px)'
               "
             >
-              <div class="class-info">
-                <strong>{{ sched.class_name }}</strong>
+              <div class="class-section-info">
+                <strong>{{ sched.course }} - {{ sched.section }}</strong>
+              </div>
+              <div class="course-info">
+                {{ sched.course_code }}
               </div>
               <div class="faculty-info">
                 {{ sched.faculty_name || sched.faculty }}
               </div>
-              <div class="course-info">
-                {{ sched.course_code }} - {{ sched.course }}
+              <div class="duration-info">
+                {{ sched.duration_hours
+                }}{{ sched.duration_hours === 1 ? " hour" : " hours" }}
               </div>
-              <div class="section-info">Section: {{ sched.section }}</div>
             </div>
           </div>
         </ng-container>

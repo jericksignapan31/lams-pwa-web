@@ -128,7 +128,6 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
             routerLink: '/home/laboratories',
             items: [],
           },
-          { label: 'No departments found', icon: '', items: [] },
         ];
       }
     } else {

@@ -62,6 +62,7 @@ export interface Schedule {
   laboratory_id?: string;
   created_at?: string;
   updated_at?: string;
+  duration_hours?: number;
 }
 
 // Form interface for creating/editing schedules
