@@ -34,13 +34,48 @@ export class DepartmentsComponent implements OnInit {
   constructor(private departmentService: DepartmentService) {}
 
   ngOnInit(): void {
+    console.log('🔍 DepartmentsComponent - Loading departments...');
     this.departmentService.getDepartments().subscribe({
       next: (data) => {
-        this.departments = data;
-        // console.log('Departments:', data);
+        console.log('✅ Departments loaded successfully:', data);
+        
+        // Handle different response formats
+        if (Array.isArray(data)) {
+          this.departments = data;
+        } else if (data && Array.isArray(data.data)) {
+          this.departments = data.data;
+        } else if (data && Array.isArray(data.results)) {
+          this.departments = data.results;
+        } else {
+          console.warn('⚠️ Unexpected departments response format:', data);
+          this.departments = [];
+        }
+        
+        console.log('🔍 Final departments array:', this.departments);
+        console.log('🔍 Departments count:', this.departments.length);
       },
       error: (err) => {
-        console.error('Failed to fetch departments:', err);
+        console.error('❌ Failed to fetch departments:', err);
+        console.error('❌ Error status:', err.status);
+        console.error('❌ Error details:', err.error);
+        
+        let errorMessage = 'Failed to load departments.';
+        if (err.status === 403) {
+          errorMessage = 'Access denied to departments. Check user permissions.';
+        } else if (err.status === 401) {
+          errorMessage = 'Authentication failed. Please log in again.';
+        } else if (err.status === 500) {
+          errorMessage = 'Server error when loading departments.';
+        } else if (err.status === 0) {
+          errorMessage = 'Cannot connect to server. Check if backend is running.';
+        }
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Error Loading Departments',
+          text: errorMessage,
+          confirmButtonColor: '#f5a623',
+        });
       },
     });
   }

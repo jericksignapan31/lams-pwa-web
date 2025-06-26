@@ -15,7 +15,10 @@ export class DepartmentService {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of([]);
     }
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('lams_authToken123');
+    console.log('🔍 DepartmentService - Getting departments with token:', accessToken ? 'Token found' : 'No token');
+    console.log('🔍 DepartmentService - API URL:', this.baseUrl);
+    
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -29,7 +32,7 @@ export class DepartmentService {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of(null);
     }
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -37,7 +40,10 @@ export class DepartmentService {
   }
 
   getDepartment(id: number | string): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -45,7 +51,10 @@ export class DepartmentService {
   }
 
   updateDepartment(id: number | string, data: any): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -54,7 +63,10 @@ export class DepartmentService {
 
   // Partial update department
   patchDepartment(id: number | string, data: any): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -63,7 +75,10 @@ export class DepartmentService {
 
   // Delete department
   deleteDepartment(id: number | string): Observable<any> {
-    const accessToken = localStorage.getItem('access_token');
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of(null);
+    }
+    const accessToken = localStorage.getItem('lams_authToken123');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
