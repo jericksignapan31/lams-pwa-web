@@ -56,13 +56,7 @@ export const homeRoute: Route[] = [
         (m) => m.SchedulesComponent
       ),
   },
-  {
-    path: 'file-upload',
-    loadComponent: () =>
-      import('../../shared/components/file-upload/file-upload.component').then(
-        (m) => m.FileUploadComponent
-      ),
-  },
+
   {
     path: 'campuses',
     loadComponent: () =>
