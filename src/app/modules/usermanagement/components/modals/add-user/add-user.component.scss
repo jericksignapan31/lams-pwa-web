@@ -143,3 +143,62 @@
     gap: 1rem;
   }
 }
+
+// Dark mode styles
+:host-context(.my-app-dark) :host ::ng-deep .p-dialog-content {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .add-user-form {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.4);
+}
+
+:host-context(.my-app-dark) .p-field label {
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .p-field input[type="text"],
+:host-context(.my-app-dark) .p-field input[type="email"],
+:host-context(.my-app-dark) .p-field input[type="password"] {
+  background: #1e2228 !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+:host-context(.my-app-dark) .p-button-lg {
+  background: #f4a300 !important;
+  color: #181a20 !important;
+}
+
+:host-context(.my-app-dark) .auto-assignment-info {
+  background-color: #1e2228 !important;
+  border-color: #444 !important;
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .auto-assignment-info p {
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .auto-assignment-info strong {
+  color: #f4a300 !important;
+}
+
+:host-context(.my-app-dark) .disabled-field {
+  background-color: #1e2228 !important;
+  border-color: #444 !important;
+  color: #999 !important;
+}
+
+:host-context(.my-app-dark) :host ::ng-deep .disabled-field .p-dropdown {
+  background-color: #1e2228 !important;
+  border-color: #444 !important;
+  color: #999 !important;
+}
+
+:host-context(.my-app-dark) .auto-assigned-note {
+  color: #bbb !important;
+}

@@ -53,7 +53,6 @@ export class SchedulesComponent implements OnInit {
 
   ngOnInit() {
     console.log('🔍 SchedulesComponent - ngOnInit started');
-    // Removed window.location.href reference for SSR compatibility
 
     this.route.paramMap.subscribe((params) => {
       this.laboratoryId = params.get('laboratoryId') || '';

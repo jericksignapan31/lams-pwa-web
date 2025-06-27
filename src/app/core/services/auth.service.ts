@@ -26,7 +26,7 @@ export class AuthService {
   user = signal<UserModel | null>(null);
   userInfo: UserModel | null = null;
   userProfile: any = null;
-  private refreshKey = 'refresh_token';
+  // private refreshKey = 'refresh_token';
   private userActivityEvents = ['mousemove', 'keydown', 'click', 'touchstart'];
   // private inactivityTimeout = 10 * 60 * 1000; // 10 minutes
   // private inactivityTimeout = 60 * 1000; // 60 seconds - COMMENTED OUT
@@ -208,7 +208,7 @@ export class AuthService {
             this._isLoggedIn$.next(false);
             if (typeof window !== 'undefined' && window.localStorage) {
               localStorage.removeItem(this.TOKEN_NAME);
-              localStorage.removeItem(this.refreshKey);
+              // localStorage.removeItem(this.refreshKey);
             }
             this.user.set(null);
             this.userInfo = null;
@@ -241,7 +241,7 @@ export class AuthService {
   saveTokens(access: string, refresh: string) {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem(this.TOKEN_NAME, access);
-      localStorage.setItem(this.refreshKey, refresh);
+      // localStorage.setItem(this.refreshKey, refresh);
     }
     this._isLoggedIn$.next(true);
     // Commented out - inactivity timer is disabled
@@ -250,7 +250,7 @@ export class AuthService {
 
   getRefreshToken(): string | null {
     if (typeof window !== 'undefined' && window.localStorage) {
-      return localStorage.getItem(this.refreshKey);
+      // return localStorage.getItem(this.refreshKey);
     }
     return null;
   }

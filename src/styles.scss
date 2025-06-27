@@ -34,15 +34,38 @@ html.my-app-dark body {
   color: #f5f5f5 !important;
 }
 
+// Basic containers and cards
 .my-app-dark .login-container,
-.my-app-dark .login-card {
+.my-app-dark .login-card,
+.my-app-dark .profile-container,
+.my-app-dark .user-table-container,
+.my-app-dark .room-storage-container,
+.my-app-dark .file-upload-container,
+.my-app-dark .dashboard-container,
+.my-app-dark .schedule-container,
+.my-app-dark .equipment-container,
+.my-app-dark .container {
   background-color: #23272f !important;
   color: #f5f5f5 !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+// Form elements
 .my-app-dark .form label,
-.my-app-dark label {
+.my-app-dark label,
+.my-app-dark .profile-name,
+.my-app-dark .profile-role,
+.my-app-dark .header-left h2,
+.my-app-dark .profile-title,
+.my-app-dark .extra-title,
+.my-app-dark .detail-label,
+.my-app-dark .detail-value,
+.my-app-dark h1,
+.my-app-dark h2,
+.my-app-dark h3,
+.my-app-dark h4,
+.my-app-dark h5,
+.my-app-dark h6 {
   color: #f5f5f5 !important;
 }
 
@@ -51,17 +74,32 @@ html.my-app-dark body {
 .my-app-dark .p-inputtext,
 .my-app-dark .p-password-input,
 .my-app-dark .p-inputnumber-input,
-.my-app-dark .p-dropdown-label {
+.my-app-dark .p-dropdown-label,
+.my-app-dark .form-input,
+.my-app-dark input[type="text"],
+.my-app-dark input[type="email"],
+.my-app-dark input[type="password"],
+.my-app-dark input[type="number"],
+.my-app-dark textarea {
   background: #23272f !important;
   color: #f5f5f5 !important;
   border-color: #444 !important;
 }
 
+// PrimeNG components
 .my-app-dark .card,
 .my-app-dark .p-card,
+.my-app-dark .p-card-body,
+.my-app-dark .p-card-content,
 .my-app-dark .p-toolbar,
 .my-app-dark .p-dialog,
+.my-app-dark .p-dialog-content,
+.my-app-dark .p-dialog-header,
 .my-app-dark .p-table,
+.my-app-dark .p-datatable,
+.my-app-dark .p-datatable-wrapper,
+.my-app-dark .p-datatable-thead,
+.my-app-dark .p-datatable-tbody,
 .my-app-dark .p-panel,
 .my-app-dark .p-sidebar,
 .my-app-dark .p-menu,
@@ -77,22 +115,116 @@ html.my-app-dark body {
 .my-app-dark .p-radiobutton,
 .my-app-dark .p-checkbox,
 .my-app-dark .p-dropdown,
+.my-app-dark .p-dropdown-panel,
 .my-app-dark .p-inputnumber,
 .my-app-dark .p-tabview,
 .my-app-dark .p-tabs,
 .my-app-dark .p-accordion,
 .my-app-dark .p-panelmenu,
-.my-app-dark .p-datatable {
+.my-app-dark .p-panelmenu-panel,
+.my-app-dark .p-panelmenu-header,
+.my-app-dark .p-panelmenu-content,
+.my-app-dark .p-datatable,
+.my-app-dark .p-paginator {
   background-color: #23272f !important;
   color: #f5f5f5 !important;
   border-color: #444 !important;
 }
 
+// Dropdown specific
+.my-app-dark .p-dropdown,
+.my-app-dark .p-dropdown-trigger,
+.my-app-dark .p-dropdown-label {
+  background-color: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .p-dropdown-panel .p-dropdown-items {
+  background-color: #23272f !important;
+}
+
+.my-app-dark .p-dropdown-panel .p-dropdown-item {
+  background-color: #23272f !important;
+  color: #f5f5f5 !important;
+}
+
+.my-app-dark .p-dropdown-panel .p-dropdown-item:hover {
+  background-color: #2a2f38 !important;
+}
+
+// Cards and containers
+.my-app-dark .profile-card,
+.my-app-dark .user-table,
+.my-app-dark .profile-detail-card,
+.my-app-dark .dashboard-card,
+.my-app-dark .dashboard-minimal-card,
+.my-app-dark .dashboard-table,
+.my-app-dark .equipment-table,
+.my-app-dark .storage-header,
+.my-app-dark .upload-area,
+.my-app-dark .selected-files,
+.my-app-dark .upload-controls,
+.my-app-dark .upload-progress,
+.my-app-dark .uploaded-files {
+  background-color: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+// Specific background overrides
+.my-app-dark .extra-details {
+  background: #1e2228 !important;
+}
+
+.my-app-dark .extra-details .profile-detail-card {
+  background: #23272f !important;
+  border-color: #444 !important;
+}
+
+// Table elements
+.my-app-dark .user-table th,
+.my-app-dark .user-table td,
+.my-app-dark .p-datatable-thead th,
+.my-app-dark .p-datatable-tbody td {
+  background-color: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .user-table th,
+.my-app-dark .p-datatable-thead th {
+  background: #1e2228 !important;
+}
+
+.my-app-dark .p-datatable-tbody tr:hover {
+  background-color: #2a2f38 !important;
+}
+
+// Buttons
 .my-app-dark .p-button,
-.my-app-dark .login-btn {
+.my-app-dark .login-btn,
+.my-app-dark .add-user-btn,
+.my-app-dark .edit-btn,
+.my-app-dark .save-btn,
+.my-app-dark .cancel-btn,
+.my-app-dark .action-btn,
+.my-app-dark .toggle-btn,
+.my-app-dark .submit-btn,
+.my-app-dark button[pButton] {
   background-color: #f4a300 !important;
   color: #181a20 !important;
   border: none !important;
+}
+
+.my-app-dark .p-button:hover,
+.my-app-dark .login-btn:hover,
+.my-app-dark .add-user-btn:hover,
+.my-app-dark .edit-btn:hover,
+.my-app-dark .save-btn:hover,
+.my-app-dark .submit-btn:hover,
+.my-app-dark button[pButton]:hover {
+  background-color: #e59400 !important;
 }
 
 .my-app-dark .p-button:disabled,
@@ -101,6 +233,58 @@ html.my-app-dark body {
   color: #888 !important;
 }
 
+// Secondary buttons
+.my-app-dark .cancel-btn,
+.my-app-dark .p-button-secondary {
+  background-color: #6c757d !important;
+  color: #f5f5f5 !important;
+}
+
+.my-app-dark .cancel-btn:hover,
+.my-app-dark .p-button-secondary:hover {
+  background-color: #5a6268 !important;
+}
+
+// Schedule specific
+.my-app-dark .top-row,
+.my-app-dark .show-btn-row,
+.my-app-dark .schedule-form,
+.my-app-dark .schedule-header-grid,
+.my-app-dark .schedule-grid {
+  background-color: #23272f !important;
+  color: #f5f5f5 !important;
+}
+
+.my-app-dark .schedule-form input {
+  background: #1e2228 !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+// Legend and info sections
+.my-app-dark .legend-container,
+.my-app-dark .auto-assignment-info,
+.my-app-dark .debug-info {
+  background: #1e2228 !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+// File upload specific
+.my-app-dark .file-item,
+.my-app-dark .uploaded-item,
+.my-app-dark .progress-item {
+  background: #1e2228 !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .file-name,
+.my-app-dark .progress-filename {
+  color: #f5f5f5 !important;
+}
+
+// Status tags
 .my-app-dark .p-tag-success {
   background: #14532d !important;
   color: #bbf7d0 !important;
@@ -112,4 +296,52 @@ html.my-app-dark body {
 .my-app-dark .p-tag-info {
   background: #0c4a6e !important;
   color: #bae6fd !important;
+}
+
+// Paginator
+.my-app-dark .p-paginator {
+  background: #1e2228 !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .p-paginator .p-paginator-pages .p-paginator-page {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+.my-app-dark .p-paginator .p-paginator-pages .p-paginator-page:hover {
+  background: #2a2f38 !important;
+}
+
+.my-app-dark .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #f4a300 !important;
+  color: #181a20 !important;
+}
+
+// Menu items
+.my-app-dark .p-menuitem-link {
+  color: #f5f5f5 !important;
+}
+
+.my-app-dark .p-menuitem-link:hover {
+  background: #2a2f38 !important;
+  color: #f5f5f5 !important;
+}
+
+// Toast messages
+.my-app-dark .p-toast-message {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+// Confirm dialog
+.my-app-dark .p-confirm-dialog .p-dialog-header,
+.my-app-dark .p-confirm-dialog .p-dialog-content,
+.my-app-dark .p-confirm-dialog .p-dialog-footer {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
 }

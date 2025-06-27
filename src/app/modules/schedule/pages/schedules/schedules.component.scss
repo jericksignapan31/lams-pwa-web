@@ -445,3 +445,69 @@
     }
   }
 }
+
+// Dark mode styles
+:host-context(.my-app-dark) .top-row {
+  background-color: #23272f !important;
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .toggle-btn,
+:host-context(.my-app-dark) .submit-btn {
+  background: #1e2228 !important;
+  color: #f4a300 !important;
+}
+
+:host-context(.my-app-dark) .toggle-btn:hover,
+:host-context(.my-app-dark) .submit-btn:hover {
+  background: #f4a300 !important;
+  color: #181a20 !important;
+}
+
+:host-context(.my-app-dark) .schedule-form input {
+  background: #1e2228 !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+:host-context(.my-app-dark) .schedule-header-grid {
+  background: linear-gradient(135deg, #f4a300 0%, #e59400 100%) !important;
+  color: #181a20 !important;
+}
+
+:host-context(.my-app-dark) .schedule-grid .time-row {
+  border-color: #444 !important;
+}
+
+:host-context(.my-app-dark) .schedule-grid .time-label {
+  background: linear-gradient(135deg, #1e2228 0%, #23272f 100%) !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+:host-context(.my-app-dark) .schedule-grid .cell:hover {
+  background-color: rgba(244, 163, 0, 0.1) !important;
+}
+
+:host-context(.my-app-dark) .legend-container {
+  background: linear-gradient(135deg, #1e2228 0%, #23272f 100%) !important;
+  border-color: #444 !important;
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .legend-container h4 {
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .legend-item .legend-text {
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .legend-item {
+  background: #23272f !important;
+}
+
+:host-context(.my-app-dark) .unmatched-schedules .schedule-cell-card {
+  background: #2a2f38 !important;
+  border-color: #f4a300 !important;
+}

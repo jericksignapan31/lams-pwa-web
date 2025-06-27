@@ -19,3 +19,24 @@ button[pButton] {
   min-width: 120px;
   font-size: 1rem;
 }
+
+// Dark mode styles
+:host-context(.my-app-dark) .edit-department-form {
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .p-field label {
+  color: #f5f5f5 !important;
+}
+
+:host-context(.my-app-dark) .p-field input,
+:host-context(.my-app-dark) .p-field .p-dropdown {
+  background: #1e2228 !important;
+  color: #f5f5f5 !important;
+  border-color: #444 !important;
+}
+
+:host-context(.my-app-dark) button[pButton] {
+  background: #f4a300 !important;
+  color: #181a20 !important;
+}

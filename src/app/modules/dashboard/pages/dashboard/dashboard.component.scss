@@ -118,6 +118,29 @@
   color: #7b8a9b;
 }
 
+// Dark mode styles
+:host-context(.my-app-dark) .dashboard-card {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+:host-context(.my-app-dark) .dashboard-chart-label {
+  color: #bbb !important;
+}
+
+:host-context(.my-app-dark) .dashboard-table {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+:host-context(.my-app-dark) .dashboard-minimal-card {
+  background: #23272f !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
 @media (max-width: 900px) {
   .dashboard-cards,
   .dashboard-charts,
