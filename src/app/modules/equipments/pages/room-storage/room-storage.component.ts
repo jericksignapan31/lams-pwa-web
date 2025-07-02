@@ -36,65 +36,15 @@ export class RoomStorageComponent implements OnInit {
       console.log('🏠 Room Storage - Laboratory ID:', this.currentLaboratoryId);
 
       if (this.currentLaboratory) {
-        this.loadEquipmentForLaboratory();
       } else {
         // If no laboratory specified, load all equipment
-        this.loadAllEquipment();
       }
     });
   }
 
-  private loadEquipmentForLaboratory() {
-    this.isLoading = true;
-    this.error = null;
+  
 
-    this.equipmentService.getEquipments().subscribe({
-      next: (data: Equipment[]) => {
-        console.log('📦 All equipment loaded:', data);
-        this.equipment = data;
-
-        // Filter equipment by laboratory name
-        this.filteredEquipment = data.filter(
-          (eq) =>
-            eq.laboratory === this.currentLaboratory ||
-            eq.laboratory?.toLowerCase() ===
-              this.currentLaboratory.toLowerCase()
-        );
-
-        console.log(
-          `🔍 Filtered equipment for ${this.currentLaboratory}:`,
-          this.filteredEquipment
-        );
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('❌ Failed to load equipment:', err);
-        this.error = 'Failed to load equipment data';
-        this.isLoading = false;
-      },
-    });
-  }
-
-  private loadAllEquipment() {
-    this.isLoading = true;
-    this.error = null;
-    this.currentLaboratory = 'All Laboratories';
-
-    this.equipmentService.getEquipments().subscribe({
-      next: (data: Equipment[]) => {
-        console.log('📦 All equipment loaded:', data);
-        this.equipment = data;
-        this.filteredEquipment = data;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('❌ Failed to load equipment:', err);
-        this.error = 'Failed to load equipment data';
-        this.isLoading = false;
-      },
-    });
-  }
-
+  
   getStatusSeverity(status: string): string {
     switch (status?.toUpperCase()) {
       case 'AVAILABLE':

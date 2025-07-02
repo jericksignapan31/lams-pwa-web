@@ -1,541 +1,92 @@
-<div class="card">
-  <p-toast />
-  <p-toolbar styleClass="mb-6 gap-5">
-    <ng-template #start>
-      <p-button
-        label="New Equipment"
-        icon="pi pi-plus"
-        class="mr-2"
-        (onClick)="openNewEquipment()"
-      />
-      <p-button
-        severity="danger"
-        label="Delete"
-        icon="pi pi-trash"
-        outlined
-        (onClick)="deleteSelectedProducts()"
-        [disabled]="!selectedProducts || !selectedProducts.length"
-      />
-      <!-- Debug buttons -->
-      <p-button
-        severity="info"
-        label="Test API"
-        icon="pi pi-cog"
-        outlined
-        class="ml-2"
-        (onClick)="testEquipmentAPI()"
-        [disabled]="isLoading"
-      />
-      <p-button
-        severity="success"
-        label="Refresh"
-        icon="pi pi-refresh"
-        outlined
-        class="ml-2"
-        (onClick)="refreshEquipment()"
-        [disabled]="isLoading"
-      />
-      <p-button
-        severity="secondary"
-        label="Test Labs"
-        icon="pi pi-building"
-        outlined
-        class="ml-2"
-        (onClick)="testLaboratoriesAPI()"
-        [disabled]="isLoadingLaboratories"
-      />
-      <p-button
-        severity="help"
-        label="Debug Form"
-        icon="pi pi-info-circle"
-        outlined
-        class="ml-2"
-        (onClick)="debugFormState()"
-      />
-    </ng-template>
-
-    <ng-template #end>
-      <p-fileUpload
-        mode="basic"
-        accept="image/*"
-        [maxFileSize]="1000000"
-        label="Import"
-        chooseLabel="Import"
-        auto
-        customUpload
-        class="mr-2 inline-block"
-        [chooseButtonProps]="{ severity: 'secondary' }"
-      />
-      <p-button
-        label="Export"
-        icon="pi pi-upload"
-        severity="secondary"
-        (onClick)="exportCSV()"
-      />
-    </ng-template>
-  </p-toolbar>
-
-  <!-- Debug Info Panel -->
-  <div
-    class="debug-info mb-4 p-3"
-    style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px"
-  >
-    <h5 style="margin: 0 0 10px 0; color: #495057">Equipment Debug Info</h5>
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 10px">
-      <span><strong>Loading:</strong> {{ isLoading ? "Yes" : "No" }}</span>
-      <span><strong>Raw Equipment:</strong> {{ equipment.length }}</span>
-      <span><strong>Display Products:</strong> {{ products.length || 0 }}</span>
-      <span><strong>Laboratories:</strong> {{ laboratories.length || 0 }}</span>
-      <span
-        ><strong>Labs Loading:</strong>
-        {{ isLoadingLaboratories ? "Yes" : "No" }}</span
-      >
-      <span><strong>Error:</strong> {{ loadingError || "None" }}</span>
-    </div>
-    <!-- Equipment Sample Data -->
-    <div
-      *ngIf="equipment.length > 0"
-      style="
-        background: #e8f5e8;
-        padding: 10px;
-        border-radius: 3px;
-        font-size: 12px;
-        max-height: 200px;
-        overflow-y: auto;
-      "
-    >
-      <strong>Sample Equipment Data:</strong>
-      <pre style="margin: 5px 0; white-space: pre-wrap">{{
-        equipment[0] | json
-      }}</pre>
-    </div>
-    <!-- Laboratory Sample Data -->
-    <div
-      *ngIf="laboratories.length > 0"
-      style="
-        background: #e8e8f5;
-        padding: 10px;
-        border-radius: 3px;
-        font-size: 12px;
-        max-height: 150px;
-        overflow-y: auto;
-        margin-top: 10px;
-      "
-    >
-      <strong>Sample Laboratory Data:</strong>
-      <pre style="margin: 5px 0; white-space: pre-wrap">{{
-        laboratories[0] | json
-      }}</pre>
-    </div>
+<div class="header">
+  <h2>Equipment Management</h2>
+  <div class="header-buttons">
+    <button
+      pButton
+      type="button"
+      label="Add Equipment"
+      icon="pi pi-plus"
+      (click)="showAddEquipment()"
+      class="p-button-success add-equipment-btn"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Reload Assets"
+      icon="pi pi-refresh"
+      (click)="retryLoadAssets()"
+      [loading]="loading"
+    ></button>
   </div>
-
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-state text-center p-5">
-    <p-progressSpinner
-      strokeWidth="3"
-      animationDuration="1s"
-    ></p-progressSpinner>
-    <p class="mt-3">Loading equipment data...</p>
-  </div>
-
-  <!-- Error State -->
-  <div
-    *ngIf="loadingError && !isLoading"
-    class="error-state text-center p-5"
-    style="background: #ffebee; border: 1px solid #ffcdd2; border-radius: 5px"
-  >
-    <i
-      class="pi pi-exclamation-triangle"
-      style="font-size: 2rem; color: #d32f2f"
-    ></i>
-    <h4 style="color: #d32f2f; margin: 10px 0">Error Loading Equipment</h4>
-    <p style="color: #666">{{ loadingError }}</p>
-    <p-button label="Retry" icon="pi pi-refresh" (onClick)="refreshEquipment()">
-    </p-button>
-  </div>
-
-  <p-table
-    *ngIf="!isLoading && !loadingError"
-    #dt
-    [value]="products"
-    [rows]="10"
-    [columns]="cols"
-    [paginator]="true"
-    [globalFilterFields]="[
-      'name',
-      'brand',
-      'model',
-      'code',
-      'category',
-      'assignedUser'
-    ]"
-    [tableStyle]="{ 'min-width': '75rem' }"
-    [(selection)]="selectedProducts"
-    [rowHover]="true"
-    dataKey="id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [showCurrentPageReport]="true"
-  >
-    <ng-template #caption>
-      <div class="flex items-center justify-between">
-        <p-iconfield>
-          <p-inputicon styleClass="pi pi-search" />
-          <input
-            #globalFilter
-            pInputText
-            type="text"
-            (input)="dt.filterGlobal(globalFilter.value, 'contains')"
-            placeholder="Search..."
-          />
-        </p-iconfield>
-      </div>
-    </ng-template>
-    <ng-template #header>
-      <tr>
-        <th style="width: 3rem">
-          <p-tableHeaderCheckbox />
-        </th>
-        <th
-          *ngFor="let col of cols"
-          [pSortableColumn]="col.field"
-          style="min-width: 12rem"
-        >
-          {{ col.header }}
-          <p-sortIcon [field]="col.field" />
-        </th>
-        <th style="min-width: 12rem">Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-product>
-      <tr>
-        <td style="width: 3rem">
-          <p-tableCheckbox [value]="product" />
-        </td>
-        <td *ngFor="let col of cols" style="min-width: 12rem">
-          <ng-container [ngSwitch]="col.field">
-            <!-- Price column with currency formatting -->
-            <span *ngSwitchCase="'price'">{{
-              product[col.field] | currency : "USD"
-            }}</span>
-            <!-- Status column with tag -->
-            <p-tag
-              *ngSwitchCase="'inventoryStatus'"
-              [value]="product[col.field]"
-              [severity]="getSeverity(product[col.field])"
-            />
-            <!-- Date column with date formatting -->
-            <span *ngSwitchCase="'dateAcquired'">{{
-              product[col.field] | date : "mediumDate"
-            }}</span>
-            <!-- Default text display -->
-            <span *ngSwitchDefault>{{ product[col.field] || "N/A" }}</span>
-          </ng-container>
-        </td>
-        <td style="min-width: 12rem">
-          <p-button
-            icon="pi pi-pencil"
-            class="mr-2"
-            [rounded]="true"
-            [outlined]="true"
-            (click)="editProduct(product)"
-          />
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            [rounded]="true"
-            [outlined]="true"
-            (click)="deleteProduct(product)"
-          />
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-  <p-dialog
-    [(visible)]="productDialog"
-    [style]="{ width: '450px' }"
-    header="Product Details"
-    [modal]="true"
-  >
-    <ng-template #content>
-      <div class="flex flex-col gap-6">
-        <img
-          [src]="
-            'https://primefaces.org/cdn/primeng/images/demo/product/' +
-            product.image
-          "
-          [alt]="product.image"
-          class="block m-auto pb-4"
-          *ngIf="product.image"
-        />
-        <div>
-          <label for="name" class="block font-bold mb-3">Name</label>
-          <input
-            type="text"
-            pInputText
-            id="name"
-            [(ngModel)]="product.name"
-            required
-            autofocus
-            fluid
-          />
-          <small class="text-red-500" *ngIf="submitted && !product.name"
-            >Name is required.</small
-          >
-        </div>
-        <div>
-          <label for="description" class="block font-bold mb-3"
-            >Description</label
-          >
-          <textarea
-            id="description"
-            pTextarea
-            [(ngModel)]="product.description"
-            required
-            rows="3"
-            cols="20"
-            fluid
-          ></textarea>
-        </div>
-
-        <div>
-          <label for="inventoryStatus" class="block font-bold mb-3"
-            >Inventory Status</label
-          >
-          <p-select
-            [(ngModel)]="product.inventoryStatus"
-            inputId="inventoryStatus"
-            [options]="statuses"
-            optionLabel="label"
-            placeholder="Select a Status"
-            fluid
-          />
-        </div>
-
-        <div>
-          <span class="block font-bold mb-4">Category</span>
-          <div class="grid grid-cols-12 gap-4">
-            <div class="flex items-center gap-2 col-span-6">
-              <p-radiobutton
-                id="category1"
-                name="category"
-                value="Accessories"
-                [(ngModel)]="product.category"
-              />
-              <label for="category1">Accessories</label>
-            </div>
-            <div class="flex items-center gap-2 col-span-6">
-              <p-radiobutton
-                id="category2"
-                name="category"
-                value="Clothing"
-                [(ngModel)]="product.category"
-              />
-              <label for="category2">Clothing</label>
-            </div>
-            <div class="flex items-center gap-2 col-span-6">
-              <p-radiobutton
-                id="category3"
-                name="category"
-                value="Electronics"
-                [(ngModel)]="product.category"
-              />
-              <label for="category3">Electronics</label>
-            </div>
-            <div class="flex items-center gap-2 col-span-6">
-              <p-radiobutton
-                id="category4"
-                name="category"
-                value="Fitness"
-                [(ngModel)]="product.category"
-              />
-              <label for="category4">Fitness</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-12 gap-4">
-          <div class="col-span-6">
-            <label for="price" class="block font-bold mb-3">Price</label>
-            <p-inputnumber
-              id="price"
-              [(ngModel)]="product.price"
-              mode="currency"
-              currency="USD"
-              locale="en-US"
-              fluid
-            />
-          </div>
-          <div class="col-span-6">
-            <label for="quantity" class="block font-bold mb-3">Quantity</label>
-            <p-inputnumber id="quantity" [(ngModel)]="product.quantity" fluid />
-          </div>
-        </div>
-      </div>
-    </ng-template>
-
-    <ng-template #footer>
-      <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-      <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
-    </ng-template>
-  </p-dialog>
-
-  <!-- Add Equipment Dialog -->
-  <p-dialog
-    [(visible)]="equipmentDialog"
-    [style]="{ width: '450px' }"
-    header="Add Equipment"
-    [modal]="true"
-    class="p-fluid"
-  >
-    <ng-template #content>
-      <div class="flex flex-col gap-6">
-        <div>
-          <label for="equipment_name" class="block font-bold mb-3"
-            >Equipment Name *</label
-          >
-          <input
-            type="text"
-            pInputText
-            id="equipment_name"
-            [(ngModel)]="equipmentForm.equipment_name"
-            required
-            autofocus
-            fluid
-            [class.ng-invalid]="
-              submitted && !equipmentForm.equipment_name.trim()
-            "
-          />
-          <small
-            class="text-red-500"
-            *ngIf="submitted && !equipmentForm.equipment_name.trim()"
-          >
-            Equipment name is required.
-          </small>
-        </div>
-
-        <div>
-          <label for="brand_name" class="block font-bold mb-3"
-            >Brand Name *</label
-          >
-          <input
-            type="text"
-            pInputText
-            id="brand_name"
-            [(ngModel)]="equipmentForm.brand_name"
-            required
-            fluid
-            [class.ng-invalid]="submitted && !equipmentForm.brand_name.trim()"
-          />
-          <small
-            class="text-red-500"
-            *ngIf="submitted && !equipmentForm.brand_name.trim()"
-          >
-            Brand name is required.
-          </small>
-        </div>
-
-        <div>
-          <label for="model_number" class="block font-bold mb-3"
-            >Model Number</label
-          >
-          <input
-            type="text"
-            pInputText
-            id="model_number"
-            [(ngModel)]="equipmentForm.model_number"
-            fluid
-          />
-        </div>
-
-        <div>
-          <label for="serial_number" class="block font-bold mb-3"
-            >Serial Number</label
-          >
-          <input
-            type="text"
-            pInputText
-            id="serial_number"
-            [(ngModel)]="equipmentForm.serial_number"
-            fluid
-          />
-        </div>
-
-        <div>
-          <label for="laboratory" class="block font-bold mb-3"
-            >Laboratory *</label
-          >
-          <p-select
-            [(ngModel)]="equipmentForm.laboratory_id"
-            inputId="laboratory"
-            [options]="laboratories"
-            optionLabel="laboratory_name"
-            optionValue="laboratory_id"
-            placeholder="Select a Laboratory"
-            fluid
-            [loading]="isLoadingLaboratories"
-            [class.ng-invalid]="submitted && !equipmentForm.laboratory_id"
-          />
-          <small class="text-gray-600" *ngIf="laboratories.length > 0">
-            Showing {{ laboratories.length }} laboratory(s) from your campus
-          </small>
-          <small
-            class="text-orange-500"
-            *ngIf="!isLoadingLaboratories && laboratories.length === 0"
-          >
-            No laboratories found for your campus
-          </small>
-          <small
-            class="text-red-500"
-            *ngIf="submitted && !equipmentForm.laboratory_id"
-          >
-            Laboratory selection is required.
-          </small>
-        </div>
-
-        <div class="grid grid-cols-12 gap-4">
-          <div class="col-span-6">
-            <label for="unit_cost" class="block font-bold mb-3"
-              >Unit Cost</label
-            >
-            <p-inputnumber
-              id="unit_cost"
-              [(ngModel)]="equipmentForm.unit_cost"
-              mode="currency"
-              currency="USD"
-              locale="en-US"
-              fluid
-            />
-          </div>
-          <div class="col-span-6">
-            <label for="date_acquired" class="block font-bold mb-3"
-              >Date Acquired</label
-            >
-            <p-datepicker
-              id="date_acquired"
-              [(ngModel)]="equipmentForm.date_acquired"
-              dateFormat="yy-mm-dd"
-              fluid
-            />
-          </div>
-        </div>
-      </div>
-    </ng-template>
-
-    <ng-template #footer>
-      <p-button
-        label="Cancel"
-        icon="pi pi-times"
-        text
-        (click)="hideEquipmentDialog()"
-      />
-      <p-button
-        label="Save Equipment"
-        icon="pi pi-check"
-        (click)="saveEquipment()"
-      />
-    </ng-template>
-  </p-dialog>
-
-  <p-confirmDialog [style]="{ width: '450px' }" />
 </div>
+
+<div class="content">
+  <!-- Add Equipment Section -->
+  <div *ngIf="showAddForm" class="add-equipment-section">
+    <app-add-equipment
+      (cancel)="hideAddEquipment()"
+      (equipmentAdded)="onEquipmentAdded($event)"
+    ></app-add-equipment>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Loading assets...</p>
+  </div>
+
+  <!-- Error display -->
+  <div *ngIf="error && !loading" class="error-container">
+    <p-message severity="error" [text]="error"></p-message>
+    <button
+      pButton
+      type="button"
+      label="Retry"
+      icon="pi pi-refresh"
+      (click)="retryLoadAssets()"
+    ></button>
+  </div>
+
+  <!-- Assets display -->
+  <div *ngIf="!loading && !error">
+    <h3>Assets Data ({{ assets.length }} items)</h3>
+
+    <!-- JSON view for debugging -->
+    <p-accordion>
+      <p-accordionTab header="Raw JSON Data">
+        <pre>{{ assets | json }}</pre>
+      </p-accordionTab>
+    </p-accordion>
+
+    <!-- Table view if assets exist -->
+    <div *ngIf="assets.length > 0" class="mt-4">
+      <p-table
+        [value]="assets"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="10"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of getAssetColumns()">{{ col }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-asset>
+          <tr>
+            <td *ngFor="let col of getAssetColumns()">
+              {{ getAssetValue(asset, col) }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="assets.length === 0" class="empty-state">
+      <p-message severity="info" text="No assets found"></p-message>
+    </div>
+  </div>
+</div>
+
+<!-- Toast messages -->
+<p-toast></p-toast>

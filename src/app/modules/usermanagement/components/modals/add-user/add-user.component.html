@@ -84,7 +84,10 @@
       </p-floatlabel>
 
       <!-- Show assigned role and campus info for non-Super Admin users -->
-      <div *ngIf="!isSuperAdmin() && !isCampusAdmin()" class="auto-assignment-info">
+      <div
+        *ngIf="!isSuperAdmin() && !isCampusAdmin()"
+        class="auto-assignment-info"
+      >
         <p><strong>Role to be assigned:</strong> {{ assignedRole }}</p>
         <p *ngIf="campuses.length > 0">
           <strong>Campus:</strong>

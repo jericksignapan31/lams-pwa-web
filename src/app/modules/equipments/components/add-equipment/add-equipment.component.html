@@ -1,0 +1,368 @@
+<div class="add-equipment-container">
+  <!-- Asset Type Selection -->
+  <div *ngIf="!selectedAssetType" class="asset-type-selection">
+    <h3>Select Equipment Type</h3>
+    <p class="subtitle">Choose the type of equipment you want to add</p>
+
+    <div class="asset-type-cards">
+      <div
+        *ngFor="let assetType of assetTypes"
+        class="asset-type-card"
+        (click)="selectAssetType(assetType)"
+      >
+        <div class="card-icon">
+          <i
+            [class]="
+              assetType.asset_type_name === 'Hardware'
+                ? 'pi pi-desktop'
+                : 'pi pi-code'
+            "
+          ></i>
+        </div>
+        <h4>{{ assetType.asset_type_name }}</h4>
+        <p>
+          {{
+            assetType.asset_type_name === "Hardware"
+              ? "Physical equipment and devices"
+              : "Software applications and licenses"
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-secondary"
+        (click)="onCancel()"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Hardware Form -->
+  <div
+    *ngIf="selectedAssetType?.asset_type_name === 'Hardware'"
+    class="equipment-form"
+  >
+    <div class="form-header">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-arrow-left"
+        class="p-button-text"
+        (click)="goBack()"
+      ></button>
+      <h3>Add Hardware Equipment</h3>
+    </div>
+
+    <form [formGroup]="hardwareForm" (ngSubmit)="onSubmit()" class="form-grid">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="hardware_name">Hardware Name *</label>
+          <input
+            pInputText
+            id="hardware_name"
+            formControlName="hardware_name"
+            placeholder="Enter hardware name"
+          />
+        </div>
+        <div class="form-field">
+          <label for="brand_name">Brand Name *</label>
+          <input
+            pInputText
+            id="brand_name"
+            formControlName="brand_name"
+            placeholder="Enter brand name"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="model">Model *</label>
+          <input
+            pInputText
+            id="model"
+            formControlName="model"
+            placeholder="Enter model"
+          />
+        </div>
+        <div class="form-field">
+          <label for="serial_number">Serial Number *</label>
+          <input
+            pInputText
+            id="serial_number"
+            formControlName="serial_number"
+            placeholder="Enter serial number"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="date_acquired">Date Acquired</label>
+          <p-calendar
+            formControlName="date_acquired"
+            [showIcon]="true"
+            placeholder="Select date"
+          ></p-calendar>
+        </div>
+        <div class="form-field">
+          <label for="unit_cost">Unit Cost</label>
+          <p-inputNumber
+            formControlName="unit_cost"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            placeholder="0.00"
+          ></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="color">Color</label>
+          <input
+            pInputText
+            id="color"
+            formControlName="color"
+            placeholder="Enter color"
+          />
+        </div>
+        <div class="form-field">
+          <label for="package_material">Package Material</label>
+          <input
+            pInputText
+            id="package_material"
+            formControlName="package_material"
+            placeholder="Enter package material"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="height">Height (cm)</label>
+          <p-inputNumber
+            formControlName="height"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
+            placeholder="0"
+          ></p-inputNumber>
+        </div>
+        <div class="form-field">
+          <label for="width">Width (cm)</label>
+          <p-inputNumber
+            formControlName="width"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
+            placeholder="0"
+          ></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="length">Length (cm)</label>
+          <p-inputNumber
+            formControlName="length"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
+            placeholder="0"
+          ></p-inputNumber>
+        </div>
+        <div class="form-field">
+          <label for="weight">Weight (kg)</label>
+          <p-inputNumber
+            formControlName="weight"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="2"
+            placeholder="0"
+          ></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="package_color">Package Color</label>
+          <input
+            pInputText
+            id="package_color"
+            formControlName="package_color"
+            placeholder="Enter package color"
+          />
+        </div>
+        <div class="form-field">
+          <label for="estimated_useful_life"
+            >Estimated Useful Life (years)</label
+          >
+          <p-inputNumber
+            formControlName="estimated_useful_life"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="0"
+            placeholder="0"
+          ></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          pButton
+          type="button"
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary"
+          (click)="onCancel()"
+        ></button>
+        <button
+          pButton
+          type="submit"
+          label="Add Hardware"
+          icon="pi pi-plus"
+          class="p-button-success"
+          [loading]="isSubmitting"
+          [disabled]="hardwareForm.invalid"
+        ></button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Software Form -->
+  <div
+    *ngIf="selectedAssetType?.asset_type_name === 'Software'"
+    class="equipment-form"
+  >
+    <div class="form-header">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-arrow-left"
+        class="p-button-text"
+        (click)="goBack()"
+      ></button>
+      <h3>Add Software Equipment</h3>
+    </div>
+
+    <form [formGroup]="softwareForm" (ngSubmit)="onSubmit()" class="form-grid">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="software_name">Software Name *</label>
+          <input
+            pInputText
+            id="software_name"
+            formControlName="software_name"
+            placeholder="Enter software name"
+          />
+        </div>
+        <div class="form-field">
+          <label for="version">Version *</label>
+          <input
+            pInputText
+            id="version"
+            formControlName="version"
+            placeholder="Enter version"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="vendor">Vendor *</label>
+          <input
+            pInputText
+            id="vendor"
+            formControlName="vendor"
+            placeholder="Enter vendor name"
+          />
+        </div>
+        <div class="form-field">
+          <label for="license_key">License Key</label>
+          <input
+            pInputText
+            id="license_key"
+            formControlName="license_key"
+            placeholder="Enter license key"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="license_count">License Count</label>
+          <p-inputNumber
+            formControlName="license_count"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="0"
+            placeholder="0"
+          ></p-inputNumber>
+        </div>
+        <div class="form-field">
+          <label for="assigned_to">Assigned To</label>
+          <input
+            pInputText
+            id="assigned_to"
+            formControlName="assigned_to"
+            placeholder="Enter assignee"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="date_acquired">Date Acquired</label>
+          <p-calendar
+            formControlName="date_acquired"
+            [showIcon]="true"
+            placeholder="Select date"
+          ></p-calendar>
+        </div>
+        <div class="form-field">
+          <label for="license_expiry_date">License Expiry Date</label>
+          <p-calendar
+            formControlName="license_expiry_date"
+            [showIcon]="true"
+            placeholder="Select expiry date"
+          ></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="unit_cost">Unit Cost</label>
+          <p-inputNumber
+            formControlName="unit_cost"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            placeholder="0.00"
+          ></p-inputNumber>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          pButton
+          type="button"
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary"
+          (click)="onCancel()"
+        ></button>
+        <button
+          pButton
+          type="submit"
+          label="Add Software"
+          icon="pi pi-plus"
+          class="p-button-success"
+          [loading]="isSubmitting"
+          [disabled]="softwareForm.invalid"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<p-toast></p-toast>

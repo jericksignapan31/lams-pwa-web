@@ -36,11 +36,11 @@ export class AddUserComponent implements OnInit {
   campuses: any[] = [];
   loading = false;
   assignedRole = '';
-  
+
   // Role options for Campus Admin
   roleOptions = [
     { label: 'Faculty', value: 'faculty' },
-    { label: 'Laboratory Technician', value: 'laboratory technician' }
+    { label: 'Laboratory Technician', value: 'laboratory technician' },
   ];
 
   @Output() close = new EventEmitter<void>();
@@ -244,7 +244,7 @@ export class AddUserComponent implements OnInit {
     formData.append('password', this.form.value.password || '');
     formData.append('first_name', this.form.value.first_name || '');
     formData.append('last_name', this.form.value.last_name || '');
-    
+
     // Handle role assignment based on current user
     let roleToAssign = '';
     if (this.isCampusAdmin()) {
@@ -312,7 +312,11 @@ export class AddUserComponent implements OnInit {
     );
     console.log(
       '🔍 User type:',
-      this.isSuperAdmin() ? 'Super Admin' : this.isCampusAdmin() ? 'Campus Admin' : 'Faculty'
+      this.isSuperAdmin()
+        ? 'Super Admin'
+        : this.isCampusAdmin()
+        ? 'Campus Admin'
+        : 'Faculty'
     );
 
     this.loading = true;
