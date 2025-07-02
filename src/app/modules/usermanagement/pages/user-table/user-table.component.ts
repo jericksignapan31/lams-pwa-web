@@ -53,6 +53,12 @@ export class UserTableComponent implements OnInit {
     return currentUserRole;
   }
 
+  // Check if current user can add users (only Super Admin and Campus Admin)
+  canAddUsers(): boolean {
+    const currentUserRole = this.getCurrentUserRole();
+    return currentUserRole === 'super admin' || currentUserRole === 'campus admin';
+  }
+
   // Filter users based on current user's role
   filterUsersByRole(users: any[]): any[] {
     const currentUserRole = this.getCurrentUserRole();

@@ -20,6 +20,7 @@
       <input type="text" pInputText placeholder="Search" style="width: 220px" />
     </span>
     <button
+      *ngIf="canAddUsers()"
       pButton
       icon="pi pi-plus"
       class="p-ml-2"
@@ -63,6 +64,7 @@
         <button
           pButton
           label="Add User Instead"
+          *ngIf="canAddUsers()"
           (click)="openAddUserModal()"
           class="p-button-sm p-button-help"
           icon="pi pi-plus"
@@ -156,6 +158,7 @@
             <i class="pi pi-users" style="font-size: 2rem; color: #6c757d"></i>
             <p>No users found</p>
             <button
+              *ngIf="canAddUsers()"
               pButton
               label="Add First User"
               (click)="openAddUserModal()"

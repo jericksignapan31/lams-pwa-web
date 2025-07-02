@@ -58,6 +58,20 @@
         <label for="campus">Campus</label>
       </p-floatlabel>
 
+      <!-- Role dropdown - only show for Campus Admin -->
+      <p-floatlabel variant="on" *ngIf="isCampusAdmin()">
+        <p-dropdown
+          id="role"
+          formControlName="role"
+          [options]="roleOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select a role"
+          [showClear]="false"
+        ></p-dropdown>
+        <label for="role">Role</label>
+      </p-floatlabel>
+
       <p-floatlabel variant="on">
         <input
           pInputText
@@ -70,8 +84,19 @@
       </p-floatlabel>
 
       <!-- Show assigned role and campus info for non-Super Admin users -->
-      <div *ngIf="!isSuperAdmin()" class="auto-assignment-info">
+      <div *ngIf="!isSuperAdmin() && !isCampusAdmin()" class="auto-assignment-info">
         <p><strong>Role to be assigned:</strong> {{ assignedRole }}</p>
+        <p *ngIf="campuses.length > 0">
+          <strong>Campus:</strong>
+          {{ campuses[0]?.campus_name || "Auto-assigned" }}
+        </p>
+        <p *ngIf="campuses.length === 0" style="color: #e74c3c">
+          <strong>Warning:</strong> No campus assigned to your account
+        </p>
+      </div>
+
+      <!-- Show campus info for Campus Admin -->
+      <div *ngIf="isCampusAdmin()" class="auto-assignment-info">
         <p *ngIf="campuses.length > 0">
           <strong>Campus:</strong>
           {{ campuses[0]?.campus_name || "Auto-assigned" }}

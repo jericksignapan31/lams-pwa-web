@@ -36,6 +36,12 @@ export class AddUserComponent implements OnInit {
   campuses: any[] = [];
   loading = false;
   assignedRole = '';
+  
+  // Role options for Campus Admin
+  roleOptions = [
+    { label: 'Faculty', value: 'faculty' },
+    { label: 'Laboratory Technician', value: 'laboratory technician' }
+  ];
 
   @Output() close = new EventEmitter<void>();
 
@@ -46,9 +52,6 @@ export class AddUserComponent implements OnInit {
     private alertService: AlertService,
     private authService: AuthService
   ) {
-    // Determine the role to assign based on current user's role
-    this.assignedRole = this.getAssignedRole();
-
     // Create form based on user role
     this.createFormBasedOnRole();
   }
@@ -62,7 +65,8 @@ export class AddUserComponent implements OnInit {
     console.log('🔍 Creating form for user role:', currentUserRole);
 
     if (currentUserRole === 'super admin') {
-      // Super Admin: Show campus selection
+      // Super Admin: Show campus selection, fixed role assignment
+      this.assignedRole = this.getAssignedRole();
       this.form = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         password: ['', Validators.required],
@@ -71,8 +75,19 @@ export class AddUserComponent implements OnInit {
         campus: ['', Validators.required],
         contact_number: ['', Validators.required],
       });
+    } else if (currentUserRole === 'campus admin') {
+      // Campus Admin: Show role selection, no campus selection needed
+      this.form = this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', Validators.required],
+        first_name: ['', Validators.required],
+        last_name: ['', Validators.required],
+        role: ['', Validators.required], // Add role selection for campus admin
+        contact_number: ['', Validators.required],
+      });
     } else {
-      // Campus Admin or Faculty: No campus selection needed
+      // Faculty: No campus selection needed, fixed role
+      this.assignedRole = this.getAssignedRole();
       this.form = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         password: ['', Validators.required],
@@ -90,6 +105,15 @@ export class AddUserComponent implements OnInit {
       this.authService.userInfo?.accountType?.toLowerCase() ||
       '';
     return currentUserRole === 'super admin';
+  }
+
+  // Method to check if current user is Campus Admin
+  isCampusAdmin(): boolean {
+    const currentUserRole =
+      this.authService.userProfile?.role?.toLowerCase() ||
+      this.authService.userInfo?.accountType?.toLowerCase() ||
+      '';
+    return currentUserRole === 'campus admin';
   }
 
   private getAssignedRole(): string {
@@ -220,7 +244,17 @@ export class AddUserComponent implements OnInit {
     formData.append('password', this.form.value.password || '');
     formData.append('first_name', this.form.value.first_name || '');
     formData.append('last_name', this.form.value.last_name || '');
-    formData.append('role', this.assignedRole); // Use the dynamically assigned role
+    
+    // Handle role assignment based on current user
+    let roleToAssign = '';
+    if (this.isCampusAdmin()) {
+      // Campus Admin: Use selected role from form
+      roleToAssign = this.form.value.role || '';
+    } else {
+      // Super Admin or Faculty: Use the dynamically assigned role
+      roleToAssign = this.assignedRole;
+    }
+    formData.append('role', roleToAssign);
 
     // Handle campus value based on user role
     let campusValue = '';
@@ -269,7 +303,7 @@ export class AddUserComponent implements OnInit {
       'https://znjhzkpekjdtzzsjfvhm.supabase.co/storage/v1/object/public/lems-storage/Profile-Pictures/b7e43cbb-e23c-44f8-8a70-99bf49fc33a9.jpg'
     );
 
-    console.log('🔍 Creating account with role:', this.assignedRole);
+    console.log('🔍 Creating account with role:', roleToAssign);
     console.log('🔍 Creating account with campus:', campusValue);
     console.log('🔍 Campus value type:', typeof campusValue);
     console.log(
@@ -278,7 +312,7 @@ export class AddUserComponent implements OnInit {
     );
     console.log(
       '🔍 User type:',
-      this.isSuperAdmin() ? 'Super Admin' : 'Campus Admin/Faculty'
+      this.isSuperAdmin() ? 'Super Admin' : this.isCampusAdmin() ? 'Campus Admin' : 'Faculty'
     );
 
     this.loading = true;
@@ -286,7 +320,7 @@ export class AddUserComponent implements OnInit {
       next: (res: any) => {
         this.loading = false;
         this.alertService.handleSuccess(
-          `Account created successfully with role: ${this.assignedRole}!`
+          `Account created successfully with role: ${roleToAssign}!`
         );
         // Commented out auto reload - no more 60sec auto logout
         // setTimeout(() => {
