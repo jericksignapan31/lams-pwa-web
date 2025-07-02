@@ -208,6 +208,36 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="form-field">
+          <label for="laboratory">Laboratory *</label>
+          <p-dropdown
+            formControlName="laboratory"
+            [options]="laboratories"
+            optionLabel="laboratory_name"
+            optionValue="laboratory_id"
+            placeholder="Select a laboratory"
+            [loading]="loadingLaboratories"
+            [style]="{ width: '100%' }"
+          >
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+              <div *ngIf="selectedOption">
+                {{ selectedOption.laboratory_name }} -
+                {{ selectedOption.campus }}
+              </div>
+            </ng-template>
+            <ng-template pTemplate="item" let-laboratory>
+              <div class="laboratory-item">
+                <div class="lab-name">{{ laboratory.laboratory_name }}</div>
+                <div class="lab-details">
+                  {{ laboratory.campus }} - Room {{ laboratory.room_no }}
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+
       <div class="form-actions">
         <button
           pButton
@@ -339,6 +369,33 @@
             [maxFractionDigits]="2"
             placeholder="0.00"
           ></p-inputNumber>
+        </div>
+        <div class="form-field">
+          <label for="laboratory">Laboratory *</label>
+          <p-dropdown
+            formControlName="laboratory"
+            [options]="laboratories"
+            optionLabel="laboratory_name"
+            optionValue="laboratory_id"
+            placeholder="Select a laboratory"
+            [loading]="loadingLaboratories"
+            [style]="{ width: '100%' }"
+          >
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+              <div *ngIf="selectedOption">
+                {{ selectedOption.laboratory_name }} -
+                {{ selectedOption.campus }}
+              </div>
+            </ng-template>
+            <ng-template pTemplate="item" let-laboratory>
+              <div class="laboratory-item">
+                <div class="lab-name">{{ laboratory.laboratory_name }}</div>
+                <div class="lab-details">
+                  {{ laboratory.campus }} - Room {{ laboratory.room_no }}
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
 

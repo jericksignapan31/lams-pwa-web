@@ -136,8 +136,25 @@
 .form-field:has(input[formControlName="serial_number"]) label:after,
 .form-field:has(input[formControlName="software_name"]) label:after,
 .form-field:has(input[formControlName="version"]) label:after,
-.form-field:has(input[formControlName="vendor"]) label:after {
+.form-field:has(input[formControlName="vendor"]) label:after,
+.form-field:has([formControlName="laboratory"]) label:after {
   display: inline;
+}
+
+// Laboratory dropdown styling
+.laboratory-item {
+  padding: 0.5rem 0;
+
+  .lab-name {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+  }
+
+  .lab-details {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+  }
 }
 
 .form-actions,
@@ -230,5 +247,35 @@
 
   .p-toast {
     z-index: 9999;
+  }
+
+  .p-dropdown {
+    width: 100%;
+
+    .p-dropdown-label {
+      padding: 0.75rem;
+    }
+
+    &.p-focus .p-dropdown-label {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+    }
+  }
+
+  .p-dropdown-panel {
+    .p-dropdown-items {
+      .p-dropdown-item {
+        padding: 0.75rem;
+
+        &:hover {
+          background: var(--surface-hover);
+        }
+
+        &.p-highlight {
+          background: var(--primary-color);
+          color: white;
+        }
+      }
+    }
   }
 }
