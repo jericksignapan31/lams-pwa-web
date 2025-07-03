@@ -1,1 +1,246 @@
-<p>software-table works!</p>
+<div class="software-table-container">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Loading software equipment...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !loading" class="error-container">
+    <p-message severity="error" [text]="error"></p-message>
+    <button
+      pButton
+      type="button"
+      label="Retry"
+      icon="pi pi-refresh"
+      class="p-button-secondary"
+      (click)="loadSoftware()"
+    ></button>
+  </div>
+
+  <!-- Software table -->
+  <div *ngIf="!loading && !error" class="table-container">
+    <!-- Clear Header Section -->
+    <div class="table-main-header">
+      <div class="header-content">
+        <div class="header-left">
+          <h2 class="table-title">
+            <i class="pi pi-code"></i>
+            Software Equipment Management
+          </h2>
+          <p class="table-description">
+            Manage and view all software licenses, applications, and digital
+            assets in the system
+          </p>
+          <div class="table-stats">
+            <span class="stat-item">
+              <i class="pi pi-database"></i>
+              Total Items: <strong>{{ softwareList.length }}</strong>
+            </span>
+            <span class="stat-item" *ngIf="getExpiredLicensesCount() > 0">
+              <i class="pi pi-exclamation-triangle"></i>
+              Expired Licenses:
+              <strong class="expired">{{ getExpiredLicensesCount() }}</strong>
+            </span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button
+            pButton
+            type="button"
+            label="Refresh Data"
+            icon="pi pi-refresh"
+            class="p-button-secondary p-button-outlined refresh-btn"
+            (click)="refresh()"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="softwareList.length === 0" class="empty-state">
+      <div class="empty-content">
+        <i class="pi pi-code empty-icon"></i>
+        <h3>No Software Equipment Found</h3>
+        <p>There are no software items to display.</p>
+      </div>
+    </div>
+
+    <!-- Data table -->
+    <p-table
+      #dt
+      *ngIf="softwareList.length > 0"
+      [value]="softwareList"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} software items"
+      [globalFilterFields]="[
+        'software_name',
+        'version',
+        'vendor',
+        'license_key',
+        'laboratory_name',
+        'campus'
+      ]"
+      styleClass="p-datatable-gridlines"
+      [scrollable]="true"
+      scrollHeight="500px"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <span class="table-title">
+            <i class="pi pi-code"></i>
+            Software Equipment ({{ softwareList.length }} items)
+          </span>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              placeholder="Search software..."
+              #searchInput
+              (input)="dt.filterGlobal(searchInput.value, 'contains')"
+            />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="software_name">
+            Software Name <p-sortIcon field="software_name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="version">
+            Version <p-sortIcon field="version"></p-sortIcon>
+          </th>
+          <th pSortableColumn="vendor">
+            Vendor <p-sortIcon field="vendor"></p-sortIcon>
+          </th>
+          <th pSortableColumn="license_key">
+            License Key <p-sortIcon field="license_key"></p-sortIcon>
+          </th>
+          <th pSortableColumn="license_count">
+            License Count <p-sortIcon field="license_count"></p-sortIcon>
+          </th>
+          <th pSortableColumn="license_expiry_date">
+            License Expiry <p-sortIcon field="license_expiry_date"></p-sortIcon>
+          </th>
+          <th pSortableColumn="assigned_to">
+            Assigned To <p-sortIcon field="assigned_to"></p-sortIcon>
+          </th>
+          <th pSortableColumn="date_acquired">
+            Date Acquired <p-sortIcon field="date_acquired"></p-sortIcon>
+          </th>
+          <th pSortableColumn="unit_cost">
+            Unit Cost <p-sortIcon field="unit_cost"></p-sortIcon>
+          </th>
+          <th pSortableColumn="laboratory_name">
+            Laboratory <p-sortIcon field="laboratory_name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="campus">
+            Campus <p-sortIcon field="campus"></p-sortIcon>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-software let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <div class="software-name">
+              <strong>{{ software.software_name || "-" }}</strong>
+            </div>
+          </td>
+          <td>
+            <span class="version-badge">{{ software.version || "-" }}</span>
+          </td>
+          <td>{{ software.vendor || "-" }}</td>
+          <td>
+            <span class="license-key" *ngIf="software.license_key">
+              {{ software.license_key }}
+            </span>
+            <span *ngIf="!software.license_key">-</span>
+          </td>
+          <td>
+            <span *ngIf="software.license_count" class="license-count">
+              {{ software.license_count }}
+            </span>
+            <span *ngIf="!software.license_count">-</span>
+          </td>
+          <td>
+            <span
+              *ngIf="software.license_expiry_date"
+              [class]="
+                'license-expiry ' +
+                (isLicenseExpired(software.license_expiry_date)
+                  ? 'expired'
+                  : 'active')
+              "
+            >
+              {{ formatDate(software.license_expiry_date) }}
+              <i
+                *ngIf="isLicenseExpired(software.license_expiry_date)"
+                class="pi pi-exclamation-triangle"
+                pTooltip="License Expired"
+              ></i>
+            </span>
+            <span *ngIf="!software.license_expiry_date">-</span>
+          </td>
+          <td>{{ software.assigned_to || "-" }}</td>
+          <td>{{ formatDate(software.date_acquired) }}</td>
+          <td>{{ formatCurrency(software.unit_cost) }}</td>
+          <td>{{ software.laboratory_name || "-" }}</td>
+          <td>{{ software.campus || "-" }}</td>
+          <td>
+            <div class="action-buttons">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-eye"
+                class="p-button-info p-button-sm p-button-outlined"
+                pTooltip="View Details"
+                (click)="onView(software)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                class="p-button-warning p-button-sm p-button-outlined"
+                pTooltip="Edit Software"
+                (click)="onEdit(software)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-danger p-button-sm p-button-outlined"
+                pTooltip="Delete Software"
+                (click)="onDelete(software)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="12" class="text-center">
+            <div class="empty-state">
+              <i class="pi pi-code empty-icon"></i>
+              <h3>No Software Found</h3>
+              <p>No software matches your search criteria.</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Confirmation Dialog -->
+<p-confirmDialog></p-confirmDialog>
+
+<!-- Toast Messages -->
+<p-toast></p-toast>

@@ -12,10 +12,17 @@ import { EquipmentService } from '../../services/equipment.service';
 import { LaboratoryService } from '../../../laboratory/services/laboratory.service';
 import { AlertService } from '../../../../core/services/alert.service';
 import { AddEquipmentComponent } from '../../components/add-equipment/add-equipment.component';
+import { HardwareTableComponent } from '../../components/hardware-table/hardware-table.component';
+import { SoftwareTableComponent } from '../../components/software-table/software-table.component';
 
 @Component({
   selector: 'app-equipment',
-  imports: [ImportsModule, AddEquipmentComponent],
+  imports: [
+    ImportsModule,
+    AddEquipmentComponent,
+    HardwareTableComponent,
+    SoftwareTableComponent,
+  ],
   providers: [MessageService, ConfirmationService, EquipmentService],
   templateUrl: './equipment.component.html',
   styleUrl: './equipment.component.scss',
@@ -34,6 +41,11 @@ export class EquipmentComponent implements OnInit {
   loading: boolean = false;
   error: string = '';
   showAddForm: boolean = false;
+
+  // Table display properties
+  showTableSection: boolean = false;
+  showCategorySelection: boolean = false;
+  selectedCategory: 'hardware' | 'software' | null = null;
 
   constructor(
     private alertService: AlertService,
@@ -132,5 +144,39 @@ export class EquipmentComponent implements OnInit {
       summary: 'Success',
       detail: 'Equipment added successfully!',
     });
+  }
+
+  /**
+   * Show table section with category selection
+   */
+  showTable() {
+    this.showTableSection = true;
+    this.showCategorySelection = true;
+    this.selectedCategory = null;
+  }
+
+  /**
+   * Hide table section
+   */
+  hideTable() {
+    this.showTableSection = false;
+    this.showCategorySelection = false;
+    this.selectedCategory = null;
+  }
+
+  /**
+   * Select category and show corresponding table
+   */
+  selectCategory(category: 'hardware' | 'software') {
+    this.selectedCategory = category;
+    this.showCategorySelection = false;
+  }
+
+  /**
+   * Go back to category selection
+   */
+  backToCategorySelection() {
+    this.showCategorySelection = true;
+    this.selectedCategory = null;
   }
 }
