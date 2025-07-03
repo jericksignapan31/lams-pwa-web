@@ -1,12 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
+import { TableModule, Table } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
+import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import {
   EquipmentService,
@@ -40,12 +48,14 @@ interface SoftwareEquipment {
     ToastModule,
     ProgressSpinnerModule,
     MessageModule,
+    InputTextModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './software-table.component.html',
   styleUrl: './software-table.component.scss',
 })
 export class SoftwareTableComponent implements OnInit {
+  @ViewChild('softwareTable') softwareTable!: Table;
   @Input() autoLoad: boolean = true;
   @Input() assetTypeId: string = ASSET_TYPES.SOFTWARE; // Accept asset type ID as input
   @Output() editSoftware = new EventEmitter<SoftwareEquipment>();
@@ -75,11 +85,17 @@ export class SoftwareTableComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    console.log('💻 SoftwareTableComponent - Loading software with asset type ID:', this.assetTypeId);
+    console.log(
+      '💻 SoftwareTableComponent - Loading software with asset type ID:',
+      this.assetTypeId
+    );
 
     this.equipmentService.getSoftwares(this.assetTypeId).subscribe({
       next: (response) => {
-        console.log('✅ Software equipment loaded in table component:', response);
+        console.log(
+          '✅ Software equipment loaded in table component:',
+          response
+        );
         this.softwareList = response || [];
         this.loading = false;
       },
@@ -124,9 +140,21 @@ export class SoftwareTableComponent implements OnInit {
    * Update asset type ID and reload data
    */
   updateAssetTypeId(newAssetTypeId: string) {
-    console.log('🔄 SoftwareTableComponent - Updating asset type ID:', newAssetTypeId);
+    console.log(
+      '🔄 SoftwareTableComponent - Updating asset type ID:',
+      newAssetTypeId
+    );
     this.assetTypeId = newAssetTypeId;
     this.loadSoftware();
+  }
+
+  /**
+   * Clear search filter
+   */
+  clearSearch() {
+    if (this.softwareTable) {
+      this.softwareTable.clear();
+    }
   }
 
   /**

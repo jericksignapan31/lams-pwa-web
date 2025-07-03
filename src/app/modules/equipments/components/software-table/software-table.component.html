@@ -4,15 +4,28 @@
       <i class="pi pi-code"></i>
       Software Equipment
     </h3>
-    <button
-      pButton
-      type="button"
-      label="Refresh"
-      icon="pi pi-refresh"
-      (click)="refresh()"
-      [loading]="loading"
-      class="p-button-secondary"
-    ></button>
+    <div class="header-actions">
+      <span class="p-input-icon-left search-container">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Search software..."
+          #searchInput
+          (input)="softwareTable.filterGlobal(searchInput.value, 'contains')"
+          class="search-input"
+        />
+      </span>
+      <button
+        pButton
+        type="button"
+        label="Refresh"
+        icon="pi pi-refresh"
+        (click)="refresh()"
+        [loading]="loading"
+        class="p-button-secondary"
+      ></button>
+    </div>
   </div>
 
   <!-- Loading State -->
@@ -37,6 +50,7 @@
   <!-- Software Table -->
   <div *ngIf="!loading && !error" class="table-container">
     <p-table
+      #softwareTable
       [value]="softwareList"
       [responsive]="true"
       [paginator]="true"

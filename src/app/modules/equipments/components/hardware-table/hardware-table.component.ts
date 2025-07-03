@@ -1,12 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
+import { TableModule, Table } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
+import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import {
   EquipmentService,
@@ -45,12 +53,14 @@ interface HardwareEquipment {
     ToastModule,
     ProgressSpinnerModule,
     MessageModule,
+    InputTextModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './hardware-table.component.html',
   styleUrl: './hardware-table.component.scss',
 })
 export class HardwareTableComponent implements OnInit {
+  @ViewChild('hardwareTable') hardwareTable!: Table;
   @Input() autoLoad: boolean = true;
   @Input() assetTypeId: string = ASSET_TYPES.HARDWARE; // Accept asset type ID as input
   @Output() editHardware = new EventEmitter<HardwareEquipment>();
@@ -80,11 +90,17 @@ export class HardwareTableComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    console.log('🔧 HardwareTableComponent - Loading hardware with asset type ID:', this.assetTypeId);
+    console.log(
+      '🔧 HardwareTableComponent - Loading hardware with asset type ID:',
+      this.assetTypeId
+    );
 
     this.equipmentService.getHardwares(this.assetTypeId).subscribe({
       next: (response) => {
-        console.log('✅ Hardware equipment loaded in table component:', response);
+        console.log(
+          '✅ Hardware equipment loaded in table component:',
+          response
+        );
         this.hardwareList = response || [];
         this.loading = false;
       },
@@ -113,9 +129,21 @@ export class HardwareTableComponent implements OnInit {
    * Update asset type ID and reload data
    */
   updateAssetTypeId(newAssetTypeId: string) {
-    console.log('🔄 HardwareTableComponent - Updating asset type ID:', newAssetTypeId);
+    console.log(
+      '🔄 HardwareTableComponent - Updating asset type ID:',
+      newAssetTypeId
+    );
     this.assetTypeId = newAssetTypeId;
     this.loadHardware();
+  }
+
+  /**
+   * Clear search filter
+   */
+  clearSearch() {
+    if (this.hardwareTable) {
+      this.hardwareTable.clear();
+    }
   }
 
   /**

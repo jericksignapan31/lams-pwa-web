@@ -79,15 +79,17 @@ export class EquipmentComponent implements OnInit {
       next: (assetTypes) => {
         console.log('✅ Asset types loaded:', assetTypes);
         this.assetTypes = assetTypes;
-        
+
         // Find Hardware and Software asset types
-        this.hardwareAssetType = assetTypes.find(
-          type => type.asset_type_name.toLowerCase() === 'hardware'
-        ) || null;
-        
-        this.softwareAssetType = assetTypes.find(
-          type => type.asset_type_name.toLowerCase() === 'software'
-        ) || null;
+        this.hardwareAssetType =
+          assetTypes.find(
+            (type) => type.asset_type_name.toLowerCase() === 'hardware'
+          ) || null;
+
+        this.softwareAssetType =
+          assetTypes.find(
+            (type) => type.asset_type_name.toLowerCase() === 'software'
+          ) || null;
 
         console.log('🔧 Hardware Asset Type:', this.hardwareAssetType);
         console.log('💻 Software Asset Type:', this.softwareAssetType);
@@ -100,11 +102,11 @@ export class EquipmentComponent implements OnInit {
       error: (error) => {
         console.error('❌ Error loading asset types:', error);
         this.loadingAssetTypes = false;
-        
+
         // Fallback to hardcoded asset types if API fails
         console.log('🔄 Using fallback asset type IDs...');
         this.loadAndConsoleLogEquipmentData();
-      }
+      },
     });
   }
 
@@ -127,8 +129,9 @@ export class EquipmentComponent implements OnInit {
    * Load and console log hardware equipment data
    */
   loadHardwareData() {
-    const hardwareAssetTypeId = this.hardwareAssetType?.asset_type_id || ASSET_TYPES.HARDWARE;
-    
+    const hardwareAssetTypeId =
+      this.hardwareAssetType?.asset_type_id || ASSET_TYPES.HARDWARE;
+
     console.log('🔧 Fetching Hardware Equipment...');
     console.log('🔧 Using Hardware Asset Type ID:', hardwareAssetTypeId);
 
@@ -168,8 +171,9 @@ export class EquipmentComponent implements OnInit {
    * Load and console log software equipment data
    */
   loadSoftwareData() {
-    const softwareAssetTypeId = this.softwareAssetType?.asset_type_id || ASSET_TYPES.SOFTWARE;
-    
+    const softwareAssetTypeId =
+      this.softwareAssetType?.asset_type_id || ASSET_TYPES.SOFTWARE;
+
     console.log('💻 Fetching Software Equipment...');
     console.log('💻 Using Software Asset Type ID:', softwareAssetTypeId);
 
@@ -290,17 +294,27 @@ export class EquipmentComponent implements OnInit {
    */
   selectCategory(category: 'hardware' | 'software') {
     console.log('🎯 Category selected:', category);
-    
+
     if (category === 'hardware') {
-      const hardwareAssetId = this.hardwareAssetType?.asset_type_id || 'hardware-mock-id';
+      const hardwareAssetId =
+        this.hardwareAssetType?.asset_type_id || 'hardware-mock-id';
       console.log('🔧 Hardware Asset Type ID to be used:', hardwareAssetId);
-      console.log('🔧 This will call API endpoint: GET /api/assets/' + hardwareAssetId + '/hardwares/');
+      console.log(
+        '🔧 This will call API endpoint: GET /api/assets/' +
+          hardwareAssetId +
+          '/hardwares/'
+      );
     } else if (category === 'software') {
-      const softwareAssetId = this.softwareAssetType?.asset_type_id || 'software-mock-id';
+      const softwareAssetId =
+        this.softwareAssetType?.asset_type_id || 'software-mock-id';
       console.log('💻 Software Asset Type ID to be used:', softwareAssetId);
-      console.log('💻 This will call API endpoint: GET /api/assets/' + softwareAssetId + '/softwares/');
+      console.log(
+        '💻 This will call API endpoint: GET /api/assets/' +
+          softwareAssetId +
+          '/softwares/'
+      );
     }
-    
+
     this.selectedCategory = category;
     this.showCategorySelection = false;
   }
@@ -363,28 +377,44 @@ export class EquipmentComponent implements OnInit {
     console.log('🔍 ===== ASSET TYPE DEBUG INFO =====');
     console.log('🔍 Hardware Asset Type:', this.hardwareAssetType);
     console.log('🔍 Software Asset Type:', this.softwareAssetType);
-    console.log('🔍 Hardware Asset Type ID:', this.hardwareAssetType?.asset_type_id || 'hardware-mock-id');
-    console.log('🔍 Software Asset Type ID:', this.softwareAssetType?.asset_type_id || 'software-mock-id');
+    console.log(
+      '🔍 Hardware Asset Type ID:',
+      this.hardwareAssetType?.asset_type_id || 'hardware-mock-id'
+    );
+    console.log(
+      '🔍 Software Asset Type ID:',
+      this.softwareAssetType?.asset_type_id || 'software-mock-id'
+    );
     console.log('🔍 Current Selected Category:', this.selectedCategory);
     console.log('🔍 Show Table Section:', this.showTableSection);
     console.log('🔍 Show Category Selection:', this.showCategorySelection);
     console.log('🔍 ===================================');
-    
+
     // Also test API calls
     if (this.hardwareAssetType?.asset_type_id) {
-      console.log('🔧 Testing Hardware API call with ID:', this.hardwareAssetType.asset_type_id);
-      this.equipmentService.getHardwares(this.hardwareAssetType.asset_type_id).subscribe({
-        next: (data) => console.log('✅ Hardware API Response:', data),
-        error: (error) => console.error('❌ Hardware API Error:', error)
-      });
+      console.log(
+        '🔧 Testing Hardware API call with ID:',
+        this.hardwareAssetType.asset_type_id
+      );
+      this.equipmentService
+        .getHardwares(this.hardwareAssetType.asset_type_id)
+        .subscribe({
+          next: (data) => console.log('✅ Hardware API Response:', data),
+          error: (error) => console.error('❌ Hardware API Error:', error),
+        });
     }
-    
+
     if (this.softwareAssetType?.asset_type_id) {
-      console.log('💻 Testing Software API call with ID:', this.softwareAssetType.asset_type_id);
-      this.equipmentService.getSoftwares(this.softwareAssetType.asset_type_id).subscribe({
-        next: (data) => console.log('✅ Software API Response:', data),
-        error: (error) => console.error('❌ Software API Error:', error)
-      });
+      console.log(
+        '💻 Testing Software API call with ID:',
+        this.softwareAssetType.asset_type_id
+      );
+      this.equipmentService
+        .getSoftwares(this.softwareAssetType.asset_type_id)
+        .subscribe({
+          next: (data) => console.log('✅ Software API Response:', data),
+          error: (error) => console.error('❌ Software API Error:', error),
+        });
     }
   }
 

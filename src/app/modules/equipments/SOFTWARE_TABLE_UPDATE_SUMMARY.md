@@ -5,6 +5,7 @@
 ### 1. **HTML Template Changes** (`software-table.component.html`)
 
 #### **Before:**
+
 - Complex multi-section layout with main header, statistics, and separate table sections
 - Multiple conditional rendering blocks
 - Search functionality in table caption
@@ -12,6 +13,7 @@
 - Complex table structure with scrollable height
 
 #### **After:**
+
 - Simple, clean structure matching hardware table exactly
 - Single table header with title and refresh button
 - Consistent loading, error, and empty states
@@ -19,6 +21,7 @@
 - Responsive design with proper column selection
 
 #### **Key Structure Changes:**
+
 ```html
 <!-- NEW: Simple header like hardware table -->
 <div class="table-header">
@@ -43,28 +46,33 @@
 ### 2. **TypeScript Component Changes** (`software-table.component.ts`)
 
 #### **Added Methods:**
+
 - `refresh()` - Matches hardware table refresh functionality
 - `updateAssetTypeId()` - Allows dynamic asset type ID updates
 
 #### **Consistent Method Names:**
+
 - Both tables now use `refresh()` instead of different method names
 - Both tables have similar debugging and update capabilities
 
 ### 3. **SCSS Styling Changes** (`software-table.component.scss`)
 
 #### **Before:**
+
 - Complex gradient backgrounds
 - Multiple color schemes
 - Heavy styling with animations
 - Complex responsive design
 
 #### **After:**
+
 - Clean, minimal styling matching hardware table
 - Consistent color scheme using CSS variables
 - Simple, effective responsive design
 - Matching button styles and layouts
 
 #### **Key Style Improvements:**
+
 ```scss
 .table-header {
   display: flex;
@@ -91,18 +99,21 @@
 ### 4. **UI/UX Improvements**
 
 #### **Consistent Experience:**
+
 - Both tables now have identical loading states
 - Both tables have identical error handling
 - Both tables have identical empty states
 - Both tables have identical action buttons (View, Edit, Delete)
 
 #### **Better Data Display:**
+
 - Focus on essential columns only
 - Improved readability with proper spacing
 - Consistent laboratory information display
 - Better mobile responsiveness
 
 #### **Action Buttons:**
+
 - Matching rounded button styles
 - Consistent tooltips and positioning
 - Same hover effects and visual feedback
@@ -110,6 +121,7 @@
 ### 5. **Removed Complexity**
 
 #### **Eliminated:**
+
 - Complex header statistics section
 - Multiple conditional rendering blocks
 - Excessive column sorting
@@ -118,6 +130,7 @@
 - Complex responsive breakpoints
 
 #### **Simplified:**
+
 - Single, clean table layout
 - Essential columns only
 - Consistent styling with hardware table
@@ -126,6 +139,7 @@
 ## **Result**
 
 The software table now provides:
+
 - ✅ **Identical UI/UX** to hardware table
 - ✅ **Consistent functionality** and behavior
 - ✅ **Better performance** with simplified structure

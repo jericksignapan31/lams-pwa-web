@@ -152,18 +152,20 @@ export class EquipmentService {
     const accessToken = localStorage.getItem('lams_authToken123');
     console.log(
       '🔍 EquipmentService - Using token:',
-      accessToken ? `Token found (${accessToken.substring(0, 20)}...)` : 'No token'
+      accessToken
+        ? `Token found (${accessToken.substring(0, 20)}...)`
+        : 'No token'
     );
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
-    
+
     console.log('🔍 EquipmentService - Headers created:', {
       hasAuthorization: headers.has('Authorization'),
-      authValue: headers.get('Authorization')?.substring(0, 30) + '...'
+      authValue: headers.get('Authorization')?.substring(0, 30) + '...',
     });
-    
+
     return headers;
   }
 
@@ -206,28 +208,40 @@ export class EquipmentService {
    */
   getAssetTypes(): Observable<AssetType[]> {
     console.log('🔍 EquipmentService.getAssetTypes() - Method called');
-    console.log('🔍 EquipmentService.getAssetTypes() - Using existing getAssets() method');
-    
+    console.log(
+      '🔍 EquipmentService.getAssetTypes() - Using existing getAssets() method'
+    );
+
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-      console.log('⚠️ EquipmentService.getAssetTypes() - Server side rendering detected, returning empty array');
+      console.log(
+        '⚠️ EquipmentService.getAssetTypes() - Server side rendering detected, returning empty array'
+      );
       return of([]);
     }
 
-    console.log('� EquipmentService - Using getAssets() to fetch asset types from /api/assets/');
-    
+    console.log(
+      '� EquipmentService - Using getAssets() to fetch asset types from /api/assets/'
+    );
+
     return this.getAssets().pipe(
       tap({
         next: (response) => {
-          console.log('✅ EquipmentService - Assets response received:', response);
+          console.log(
+            '✅ EquipmentService - Assets response received:',
+            response
+          );
           console.log('📊 Number of assets received:', response?.length || 0);
         },
         error: (error) => {
           console.error('❌ EquipmentService - Assets API error:', error);
           console.error('❌ EquipmentService - Error status:', error.status);
-          console.error('❌ EquipmentService - Error statusText:', error.statusText);
+          console.error(
+            '❌ EquipmentService - Error statusText:',
+            error.statusText
+          );
           console.error('❌ EquipmentService - Error URL:', error.url);
           console.error('❌ EquipmentService - Error body:', error.error);
-        }
+        },
       })
     );
   }
@@ -237,16 +251,23 @@ export class EquipmentService {
    * @returns Observable<AssetType[]> - List of asset types (real or mock)
    */
   getAssetTypesWithFallback(): Observable<AssetType[]> {
-    console.log('🔄 EquipmentService.getAssetTypesWithFallback() - Trying /api/assets/ first...');
-    
+    console.log(
+      '🔄 EquipmentService.getAssetTypesWithFallback() - Trying /api/assets/ first...'
+    );
+
     return this.getAssetTypes().pipe(
       tap({
         next: (response: any) => {
-          console.log('✅ Real API data received from /api/assets/, using that:', response);
+          console.log(
+            '✅ Real API data received from /api/assets/, using that:',
+            response
+          );
         },
         error: (error: any) => {
-          console.log('❌ /api/assets/ API failed, will use mock data as fallback');
-        }
+          console.log(
+            '❌ /api/assets/ API failed, will use mock data as fallback'
+          );
+        },
       }),
       // If API fails, provide mock data
       catchError((error) => {
@@ -257,15 +278,15 @@ export class EquipmentService {
             asset_type_name: 'Hardware',
             description: 'Physical equipment and devices',
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           },
           {
             asset_type_id: 'software-mock-id',
             asset_type_name: 'Software',
             description: 'Software applications and licenses',
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
+            updated_at: new Date().toISOString(),
+          },
         ];
         console.log('✅ Mock asset types provided:', mockAssetTypes);
         return of(mockAssetTypes);

@@ -4,15 +4,28 @@
       <i class="pi pi-desktop"></i>
       Hardware Equipment
     </h3>
-    <button
-      pButton
-      type="button"
-      label="Refresh"
-      icon="pi pi-refresh"
-      (click)="refresh()"
-      [loading]="loading"
-      class="p-button-secondary"
-    ></button>
+    <div class="header-actions">
+      <span class="p-input-icon-left search-container">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="Search hardware..."
+          #searchInput
+          (input)="hardwareTable.filterGlobal(searchInput.value, 'contains')"
+          class="search-input"
+        />
+      </span>
+      <button
+        pButton
+        type="button"
+        label="Refresh"
+        icon="pi pi-refresh"
+        (click)="refresh()"
+        [loading]="loading"
+        class="p-button-secondary"
+      ></button>
+    </div>
   </div>
 
   <!-- Loading State -->
@@ -37,6 +50,7 @@
   <!-- Hardware Table -->
   <div *ngIf="!loading && !error" class="table-container">
     <p-table
+      #hardwareTable
       [value]="hardwareList"
       [responsive]="true"
       [paginator]="true"

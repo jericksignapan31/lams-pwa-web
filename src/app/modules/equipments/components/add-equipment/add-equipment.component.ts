@@ -116,13 +116,15 @@ export class AddEquipmentComponent implements OnInit {
 
   ngOnInit() {
     console.log('🚀 AddEquipmentComponent - ngOnInit started');
-    
+
     // Make component available for debugging
     if (typeof window !== 'undefined') {
       (window as any).addEquipmentComponent = this;
-      console.log('🐛 Component available for debugging: window.addEquipmentComponent');
+      console.log(
+        '🐛 Component available for debugging: window.addEquipmentComponent'
+      );
     }
-    
+
     console.log('🔧 Loading asset types...');
     this.loadAssetTypes();
     console.log('🏢 Loading laboratories...');
@@ -174,16 +176,25 @@ export class AddEquipmentComponent implements OnInit {
   loadAssetTypes() {
     console.log('🔄 Starting to load asset types...');
     this.loadingAssetTypes = true;
-    
+
     // Try with fallback first
     this.equipmentService.getAssetTypesWithFallback().subscribe({
       next: (response) => {
         console.log('✅ Asset types loaded successfully:', response);
-        console.log('📊 Number of asset types received:', response?.length || 0);
-        console.log('📋 Asset types details:', JSON.stringify(response, null, 2));
+        console.log(
+          '📊 Number of asset types received:',
+          response?.length || 0
+        );
+        console.log(
+          '📋 Asset types details:',
+          JSON.stringify(response, null, 2)
+        );
         this.assetTypes = response || [];
         this.loadingAssetTypes = false;
-        console.log('✅ Asset types loading completed. Current assetTypes array:', this.assetTypes);
+        console.log(
+          '✅ Asset types loading completed. Current assetTypes array:',
+          this.assetTypes
+        );
       },
       error: (error) => {
         console.error('❌ Even fallback failed:', error);
@@ -270,7 +281,7 @@ export class AddEquipmentComponent implements OnInit {
     console.log('🎯 Asset type selected:', assetType);
     console.log('🏷️ Asset type name:', assetType.asset_type_name);
     console.log('🆔 Asset type ID:', assetType.asset_type_id);
-    
+
     this.selectedAssetType = assetType;
     // Reset hardware type selection when changing asset type
     this.selectedHardwareType = null;
@@ -278,8 +289,11 @@ export class AddEquipmentComponent implements OnInit {
       this.hardwareForm.patchValue({ hardware_type: '' });
       console.log('🔄 Hardware form reset due to asset type change');
     }
-    
-    console.log('✅ Asset type selection completed. Selected:', this.selectedAssetType?.asset_type_name);
+
+    console.log(
+      '✅ Asset type selection completed. Selected:',
+      this.selectedAssetType?.asset_type_name
+    );
   }
 
   selectHardwareType(hardwareType: HardwareType) {
@@ -455,7 +469,7 @@ export class AddEquipmentComponent implements OnInit {
       loadingHardwareTypes: this.loadingHardwareTypes,
       selectedHardwareType: this.selectedHardwareType,
       laboratories: this.laboratories,
-      loadingLaboratories: this.loadingLaboratories
+      loadingLaboratories: this.loadingLaboratories,
     };
   }
 
