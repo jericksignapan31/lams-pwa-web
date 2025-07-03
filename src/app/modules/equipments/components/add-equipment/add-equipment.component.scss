@@ -65,6 +65,90 @@
   }
 }
 
+// Hardware Type Selection Styles
+.hardware-type-selection {
+  .form-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+    }
+  }
+
+  .subtitle {
+    color: var(--text-color-secondary);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
+
+.hardware-type-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hardware-type-card {
+  background: var(--surface-card);
+  border: 2px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+
+    i {
+      font-size: inherit;
+    }
+  }
+
+  h4 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+// Loading State Styles
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-color-secondary);
+
+  i {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
 // Form Styles
 .equipment-form {
   .form-header {
@@ -219,6 +303,61 @@
 
     button {
       width: 100%;
+    }
+  }
+}
+
+// Responsive Design for Hardware Type Selection
+@media (max-width: 768px) {
+  .hardware-type-cards {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .hardware-type-card {
+    padding: 1rem;
+    min-height: 100px;
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    h4 {
+      font-size: 0.9rem;
+    }
+  }
+
+  .hardware-type-display {
+    .selected-hardware-type {
+      padding: 0.8rem;
+
+      .hardware-type-info {
+        font-size: 0.9rem;
+
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .hardware-type-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hardware-type-card {
+    min-height: 80px;
+    padding: 0.8rem;
+
+    .card-icon {
+      font-size: 1.5rem;
+    }
+
+    h4 {
+      font-size: 0.8rem;
     }
   }
 }

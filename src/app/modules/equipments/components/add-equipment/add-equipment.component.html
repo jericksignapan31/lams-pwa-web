@@ -4,7 +4,14 @@
     <h3>Select Equipment Type</h3>
     <p class="subtitle">Choose the type of equipment you want to add</p>
 
-    <div class="asset-type-cards">
+    <!-- Loading State -->
+    <div *ngIf="loadingAssetTypes" class="loading-state">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>Loading asset types...</p>
+    </div>
+
+    <!-- Asset Type Cards -->
+    <div *ngIf="!loadingAssetTypes" class="asset-type-cards">
       <div
         *ngFor="let assetType of assetTypes"
         class="asset-type-card"
@@ -42,9 +49,50 @@
     </div>
   </div>
 
+  <!-- Hardware Type Selection -->
+  <div
+    *ngIf="
+      selectedAssetType?.asset_type_name === 'Hardware' && !selectedHardwareType
+    "
+    class="hardware-type-selection"
+  >
+    <div class="form-header">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-arrow-left"
+        class="p-button-text"
+        (click)="goBack()"
+      ></button>
+      <h3>Select Hardware Type</h3>
+    </div>
+
+    <p class="subtitle">Choose the specific type of hardware equipment</p>
+
+    <div class="hardware-type-cards" *ngIf="!loadingHardwareTypes">
+      <div
+        *ngFor="let hardwareType of hardwareTypes"
+        class="hardware-type-card"
+        (click)="selectHardwareType(hardwareType)"
+      >
+        <div class="card-icon">
+          <i [class]="hardwareType.icon"></i>
+        </div>
+        <h4>{{ hardwareType.type_name }}</h4>
+      </div>
+    </div>
+
+    <div class="loading-state" *ngIf="loadingHardwareTypes">
+      <i class="pi pi-spinner pi-spin" style="font-size: 2rem"></i>
+      <p>Loading hardware types...</p>
+    </div>
+  </div>
+
   <!-- Hardware Form -->
   <div
-    *ngIf="selectedAssetType?.asset_type_name === 'Hardware'"
+    *ngIf="
+      selectedAssetType?.asset_type_name === 'Hardware' && selectedHardwareType
+    "
     class="equipment-form"
   >
     <div class="form-header">
@@ -59,6 +107,17 @@
     </div>
 
     <form [formGroup]="hardwareForm" (ngSubmit)="onSubmit()" class="form-grid">
+      <!-- Hardware Type Display -->
+      <div class="form-row hardware-type-display">
+        <div class="selected-hardware-type">
+          <span class="hardware-type-label">Selected Hardware Type:</span>
+          <div class="hardware-type-info" *ngIf="selectedHardwareType">
+            <i [class]="selectedHardwareType.icon"></i>
+            <span>{{ selectedHardwareType.type_name }}</span>
+          </div>
+        </div>
+      </div>
+
       <div class="form-row">
         <div class="form-field">
           <label for="hardware_name">Hardware Name *</label>

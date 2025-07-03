@@ -52,6 +52,7 @@ interface HardwareEquipment {
 })
 export class HardwareTableComponent implements OnInit {
   @Input() autoLoad: boolean = true;
+  @Input() assetTypeId: string = ASSET_TYPES.HARDWARE; // Accept asset type ID as input
   @Output() editHardware = new EventEmitter<HardwareEquipment>();
   @Output() viewHardware = new EventEmitter<HardwareEquipment>();
   @Output() deleteHardware = new EventEmitter<string>();
@@ -79,14 +80,16 @@ export class HardwareTableComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.equipmentService.getHardwares(ASSET_TYPES.HARDWARE).subscribe({
+    console.log('🔧 HardwareTableComponent - Loading hardware with asset type ID:', this.assetTypeId);
+
+    this.equipmentService.getHardwares(this.assetTypeId).subscribe({
       next: (response) => {
-        console.log('✅ Hardware equipment loaded:', response);
+        console.log('✅ Hardware equipment loaded in table component:', response);
         this.hardwareList = response || [];
         this.loading = false;
       },
       error: (error) => {
-        console.error('❌ Error loading hardware:', error);
+        console.error('❌ Error loading hardware in table component:', error);
         this.error = error.message || 'Failed to load hardware equipment';
         this.loading = false;
         this.messageService.add({
@@ -96,6 +99,23 @@ export class HardwareTableComponent implements OnInit {
         });
       },
     });
+  }
+
+  /**
+   * Refresh hardware data (can be called externally or when asset type changes)
+   */
+  refreshData() {
+    console.log('🔄 HardwareTableComponent - Refreshing hardware data...');
+    this.loadHardware();
+  }
+
+  /**
+   * Update asset type ID and reload data
+   */
+  updateAssetTypeId(newAssetTypeId: string) {
+    console.log('🔄 HardwareTableComponent - Updating asset type ID:', newAssetTypeId);
+    this.assetTypeId = newAssetTypeId;
+    this.loadHardware();
   }
 
   /**

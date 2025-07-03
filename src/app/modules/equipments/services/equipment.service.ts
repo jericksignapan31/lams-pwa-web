@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment.development';
 import { Equipment, Product } from '../model/product';
 
@@ -8,6 +9,7 @@ import { Equipment, Product } from '../model/product';
 
 // Hardware Equipment Data Interface
 export interface HardwareEquipmentData {
+  hardware_asset_type?: string;
   hardware_name: string;
   brand_name: string;
   model: string;
@@ -39,7 +41,25 @@ export interface SoftwareEquipmentData {
   laboratory?: string | null;
 }
 
-// Asset Type Constants
+// Asset Type Interface
+export interface AssetType {
+  asset_type_id: string;
+  asset_type_name: string;
+  description?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Hardware Asset Type Interface
+export interface HardwareAssetType {
+  hardware_asset_type_id: string;
+  type_name: string;
+  description?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Asset Type Constants (deprecated - use getAssetTypes() instead)
 export const ASSET_TYPES = {
   HARDWARE: '3660f0bc-ba67-4a73-b121-2dc76a10248a',
   SOFTWARE: 'bfe46b46-f97f-43a5-9683-d4cc357ff143',
@@ -126,17 +146,25 @@ export class EquipmentService {
    */
   private getHeaders(): HttpHeaders {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      console.log('⚠️ EquipmentService - No window/localStorage available');
       return new HttpHeaders();
     }
     const accessToken = localStorage.getItem('lams_authToken123');
     console.log(
       '🔍 EquipmentService - Using token:',
-      accessToken ? 'Token found' : 'No token'
+      accessToken ? `Token found (${accessToken.substring(0, 20)}...)` : 'No token'
     );
 
-    return new HttpHeaders({
+    const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
+    
+    console.log('🔍 EquipmentService - Headers created:', {
+      hasAuthorization: headers.has('Authorization'),
+      authValue: headers.get('Authorization')?.substring(0, 30) + '...'
+    });
+    
+    return headers;
   }
 
   getAssets(): Observable<any> {
@@ -150,6 +178,99 @@ export class EquipmentService {
 
     const headers = this.getHeaders();
     return this.http.get(assetsUrl, { headers });
+  }
+
+  /**
+   * Get all hardware asset types
+   * @returns Observable<HardwareAssetType[]> - List of hardware asset types
+   */
+  getHardwareAssetTypes(): Observable<HardwareAssetType[]> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    const hardwareTypesUrl = `${environment.baseUrl}/hardware-asset-types/`;
+    console.log('🔍 EquipmentService - Getting hardware asset types');
+    console.log(
+      '🔍 EquipmentService - Hardware Types API URL:',
+      hardwareTypesUrl
+    );
+
+    const headers = this.getHeaders();
+    return this.http.get<HardwareAssetType[]>(hardwareTypesUrl, { headers });
+  }
+
+  /**
+   * Get all asset types
+   * @returns Observable<AssetType[]> - List of asset types
+   */
+  getAssetTypes(): Observable<AssetType[]> {
+    console.log('🔍 EquipmentService.getAssetTypes() - Method called');
+    console.log('🔍 EquipmentService.getAssetTypes() - Using existing getAssets() method');
+    
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      console.log('⚠️ EquipmentService.getAssetTypes() - Server side rendering detected, returning empty array');
+      return of([]);
+    }
+
+    console.log('� EquipmentService - Using getAssets() to fetch asset types from /api/assets/');
+    
+    return this.getAssets().pipe(
+      tap({
+        next: (response) => {
+          console.log('✅ EquipmentService - Assets response received:', response);
+          console.log('📊 Number of assets received:', response?.length || 0);
+        },
+        error: (error) => {
+          console.error('❌ EquipmentService - Assets API error:', error);
+          console.error('❌ EquipmentService - Error status:', error.status);
+          console.error('❌ EquipmentService - Error statusText:', error.statusText);
+          console.error('❌ EquipmentService - Error URL:', error.url);
+          console.error('❌ EquipmentService - Error body:', error.error);
+        }
+      })
+    );
+  }
+
+  /**
+   * Get asset types with fallback to mock data
+   * @returns Observable<AssetType[]> - List of asset types (real or mock)
+   */
+  getAssetTypesWithFallback(): Observable<AssetType[]> {
+    console.log('🔄 EquipmentService.getAssetTypesWithFallback() - Trying /api/assets/ first...');
+    
+    return this.getAssetTypes().pipe(
+      tap({
+        next: (response: any) => {
+          console.log('✅ Real API data received from /api/assets/, using that:', response);
+        },
+        error: (error: any) => {
+          console.log('❌ /api/assets/ API failed, will use mock data as fallback');
+        }
+      }),
+      // If API fails, provide mock data
+      catchError((error) => {
+        console.log('🔄 Using mock asset types as fallback...');
+        const mockAssetTypes: AssetType[] = [
+          {
+            asset_type_id: 'hardware-mock-id',
+            asset_type_name: 'Hardware',
+            description: 'Physical equipment and devices',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            asset_type_id: 'software-mock-id',
+            asset_type_name: 'Software',
+            description: 'Software applications and licenses',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+        console.log('✅ Mock asset types provided:', mockAssetTypes);
+        return of(mockAssetTypes);
+      })
+    );
   }
 
   // Legacy methods for backward compatibility (using mock data)

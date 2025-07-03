@@ -39,6 +39,7 @@
       >
         <div class="table-header">
           <h3>Hardware Equipment</h3>
+          <small class="debug-info">Using Asset Type ID: {{ hardwareAssetType?.asset_type_id || 'hardware-mock-id' }}</small>
           <button
             pButton
             type="button"
@@ -48,7 +49,10 @@
             (click)="backToCategorySelection()"
           ></button>
         </div>
-        <app-hardware-table></app-hardware-table>
+        <app-hardware-table 
+          [assetTypeId]="hardwareAssetType?.asset_type_id || 'hardware-mock-id'"
+          [autoLoad]="true">
+        </app-hardware-table>
       </div>
 
       <!-- Software Table -->
@@ -58,6 +62,7 @@
       >
         <div class="table-header">
           <h3>Software Equipment</h3>
+          <small class="debug-info">Using Asset Type ID: {{ softwareAssetType?.asset_type_id || 'software-mock-id' }}</small>
           <button
             pButton
             type="button"
@@ -67,7 +72,10 @@
             (click)="backToCategorySelection()"
           ></button>
         </div>
-        <app-software-table></app-software-table>
+        <app-software-table 
+          [assetTypeId]="softwareAssetType?.asset_type_id || 'software-mock-id'"
+          [autoLoad]="true">
+        </app-software-table>
       </div>
     </div>
 

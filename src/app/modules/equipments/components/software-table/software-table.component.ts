@@ -47,6 +47,7 @@ interface SoftwareEquipment {
 })
 export class SoftwareTableComponent implements OnInit {
   @Input() autoLoad: boolean = true;
+  @Input() assetTypeId: string = ASSET_TYPES.SOFTWARE; // Accept asset type ID as input
   @Output() editSoftware = new EventEmitter<SoftwareEquipment>();
   @Output() viewSoftware = new EventEmitter<SoftwareEquipment>();
   @Output() deleteSoftware = new EventEmitter<string>();
@@ -74,9 +75,11 @@ export class SoftwareTableComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.equipmentService.getSoftwares(ASSET_TYPES.SOFTWARE).subscribe({
+    console.log('💻 SoftwareTableComponent - Loading software with asset type ID:', this.assetTypeId);
+
+    this.equipmentService.getSoftwares(this.assetTypeId).subscribe({
       next: (response) => {
-        console.log('✅ Software equipment loaded:', response);
+        console.log('✅ Software equipment loaded in table component:', response);
         this.softwareList = response || [];
         this.loading = false;
       },
