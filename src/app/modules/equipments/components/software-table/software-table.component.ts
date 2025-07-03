@@ -113,6 +113,23 @@ export class SoftwareTableComponent implements OnInit {
   }
 
   /**
+   * Refresh software data (can be called externally or when asset type changes)
+   */
+  refresh() {
+    console.log('🔄 SoftwareTableComponent - Refreshing software data...');
+    this.loadSoftware();
+  }
+
+  /**
+   * Update asset type ID and reload data
+   */
+  updateAssetTypeId(newAssetTypeId: string) {
+    console.log('🔄 SoftwareTableComponent - Updating asset type ID:', newAssetTypeId);
+    this.assetTypeId = newAssetTypeId;
+    this.loadSoftware();
+  }
+
+  /**
    * Handle delete action with confirmation
    */
   onDelete(software: SoftwareEquipment) {
@@ -162,13 +179,6 @@ export class SoftwareTableComponent implements OnInit {
           });
         },
       });
-  }
-
-  /**
-   * Refresh the software table
-   */
-  refresh() {
-    this.loadSoftware();
   }
 
   /**

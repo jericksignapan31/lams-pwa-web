@@ -31,118 +31,23 @@
   }
 }
 
-// Main Table Header Styles
-.table-main-header {
-  background: var(--surface-card);
-  border-radius: var(--border-radius);
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--surface-border);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 2rem;
-    gap: 2rem;
-
-    .header-left {
-      flex: 1;
-
-      .table-title {
-        margin: 0 0 0.75rem 0;
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--primary-color);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-
-        i {
-          font-size: 2rem;
-          color: var(--green-500);
-        }
-      }
-
-      .table-description {
-        margin: 0 0 1.5rem 0;
-        color: var(--text-color-secondary);
-        font-size: 1rem;
-        line-height: 1.5;
-      }
-
-      .table-stats {
-        display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-
-        .stat-item {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem 1rem;
-          background: var(--surface-ground);
-          border-radius: var(--border-radius);
-          border: 1px solid var(--surface-border);
-          font-size: 0.9rem;
-
-          i {
-            color: var(--primary-color);
-          }
-
-          strong {
-            color: var(--primary-color);
-            font-weight: 600;
-
-            &.expired {
-              color: var(--red-500);
-            }
-          }
-
-          &:has(.expired) {
-            border-color: var(--red-200);
-            background: var(--red-50);
-
-            i {
-              color: var(--red-500);
-            }
-          }
-        }
-      }
-    }
-
-    .header-right {
-      flex-shrink: 0;
-      display: flex;
-      align-items: flex-start;
-
-      .refresh-btn {
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-      }
-    }
-  }
-}
-
 .table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 0;
 
-  .table-title {
-    font-size: 1.1rem;
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
     i {
-      margin-right: 0.5rem;
-      color: var(--green-500);
+      color: var(--primary-color);
     }
   }
 
@@ -164,7 +69,7 @@
       margin-bottom: 1rem;
     }
 
-    h3 {
+    h4 {
       margin: 0 0 0.5rem 0;
       color: var(--text-color);
     }
@@ -180,54 +85,53 @@
   strong {
     color: var(--primary-color);
   }
-}
 
-.version-badge {
-  display: inline-block;
-  background: var(--blue-100);
-  color: var(--blue-800);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border: 1px solid var(--blue-200);
+  .software-version {
+    small {
+      color: var(--text-color-secondary);
+      font-style: italic;
+    }
+  }
 }
 
 .license-key {
   font-family: "Courier New", monospace;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   background: var(--surface-ground);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   border: 1px solid var(--surface-border);
-}
-
-.license-count {
-  display: inline-block;
-  background: var(--green-100);
-  color: var(--green-800);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-weight: 600;
-  border: 1px solid var(--green-200);
+  color: var(--text-color);
 }
 
 .license-expiry {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
   &.expired {
-    color: var(--red-600);
-    font-weight: 600;
+    color: var(--red-500);
+    font-weight: 500;
 
     i {
+      margin-left: 0.5rem;
       color: var(--red-500);
     }
   }
 
   &.active {
-    color: var(--green-600);
+    color: var(--green-500);
+    font-weight: 500;
+  }
+}
+
+.laboratory-info {
+  .lab-name {
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  .lab-campus {
+    small {
+      color: var(--text-color-secondary);
+      font-style: italic;
+    }
   }
 }
 
@@ -235,80 +139,63 @@
   display: flex;
   gap: 0.5rem;
   justify-content: center;
+  align-items: center;
 
-  button {
+  .p-button {
     width: 2rem;
     height: 2rem;
-  }
-}
-
-// Responsive design for header
-@media (max-width: 768px) {
-  .table-main-header {
-    .header-content {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 1.5rem;
-
-      .header-left {
-        .table-title {
-          font-size: 1.5rem;
-
-          i {
-            font-size: 1.75rem;
-          }
-        }
-
-        .table-stats {
-          justify-content: center;
-        }
-      }
-
-      .header-right {
-        align-self: center;
-      }
+    
+    &.p-button-rounded {
+      border-radius: 50%;
     }
   }
 }
 
-// Table styling
+// Responsive design
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+// PrimeNG Table Overrides
 :host ::ng-deep {
   .p-datatable {
-    .p-datatable-header {
-      background: var(--surface-card);
-      border-color: var(--surface-border);
+    .p-datatable-tbody > tr > td {
+      padding: 0.75rem;
+      vertical-align: middle;
     }
 
     .p-datatable-thead > tr > th {
-      background: #2c3e50 !important;
-      color: #ffffff !important;
-      border-color: #34495e !important;
-      font-weight: 900 !important;
-      font-size: 0.95rem !important;
-      padding: 1rem !important;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      text-shadow: none !important;
-    }
-
-    .p-datatable-tbody > tr {
-      &:hover {
-        background: var(--surface-hover);
-      }
-
-      &:nth-child(even) {
-        background: var(--surface-ground);
-      }
-
-      td {
-        padding: 0.75rem 1rem;
-        border-color: var(--surface-border);
-      }
+      padding: 0.75rem;
+      background: var(--surface-ground);
+      border-bottom: 2px solid var(--surface-border);
+      font-weight: 600;
     }
 
     .p-paginator {
-      background: var(--surface-card);
-      border-color: var(--surface-border);
+      border-top: 1px solid var(--surface-border);
+      padding: 1rem;
+    }
+  }
+
+  .p-button-rounded {
+    border-radius: 50%;
+  }
+
+  .p-button-text {
+    background: transparent;
+    border: none;
+    
+    &:hover {
+      background: var(--surface-hover);
     }
   }
 }
