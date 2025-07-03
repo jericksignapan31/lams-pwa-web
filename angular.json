@@ -46,17 +46,28 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "1MB",
                   "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "10kB"
+                  "maximumWarning": "16kB",
+                  "maximumError": "25kB"
+                },
+                {
+                  "type": "bundle",
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
                 }
               ],
               "outputHashing": "all",
-              "serviceWorker": "ngsw-config.json"
+              "serviceWorker": "ngsw-config.json",
+              "allowedCommonJsDependencies": [
+                "quill",
+                "quill-delta",
+                "lodash",
+                "moment"
+              ]
             },
             "development": {
               "optimization": false,

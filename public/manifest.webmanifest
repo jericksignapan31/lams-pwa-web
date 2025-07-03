@@ -1,9 +1,14 @@
 {
-  "name": "lams",
-  "short_name": "lams",
+  "name": "LAMS - Laboratory Asset Management System",
+  "short_name": "LAMS",
+  "description": "Laboratory Asset Management System for tracking hardware and software equipment",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity", "utilities"],
   "icons": [
     {
       "src": "icons/icon-72x72.png",
