@@ -9,130 +9,21 @@
       (click)="showAddEquipment()"
       class="p-button-success add-equipment-btn"
     ></button>
-    <button
-      pButton
-      type="button"
-      label="Show Table"
-      icon="pi pi-table"
-      (click)="showTable()"
-      class="p-button-info show-table-btn"
-    ></button>
-  </div>
-</div>
-
-<div class="content">
-  <!-- Add Equipment Section -->
-  <div *ngIf="showAddForm" class="add-equipment-section">
-    <app-add-equipment
-      (cancel)="hideAddEquipment()"
-      (equipmentAdded)="onEquipmentAdded($event)"
-    ></app-add-equipment>
   </div>
 
-  <!-- Table Section -->
-  <div *ngIf="showTableSection" class="table-section">
-    <!-- Category Selection -->
-    <div *ngIf="showCategorySelection" class="category-selection">
-      <div class="category-header">
-        <h3>Select Equipment Category</h3>
-        <p class="subtitle">Choose which type of equipment table to display</p>
-        <button
-          pButton
-          type="button"
-          label="Close"
-          icon="pi pi-times"
-          class="p-button-secondary p-button-outlined close-btn"
-          (click)="hideTable()"
-        ></button>
-      </div>
-
-      <div class="category-cards">
-        <div
-          class="category-card hardware-card"
-          (click)="selectCategory('hardware')"
-        >
-          <div class="card-icon">
-            <i class="pi pi-desktop"></i>
-          </div>
-          <h4>Hardware Equipment</h4>
-          <p>
-            View and manage physical equipment, devices, and hardware assets
-          </p>
-          <div class="card-action">
-            <button
-              pButton
-              type="button"
-              label="View Hardware Table"
-              class="p-button-primary"
-            ></button>
-          </div>
-        </div>
-
-        <div
-          class="category-card software-card"
-          (click)="selectCategory('software')"
-        >
-          <div class="card-icon">
-            <i class="pi pi-code"></i>
-          </div>
-          <h4>Software Equipment</h4>
-          <p>
-            View and manage software licenses, applications, and digital assets
-          </p>
-          <div class="card-action">
-            <button
-              pButton
-              type="button"
-              label="View Software Table"
-              class="p-button-primary"
-            ></button>
-          </div>
-        </div>
-      </div>
+  <div class="content">
+    <!-- Add Equipment Section -->
+    <div *ngIf="showAddForm" class="add-equipment-section">
+      <app-add-equipment
+        (cancel)="hideAddEquipment()"
+        (equipmentAdded)="onEquipmentAdded($event)"
+      ></app-add-equipment>
     </div>
 
-    <!-- Hardware Table -->
-    <div
-      *ngIf="selectedCategory === 'hardware'"
-      class="equipment-table-container"
-    >
-      <div class="table-header">
-        <h3>Hardware Equipment</h3>
-        <button
-          pButton
-          type="button"
-          label="Back to Categories"
-          icon="pi pi-arrow-left"
-          class="p-button-secondary p-button-outlined"
-          (click)="backToCategorySelection()"
-        ></button>
-      </div>
-      <app-hardware-table></app-hardware-table>
+    <!-- Loading indicator -->
+    <div *ngIf="loading" class="loading-container">
+      <p-progressSpinner></p-progressSpinner>
+      <p>Loading assets...</p>
     </div>
-
-    <!-- Software Table -->
-    <div
-      *ngIf="selectedCategory === 'software'"
-      class="equipment-table-container"
-    >
-      <div class="table-header">
-        <h3>Software Equipment</h3>
-        <button
-          pButton
-          type="button"
-          label="Back to Categories"
-          icon="pi pi-arrow-left"
-          class="p-button-secondary p-button-outlined"
-          (click)="backToCategorySelection()"
-        ></button>
-      </div>
-      <app-software-table></app-software-table>
-    </div>
-  </div>
-
-  <!-- Loading indicator -->
-  <div *ngIf="loading" class="loading-container">
-    <p-progressSpinner></p-progressSpinner>
-    <p>Loading assets...</p>
   </div>
 </div>
