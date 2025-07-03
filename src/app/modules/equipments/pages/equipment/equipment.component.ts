@@ -42,47 +42,17 @@ export class EquipmentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.testGetAssets();
   }
 
   /**
    * Test method to call getAssets from EquipmentService
    */
-  testGetAssets() {
-    console.log('🧪 Testing getAssets method...');
-    this.loading = true;
-    this.error = '';
-
-    this.equipmentService.getAssets().subscribe({
-      next: (response) => {
-        console.log('✅ getAssets success:', response);
-        this.assets = response || [];
-        this.loading = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: `Successfully loaded ${this.assets.length} assets`,
-        });
-      },
-      error: (error) => {
-        console.error('❌ getAssets error:', error);
-        this.error = error.message || 'Failed to load assets';
-        this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load assets: ' + this.error,
-        });
-      },
-    });
-  }
+  
 
   /**
    * Manual trigger for testing (called from template)
    */
-  retryLoadAssets() {
-    this.testGetAssets();
-  }
+
 
   /**
    * Get columns for assets table display
@@ -126,7 +96,6 @@ export class EquipmentComponent implements OnInit {
    */
   onEquipmentAdded(equipment: any) {
     this.showAddForm = false;
-    this.testGetAssets(); // Refresh the assets list
     this.messageService.add({
       severity: 'success',
       summary: 'Success',
