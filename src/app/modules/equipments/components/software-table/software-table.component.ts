@@ -202,8 +202,10 @@ export class SoftwareTableComponent implements OnInit {
    * Get count of expired licenses
    */
   getExpiredLicensesCount(): number {
-    return this.softwareList.filter(software => 
-      software.license_expiry_date && this.isLicenseExpired(software.license_expiry_date)
+    return this.softwareList.filter(
+      (software) =>
+        software.license_expiry_date &&
+        this.isLicenseExpired(software.license_expiry_date)
     ).length;
   }
 }

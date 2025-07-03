@@ -199,12 +199,12 @@ export class HardwareTableComponent implements OnInit {
   formatDimensions(hardware: HardwareEquipment): string {
     const { height, width, length } = hardware;
     if (!height && !width && !length) return '-';
-    
+
     const parts = [];
     if (height) parts.push(`H: ${height}`);
     if (width) parts.push(`W: ${width}`);
     if (length) parts.push(`L: ${length}`);
-    
+
     return parts.join(', ');
   }
 }
