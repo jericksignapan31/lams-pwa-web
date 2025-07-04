@@ -62,7 +62,7 @@ interface HardwareEquipment {
 export class HardwareTableComponent implements OnInit {
   @ViewChild('hardwareTable') hardwareTable!: Table;
   @Input() autoLoad: boolean = true;
-  @Input() assetTypeId: string = ASSET_TYPES.HARDWARE; // Accept asset type ID as input
+  @Input() assetTypeId: string = ASSET_TYPES.HARDWARE; 
   @Output() editHardware = new EventEmitter<HardwareEquipment>();
   @Output() viewHardware = new EventEmitter<HardwareEquipment>();
   @Output() deleteHardware = new EventEmitter<string>();

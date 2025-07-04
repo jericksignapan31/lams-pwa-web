@@ -3,7 +3,7 @@
 ## 🎨 Files that need optimization:
 
 1. **equipment.component.scss** - 15.23 kB (needs reduction)
-2. **schedules.component.scss** - 9.05 kB (needs reduction)  
+2. **schedules.component.scss** - 9.05 kB (needs reduction)
 3. **add-equipment.component.scss** - 6.52 kB (needs reduction)
 4. **home.component.scss** - 6.17 kB (needs reduction)
 5. **hardware-table.component.scss** - 5.79 kB (needs reduction)
@@ -12,27 +12,44 @@
 ## 🔧 Optimization Techniques:
 
 ### 1. **Remove Unused Styles**
+
 - Remove commented CSS
 - Remove unused classes and IDs
 - Remove redundant styles
 
 ### 2. **Combine Similar Styles**
+
 ```scss
 // Before
-.button-primary { color: #007bff; }
-.button-secondary { color: #6c757d; }
-.button-success { color: #28a745; }
+.button-primary {
+  color: #007bff;
+}
+.button-secondary {
+  color: #6c757d;
+}
+.button-success {
+  color: #28a745;
+}
 
 // After
-.button-primary, .button-secondary, .button-success {
+.button-primary,
+.button-secondary,
+.button-success {
   // common styles
 }
-.button-primary { color: #007bff; }
-.button-secondary { color: #6c757d; }
-.button-success { color: #28a745; }
+.button-primary {
+  color: #007bff;
+}
+.button-secondary {
+  color: #6c757d;
+}
+.button-success {
+  color: #28a745;
+}
 ```
 
 ### 3. **Use CSS Variables**
+
 ```scss
 // Define variables once
 :root {
@@ -50,17 +67,26 @@
 ```
 
 ### 4. **Minimize Media Queries**
+
 ```scss
 // Combine media queries
 @media (max-width: 768px) {
-  .container { padding: 1rem; }
-  .card { margin: 0.5rem; }
-  .button { font-size: 0.9rem; }
+  .container {
+    padding: 1rem;
+  }
+  .card {
+    margin: 0.5rem;
+  }
+  .button {
+    font-size: 0.9rem;
+  }
 }
 ```
 
 ### 5. **Extract Common Styles**
+
 Move common styles to `src/styles.scss`:
+
 ```scss
 // Common button styles
 .btn-base {
@@ -75,7 +101,7 @@ Move common styles to `src/styles.scss`:
 .card-base {
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem;
 }
 ```
@@ -96,6 +122,7 @@ Move common styles to `src/styles.scss`:
 ```
 
 ## 💡 Alternative Solution:
+
 If optimization is too time-consuming, you can increase the budget limits in `angular.json`:
 
 ```json

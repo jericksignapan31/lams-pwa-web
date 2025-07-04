@@ -5,21 +5,17 @@ import { concat, interval } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PwaUpdateService {
-
-  constructor(
-    private appRef: ApplicationRef,
-    private swUpdate: SwUpdate
-  ) {}
+  constructor(private appRef: ApplicationRef, private swUpdate: SwUpdate) {}
 
   /**
    * Initialize PWA update mechanisms
    */
   initPwaPrompt() {
     console.log('🔄 PWA Update Service initialized');
-    
+
     if (!this.swUpdate.isEnabled) {
       console.log('⚠️ Service Worker not enabled');
       return;
@@ -27,10 +23,10 @@ export class PwaUpdateService {
 
     // Check for updates periodically
     this.checkForAppUpdates();
-    
+
     // Listen for version updates
     this.listenForVersionUpdates();
-    
+
     // Check for updates when app stabilizes
     this.checkForUpdatesOnStable();
   }
@@ -40,7 +36,7 @@ export class PwaUpdateService {
    */
   async checkForAppUpdates(): Promise<boolean> {
     console.log('🔍 Checking for app updates...');
-    
+
     if (!this.swUpdate.isEnabled) {
       console.log('⚠️ Service Worker updates not available');
       return false;
@@ -48,7 +44,9 @@ export class PwaUpdateService {
 
     try {
       const updateAvailable = await this.swUpdate.checkForUpdate();
-      console.log(updateAvailable ? '✅ Update available!' : '✅ App is up to date');
+      console.log(
+        updateAvailable ? '✅ Update available!' : '✅ App is up to date'
+      );
       return updateAvailable;
     } catch (error) {
       console.error('❌ Error checking for updates:', error);
@@ -64,7 +62,7 @@ export class PwaUpdateService {
       .pipe(
         filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')
       )
-      .subscribe(event => {
+      .subscribe((event) => {
         console.log('📦 New version ready:', event.latestVersion);
         this.showUpdatePrompt(event);
       });
@@ -97,19 +95,18 @@ export class PwaUpdateService {
    */
   async activateUpdate(): Promise<void> {
     console.log('🔄 Activating update...');
-    
+
     try {
       await this.swUpdate.activateUpdate();
       console.log('✅ Update activated successfully');
-      
+
       // Show loading message
       this.showUpdateInProgress();
-      
+
       // Reload the page to apply updates
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-      
     } catch (error) {
       console.error('❌ Error activating update:', error);
       alert('Update failed. Please refresh the page manually.');
@@ -122,9 +119,9 @@ export class PwaUpdateService {
   private checkForUpdatesOnStable() {
     // Allow the app to stabilize first, then check for updates
     const appIsStable$ = this.appRef.isStable.pipe(
-      first(isStable => isStable === true)
+      first((isStable) => isStable === true)
     );
-    
+
     const everySixHours$ = interval(6 * 60 * 60 * 1000); // Check every 6 hours
     const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
 
@@ -278,8 +275,8 @@ export class PwaUpdateService {
       return {
         enabled: true,
         registration: registration,
-        hasUpdate: !!(registration?.waiting),
-        state: registration?.active?.state
+        hasUpdate: !!registration?.waiting,
+        state: registration?.active?.state,
       };
     } catch (error) {
       console.error('Error getting SW registration:', error);

@@ -7,6 +7,7 @@
 Ang inyong LAMS PWA ay may automatic update system na:
 
 #### ✅ **Ginagawa nito:**
+
 - **Automatic checking** ng updates tuwing mag-open ng app
 - **Periodic checks** every 6 hours pag bukas ang app
 - **Notifies users** kapag may bagong version
@@ -14,6 +15,7 @@ Ang inyong LAMS PWA ay may automatic update system na:
 - **Smooth update experience** with loading indicators
 
 #### 🔧 **Kung saan naka-configure:**
+
 - `src/app/core/services/pwa-update.service.ts` - Main update service
 - `src/app/app.component.ts` - Initializes updates on app start
 - `ngsw-config.json` - Service worker configuration
@@ -21,6 +23,7 @@ Ang inyong LAMS PWA ay may automatic update system na:
 ### 2. **Manual na Pag-update ng Service Worker**
 
 #### **Para sa Development:**
+
 ```bash
 # Build ng production version
 ng build --prod
@@ -30,6 +33,7 @@ ng serve --prod
 ```
 
 #### **Para sa Production Deployment:**
+
 ```bash
 # Build the app
 ng build --prod
@@ -48,12 +52,15 @@ firebase deploy
 ### 3. **Mga Paraan ng Pag-update**
 
 #### **A. Automatic Updates (Recommended)**
+
 - Walang kailangan gawin
 - Mag-aantay lang ng update prompt
 - Click "Update Now" kapag lumabas
 
 #### **B. Manual Update Check**
+
 Sa browser console, pwede mong i-type:
+
 ```javascript
 // Check for updates manually
 window.pwaUpdateService.checkForAppUpdates();
@@ -63,6 +70,7 @@ window.pwaUpdateService.forceReload();
 ```
 
 #### **C. Hard Refresh**
+
 - Press `Ctrl + Shift + R` (Windows/Linux)
 - O `Cmd + Shift + R` (Mac)
 - O i-clear ang cache sa browser settings
@@ -73,21 +81,23 @@ May separate component para sa manual updates:
 
 ```typescript
 // Sa component na gusto mo ilagay ang update controls
-import { PwaUpdateComponent } from './core/components/pwa-update/pwa-update.component';
+import { PwaUpdateComponent } from "./core/components/pwa-update/pwa-update.component";
 
 // Sa template:
-<app-pwa-update></app-pwa-update>
+<app-pwa-update></app-pwa-update>;
 ```
 
 ### 5. **Mga Update Triggers**
 
 #### **Automatic triggers:**
+
 - App startup
 - Every 6 hours
 - When network comes back online
 - When app becomes stable
 
 #### **Manual triggers:**
+
 - User clicks "Check for Updates"
 - Developer calls `checkForAppUpdates()`
 - Page refresh with cache clear
@@ -108,6 +118,7 @@ import { PwaUpdateComponent } from './core/components/pwa-update/pwa-update.comp
 ### 7. **Configuration Files**
 
 #### **ngsw-config.json** - Service Worker Config
+
 ```json
 {
   "index": "/index.html",
@@ -132,22 +143,25 @@ import { PwaUpdateComponent } from './core/components/pwa-update/pwa-update.comp
 ```
 
 #### **app.config.ts** - Service Worker Provider
+
 ```typescript
-provideServiceWorker('ngsw-worker.js', {
+provideServiceWorker("ngsw-worker.js", {
   enabled: !isDevMode(),
-  registrationStrategy: 'registerWhenStable:30000'
-})
+  registrationStrategy: "registerWhenStable:30000",
+});
 ```
 
 ### 8. **Troubleshooting**
 
 #### **Problema: Hindi nag-aupdate ang app**
+
 **Solution:**
+
 1. Clear browser cache
 2. Unregister service worker:
    ```javascript
-   navigator.serviceWorker.getRegistrations().then(function(registrations) {
-     for(let registration of registrations) {
+   navigator.serviceWorker.getRegistrations().then(function (registrations) {
+     for (let registration of registrations) {
        registration.unregister();
      }
    });
@@ -155,7 +169,9 @@ provideServiceWorker('ngsw-worker.js', {
 3. Hard refresh (`Ctrl + Shift + R`)
 
 #### **Problema: Stuck sa old version**
+
 **Solution:**
+
 1. Open browser DevTools
 2. Go to Application tab
 3. Click "Service Workers"
@@ -163,7 +179,9 @@ provideServiceWorker('ngsw-worker.js', {
 5. Refresh page
 
 #### **Problema: Update notification hindi lumalabas**
+
 **Solution:**
+
 1. Check browser console for errors
 2. Verify service worker is registered
 3. Check if running in HTTPS (required for PWA)
@@ -171,12 +189,14 @@ provideServiceWorker('ngsw-worker.js', {
 ### 9. **Best Practices**
 
 #### **Para sa Users:**
+
 - Always click "Update Now" when prompted
 - Don't ignore update notifications
 - Use latest browser version
 - Enable notifications for better UX
 
 #### **Para sa Developers:**
+
 - Test updates in staging environment
 - Monitor update success rates
 - Keep service worker config updated
@@ -185,6 +205,7 @@ provideServiceWorker('ngsw-worker.js', {
 ### 10. **Browser Support**
 
 #### **Supported Browsers:**
+
 - ✅ Chrome 45+
 - ✅ Firefox 44+
 - ✅ Safari 11.1+
@@ -192,6 +213,7 @@ provideServiceWorker('ngsw-worker.js', {
 - ✅ Mobile browsers
 
 #### **Required Features:**
+
 - Service Worker support
 - HTTPS connection
 - JavaScript enabled
@@ -199,6 +221,7 @@ provideServiceWorker('ngsw-worker.js', {
 ### 11. **Monitoring Updates**
 
 #### **Console Logs:**
+
 ```
 🔄 PWA Update Service initialized
 🔍 Checking for app updates...
@@ -209,6 +232,7 @@ provideServiceWorker('ngsw-worker.js', {
 ```
 
 #### **User Notifications:**
+
 - Update prompts with version info
 - Update banners for declined updates
 - Loading screens during updates
@@ -217,11 +241,13 @@ provideServiceWorker('ngsw-worker.js', {
 ### 12. **Version Management**
 
 #### **Automatic Version Detection:**
+
 - Angular automatically generates version hashes
 - Service worker compares versions
 - Only updates when content changes
 
 #### **Manual Version Control:**
+
 - Update `package.json` version
 - Update `manifest.webmanifest` version
 - Deploy new build
@@ -231,6 +257,7 @@ provideServiceWorker('ngsw-worker.js', {
 ## 🚀 Quick Commands
 
 ### Check PWA Status
+
 ```bash
 # Open browser DevTools
 # Go to Application > Service Workers
@@ -238,16 +265,18 @@ provideServiceWorker('ngsw-worker.js', {
 ```
 
 ### Force Update
+
 ```javascript
 // In browser console
 window.location.reload(true);
 ```
 
 ### Clear All Cache
+
 ```javascript
 // In browser console
-caches.keys().then(names => {
-  names.forEach(name => {
+caches.keys().then((names) => {
+  names.forEach((name) => {
     caches.delete(name);
   });
 });
@@ -258,6 +287,7 @@ caches.keys().then(names => {
 ## 📱 Mobile App-like Experience
 
 Ang LAMS PWA ay may:
+
 - **Offline capability** - Works kahit walang internet
 - **Push notifications** - For updates and alerts
 - **Install prompt** - Add to home screen
@@ -279,9 +309,11 @@ Ang LAMS PWA ay may:
 ## 🔧 Build Issues & Solutions
 
 ### **Bundle Size Warnings**
+
 Kung makakakuha ng budget exceeded warnings:
 
 #### **Solution 1: Update Angular Budget**
+
 ```json
 // Sa angular.json
 "budgets": [
@@ -299,15 +331,18 @@ Kung makakakuha ng budget exceeded warnings:
 ```
 
 #### **Solution 2: Optimize CSS Files**
+
 - Remove unused styles
 - Combine similar classes
 - Use CSS variables
 - Extract common styles to global CSS
 
 ### **Prerendering Route Errors**
+
 Kung may route parameters na walang `getPrerenderParams`:
 
 #### **Solution: Update app.routes.server.ts**
+
 ```typescript
 // Routes with parameters - use Client rendering
 {
@@ -323,9 +358,11 @@ Kung may route parameters na walang `getPrerenderParams`:
 ```
 
 ### **CommonJS Dependencies**
+
 Kung may warning about CommonJS modules:
 
 #### **Solution: Add to angular.json**
+
 ```json
 "allowedCommonJsDependencies": [
   "quill",
@@ -336,6 +373,7 @@ Kung may warning about CommonJS modules:
 ```
 
 ### **Build Commands**
+
 ```bash
 # Development build
 ng build
@@ -377,6 +415,7 @@ ng build --configuration production --verbose
 ### **Build Error Solutions**
 
 #### **"Route does not match any routes"**
+
 ```typescript
 // Fix: Update app.routes.server.ts to match app.routes.ts
 // Wrong:
@@ -387,6 +426,7 @@ ng build --configuration production --verbose
 ```
 
 #### **"CSS exceeded maximum budget"**
+
 ```json
 // Fix: Increase budgets in angular.json
 {
@@ -397,6 +437,7 @@ ng build --configuration production --verbose
 ```
 
 #### **"CommonJS dependencies"**
+
 ```json
 // Fix: Add to angular.json
 "allowedCommonJsDependencies": [

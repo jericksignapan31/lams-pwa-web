@@ -247,12 +247,12 @@ export class EquipmentService {
   }
 
   /**
-   * Get asset types with fallback to mock data
-   * @returns Observable<AssetType[]> - List of asset types (real or mock)
+   * Get asset types with fallback to empty array
+   * @returns Observable<AssetType[]> - List of asset types from API
    */
   getAssetTypesWithFallback(): Observable<AssetType[]> {
     console.log(
-      '🔄 EquipmentService.getAssetTypesWithFallback() - Trying /api/assets/ first...'
+      '🔄 EquipmentService.getAssetTypesWithFallback() - Trying /api/assets/...'
     );
 
     return this.getAssetTypes().pipe(
@@ -264,32 +264,13 @@ export class EquipmentService {
           );
         },
         error: (error: any) => {
-          console.log(
-            '❌ /api/assets/ API failed, will use mock data as fallback'
-          );
+          console.log('❌ /api/assets/ API failed, returning empty array');
         },
       }),
-      // If API fails, provide mock data
+      // If API fails, return empty array
       catchError((error) => {
-        console.log('🔄 Using mock asset types as fallback...');
-        const mockAssetTypes: AssetType[] = [
-          {
-            asset_type_id: 'hardware-mock-id',
-            asset_type_name: 'Hardware',
-            description: 'Physical equipment and devices',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-          {
-            asset_type_id: 'software-mock-id',
-            asset_type_name: 'Software',
-            description: 'Software applications and licenses',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-        ];
-        console.log('✅ Mock asset types provided:', mockAssetTypes);
-        return of(mockAssetTypes);
+        console.log('🔄 API failed, returning empty array...');
+        return of([]);
       })
     );
   }
