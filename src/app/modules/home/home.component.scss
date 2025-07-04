@@ -77,6 +77,15 @@
     width: 70px;
     min-width: 70px;
     max-width: 70px;
+
+    // Make icons black when sidebar is collapsed
+    .sidebar-nav li a i {
+      color: #000 !important;
+    }
+
+    .sidebar-profile .profile-actions a i {
+      color: #000 !important;
+    }
   }
 
   .sidebar-nav {
@@ -366,4 +375,44 @@
 .content.my-app-dark {
   background-color: #23272f !important;
   color: #f5f5f5 !important;
+}
+
+// Collapsed sidebar icons - make them black regardless of theme
+.sidebar.collapsed {
+  .sidebar-nav li a i {
+    color: #000 !important;
+  }
+
+  .sidebar-profile .profile-actions a i {
+    color: #000 !important;
+  }
+
+  // Make icons white on hover when collapsed
+  .sidebar-nav li a:hover i {
+    color: #fff !important;
+  }
+
+  .sidebar-profile .profile-actions a:hover i {
+    color: #fff !important;
+  }
+}
+
+// Ensure black icons even in dark mode when collapsed
+.sidebar.collapsed.my-app-dark {
+  .sidebar-nav li a i {
+    color: #000 !important;
+  }
+
+  .sidebar-profile .profile-actions a i {
+    color: #000 !important;
+  }
+
+  // Make icons white on hover when collapsed (dark mode)
+  .sidebar-nav li a:hover i {
+    color: #fff !important;
+  }
+
+  .sidebar-profile .profile-actions a:hover i {
+    color: #fff !important;
+  }
 }

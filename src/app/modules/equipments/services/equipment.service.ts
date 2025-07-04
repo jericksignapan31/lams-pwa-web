@@ -39,6 +39,7 @@ export interface SoftwareEquipmentData {
   date_acquired?: Date | string | null;
   unit_cost?: number | null;
   laboratory?: string | null;
+  hardware_asset_types?: string[]; // Multiple hardware asset type IDs
 }
 
 // Asset Type Interface
@@ -190,8 +191,8 @@ export class EquipmentService {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return of([]);
     }
-
-    const hardwareTypesUrl = `${environment.baseUrl}/hardware-asset-types/`;
+    // /api/assets/hardware-asset-types/
+    const hardwareTypesUrl = `${environment.baseUrl}/assets/hardware-asset-types/`;
     console.log('🔍 EquipmentService - Getting hardware asset types');
     console.log(
       '🔍 EquipmentService - Hardware Types API URL:',

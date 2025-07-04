@@ -430,6 +430,33 @@
           ></p-inputNumber>
         </div>
         <div class="form-field">
+          <label for="hardware_asset_types">Compatible Hardware *</label>
+          <p-multiSelect
+            formControlName="hardware_asset_types"
+            [options]="hardwareTypes"
+            optionLabel="type_name"
+            optionValue="hardware_asset_type_id"
+            placeholder="Select compatible hardware types"
+            [loading]="loadingHardwareTypes"
+            [style]="{ width: '100%' }"
+            [showToggleAll]="true"
+            [filter]="true"
+            filterBy="type_name"
+            [maxSelectedLabels]="2"
+            selectedItemsLabel="{0} hardware types selected"
+          >
+            <ng-template pTemplate="item" let-hardwareType>
+              <div class="hardware-type-item">
+                <i [class]="hardwareType.icon || 'pi pi-box'"></i>
+                <span>{{ hardwareType.type_name }}</span>
+              </div>
+            </ng-template>
+          </p-multiSelect>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
           <label for="laboratory">Laboratory *</label>
           <p-dropdown
             formControlName="laboratory"

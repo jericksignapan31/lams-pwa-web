@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ToastModule } from 'primeng/toast';
 import {
   EquipmentService,
@@ -68,6 +69,7 @@ interface SoftwareForm {
   date_acquired: Date | null;
   unit_cost: number | null;
   laboratory: string | null;
+  hardware_asset_types: string[]; // Multiple hardware asset type IDs
 }
 
 @Component({
@@ -81,6 +83,7 @@ interface SoftwareForm {
     InputNumberModule,
     CalendarModule,
     DropdownModule,
+    MultiSelectModule,
     ToastModule,
   ],
   providers: [MessageService],
@@ -167,6 +170,7 @@ export class AddEquipmentComponent implements OnInit {
       date_acquired: [null],
       unit_cost: [null, [Validators.min(0)]],
       laboratory: [null, Validators.required],
+      hardware_asset_types: [[], Validators.required], // Multiple selection, required
     });
   }
 
@@ -517,6 +521,7 @@ export class AddEquipmentComponent implements OnInit {
       date_acquired: formValue.date_acquired || null,
       unit_cost: formValue.unit_cost || null,
       laboratory: formValue.laboratory || null,
+      hardware_asset_types: formValue.hardware_asset_types || [], // Multiple hardware asset type IDs
     };
   }
 }
