@@ -22,6 +22,8 @@ export class AuthService {
   private _alert = inject(AlertService);
   private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
   private readonly TOKEN_NAME = environment.tokenName;
+  private readonly USER_INFO_KEY = 'user_info';
+  private readonly USER_PROFILE_KEY = 'user_profile';
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   user = signal<UserModel | null>(null);
   userInfo: UserModel | null = null;
@@ -41,6 +43,9 @@ export class AuthService {
     private ngZone: NgZone
   ) {
     this._isLoggedIn$.next(!!this.token);
+
+    // Load user data from localStorage first
+    this.loadUserDataFromStorage();
 
     // If there's a token, try to fetch user info
     if (this.token) {
@@ -65,14 +70,16 @@ export class AuthService {
               'user',
           };
 
-          this.userInfo = userInfo;
-          this.user.set(userInfo);
-          this.userProfile = userProfile;
+          this.setUserData(userInfo, userProfile);
         },
         error: (err) => {
           console.log('⚠️ Could not fetch user profile on init:', err);
-          // Token might be expired, clear it
-          this.logout(true);
+          if (err.status === 401) {
+            console.log('🔒 Token is invalid/expired, logging out');
+            this.logout(true);
+          } else {
+            console.log('🔍 Non-auth error, keeping user logged in');
+          }
         },
       });
     }
@@ -146,10 +153,7 @@ export class AuthService {
             'user',
         };
 
-        this.userInfo = userInfo;
-        this.user.set(userInfo);
-        this.userProfile = userProfile;
-
+        this.setUserData(userInfo, userProfile);
         console.log('✅ User info mapped and set:', this.userInfo);
       })
     );
@@ -212,6 +216,8 @@ export class AuthService {
             }
             this.user.set(null);
             this.userInfo = null;
+            this.userProfile = null;
+            this.clearUserDataFromStorage();
             window.location.replace('/login');
           }
         );
@@ -230,7 +236,7 @@ export class AuthService {
         this.user.set(null);
         this.userInfo = null;
         this.userProfile = null;
-        this.userProfile = null;
+        this.clearUserDataFromStorage();
         if (typeof window !== 'undefined') {
           window.location.replace('/login');
         }
@@ -288,6 +294,67 @@ export class AuthService {
     if (this.inactivityTimer) {
       this.inactivityTimer.unsubscribe();
       this.inactivityTimer = undefined;
+    }
+  }
+
+  /**
+   * Load user data from localStorage
+   */
+  private loadUserDataFromStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const storedUserInfo = localStorage.getItem(this.USER_INFO_KEY);
+        const storedUserProfile = localStorage.getItem(this.USER_PROFILE_KEY);
+
+        if (storedUserInfo) {
+          this.userInfo = JSON.parse(storedUserInfo);
+          this.user.set(this.userInfo);
+          console.log('🔍 Loaded user info from localStorage:', this.userInfo);
+        }
+
+        if (storedUserProfile) {
+          this.userProfile = JSON.parse(storedUserProfile);
+          console.log('🔍 Loaded user profile from localStorage');
+        }
+      } catch (error) {
+        console.error('❌ Error loading user data from localStorage:', error);
+        // Clear corrupted data
+        this.clearUserDataFromStorage();
+      }
+    }
+  }
+
+  /**
+   * Save user data to localStorage and update state
+   */
+  private setUserData(userInfo: UserModel, userProfile: any) {
+    this.userInfo = userInfo;
+    this.user.set(userInfo);
+    this.userProfile = userProfile;
+
+    // Save to localStorage
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        localStorage.setItem(this.USER_INFO_KEY, JSON.stringify(userInfo));
+        localStorage.setItem(
+          this.USER_PROFILE_KEY,
+          JSON.stringify(userProfile)
+        );
+        console.log('💾 User data saved to localStorage');
+      } catch (error) {
+        console.error('❌ Error saving user data to localStorage:', error);
+      }
+    }
+  }
+
+  /**
+   * Clear user data from localStorage
+   */
+  private clearUserDataFromStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem(this.USER_INFO_KEY);
+      localStorage.removeItem(this.USER_PROFILE_KEY);
+      console.log('🗑️ User data cleared from localStorage');
     }
   }
 }
