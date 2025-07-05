@@ -28,12 +28,8 @@ export class AppComponent implements OnInit {
     this.initializePwaUpdates();
   }
 
-  /**
-   * Initialize PWA update mechanisms
-   */
   private initializePwaUpdates() {
     if (typeof window !== 'undefined') {
-      console.log('🚀 Initializing PWA updates...');
       this.pwaUpdateService.initPwaPrompt();
     }
   }

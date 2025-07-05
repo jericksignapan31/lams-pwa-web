@@ -132,9 +132,7 @@ export class LoginComponent {
       this.authService.login(loginData.email, loginData.password).subscribe({
         next: (response: any) => {
           this.loading = false;
-          // User info is now automatically set in authService.userInfo and authService.user signal
           const userInfo = this.authService.userInfo;
-          console.log('🔗 User info from AuthService:', userInfo);
 
           Swal.fire({
             icon: 'success',
@@ -148,7 +146,6 @@ export class LoginComponent {
         },
         error: (err: any) => {
           this.loading = false;
-          console.error('❌ Login failed:', err);
           Swal.fire({
             icon: 'error',
             title: 'Login Failed',

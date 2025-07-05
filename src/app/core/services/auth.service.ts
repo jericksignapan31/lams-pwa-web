@@ -73,26 +73,14 @@ export class AuthService {
           this.setUserData(userInfo, userProfile);
         },
         error: (err) => {
-          console.log('⚠️ Could not fetch user profile on init:', err);
           if (err.status === 401) {
-            console.log('🔒 Token is invalid/expired, logging out');
             this.logout(true);
-          } else {
-            console.log('🔍 Non-auth error, keeping user logged in');
           }
         },
       });
     }
-
-    if (typeof window !== 'undefined') {
-      // Commented out inactivity listener - no more auto logout
-      // this.initInactivityListener();
-    }
   }
 
-  /**
-   * Safely get token from localStorage (SSR-safe)
-   */
   get token(): string | null {
     if (typeof window !== 'undefined' && window.localStorage) {
       return localStorage.getItem(this.TOKEN_NAME);
@@ -127,15 +115,11 @@ export class AuthService {
         }
       }),
       switchMap((response: any) => {
-        // After storing the token, fetch user profile
         const token =
           response.access_token || response.access || response.token;
         return this.fetchUserProfile(token);
       }),
       tap((userProfile: any) => {
-        console.log('🔍 User profile response:', userProfile);
-
-        // Map the user profile to our UserModel interface
         const userInfo: UserModel = {
           id: userProfile.id || userProfile.user_id || 0,
           name:
@@ -154,14 +138,10 @@ export class AuthService {
         };
 
         this.setUserData(userInfo, userProfile);
-        console.log('✅ User info mapped and set:', this.userInfo);
       })
     );
   }
 
-  /**
-   * Fetch user profile from API
-   */
   private fetchUserProfile(token: string): Observable<any> {
     if (typeof window === 'undefined') {
       return of({});
@@ -212,7 +192,6 @@ export class AuthService {
             this._isLoggedIn$.next(false);
             if (typeof window !== 'undefined' && window.localStorage) {
               localStorage.removeItem(this.TOKEN_NAME);
-              // localStorage.removeItem(this.refreshKey);
             }
             this.user.set(null);
             this.userInfo = null;
@@ -247,26 +226,10 @@ export class AuthService {
   saveTokens(access: string, refresh: string) {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem(this.TOKEN_NAME, access);
-      // localStorage.setItem(this.refreshKey, refresh);
     }
     this._isLoggedIn$.next(true);
-    // Commented out - inactivity timer is disabled
-    // this.resetInactivityTimer();
   }
 
-  getRefreshToken(): string | null {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      // return localStorage.getItem(this.refreshKey);
-    }
-    return null;
-  }
-
-  refreshToken(): Observable<any> {
-    const refresh = this.getRefreshToken();
-    return this.http.post(`${this.apiUrl}/token/refresh/`, { refresh });
-  }
-
-  // Inactivity logic
   private initInactivityListener() {
     if (typeof window === 'undefined') return;
     this.userActivityEvents.forEach((event) => {
@@ -276,9 +239,7 @@ export class AuthService {
   }
 
   private resetInactivityTimer() {
-    // Don't set timer if inactivity timeout is disabled (0)
     if (this.inactivityTimeout <= 0) {
-      console.log('🔍 Inactivity timer disabled - not setting timer');
       return;
     }
 
@@ -297,9 +258,6 @@ export class AuthService {
     }
   }
 
-  /**
-   * Load user data from localStorage
-   */
   private loadUserDataFromStorage() {
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
@@ -309,24 +267,17 @@ export class AuthService {
         if (storedUserInfo) {
           this.userInfo = JSON.parse(storedUserInfo);
           this.user.set(this.userInfo);
-          console.log('🔍 Loaded user info from localStorage:', this.userInfo);
         }
 
         if (storedUserProfile) {
           this.userProfile = JSON.parse(storedUserProfile);
-          console.log('🔍 Loaded user profile from localStorage');
         }
       } catch (error) {
-        console.error('❌ Error loading user data from localStorage:', error);
-        // Clear corrupted data
         this.clearUserDataFromStorage();
       }
     }
   }
 
-  /**
-   * Save user data to localStorage and update state
-   */
   private setUserData(userInfo: UserModel, userProfile: any) {
     this.userInfo = userInfo;
     this.user.set(userInfo);
@@ -340,21 +291,14 @@ export class AuthService {
           this.USER_PROFILE_KEY,
           JSON.stringify(userProfile)
         );
-        console.log('💾 User data saved to localStorage');
-      } catch (error) {
-        console.error('❌ Error saving user data to localStorage:', error);
-      }
+      } catch (error) {}
     }
   }
 
-  /**
-   * Clear user data from localStorage
-   */
   private clearUserDataFromStorage() {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.removeItem(this.USER_INFO_KEY);
       localStorage.removeItem(this.USER_PROFILE_KEY);
-      console.log('🗑️ User data cleared from localStorage');
     }
   }
 }

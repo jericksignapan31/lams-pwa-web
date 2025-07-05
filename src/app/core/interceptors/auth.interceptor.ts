@@ -1,40 +1,42 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, throwError, switchMap } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthService) {}
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Always get the latest token from localStorage (SSR safe)
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     let token: string | null = null;
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      token = localStorage.getItem('access_token');
+      token = localStorage.getItem(environment.tokenName);
     }
+
     let authReq = req;
     if (token) {
       authReq = req.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
       });
     }
+
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 && this.auth.getRefreshToken()) {
-          // Try to refresh token
-          return this.auth.refreshToken().pipe(
-            switchMap((res: any) => {
-              this.auth.saveTokens(res.access, res.refresh);
-              const retryReq = req.clone({
-                setHeaders: { Authorization: `Bearer ${res.access}` },
-              });
-              return next.handle(retryReq);
-            })
-          );
+        if (error.status === 401) {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem(environment.tokenName);
+            localStorage.removeItem('user_info');
+            localStorage.removeItem('user_profile');
+            window.location.href = '/login';
+          }
         }
         return throwError(() => error);
       })
