@@ -22,7 +22,6 @@ export class RoomStorageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private equipmentService: EquipmentService,
     private laboratoryService: LaboratoryService
   ) {}
 

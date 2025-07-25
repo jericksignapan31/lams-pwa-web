@@ -1,13 +1,12 @@
 <div class="equipment-container">
   <div class="header">
-    <h2>Equipment Management</h2>
+    <h2>Assets Management</h2>
     <div class="header-buttons">
       <button
         pButton
         type="button"
-        label="Add Equipment"
+        label="Add Asset"
         icon="pi pi-plus"
-        (click)="showAddEquipment()"
         class="add-equipment-btn"
       ></button>
       <button
@@ -15,79 +14,13 @@
         type="button"
         label="Show Table"
         icon="pi pi-table"
-        (click)="showTable()"
         class="show-table-btn"
       ></button>
     </div>
   </div>
 
   <div class="content">
-    <!-- Add Equipment Section -->
-    <div *ngIf="showAddForm" class="add-equipment-section">
-      <app-add-equipment
-        (cancel)="hideAddEquipment()"
-        (equipmentAdded)="onEquipmentAdded($event)"
-      ></app-add-equipment>
-    </div>
-
-    <!-- Table Section -->
-    <div *ngIf="showTableSection" class="table-section">
-      <!-- Hardware Table -->
-      <div
-        *ngIf="selectedCategory === 'hardware'"
-        class="equipment-table-container"
-      >
-        <div class="table-header">
-          <h3>Hardware Equipment</h3>
-          <small class="debug-info"
-            >Using Asset Type ID:
-            {{ hardwareAssetType?.asset_type_id || "hardware-mock-id" }}</small
-          >
-          <button
-            pButton
-            type="button"
-            label="Back to Categories"
-            icon="pi pi-arrow-left"
-            class="p-button-secondary p-button-outlined"
-            (click)="backToCategorySelection()"
-          ></button>
-        </div>
-        <app-hardware-table
-          [assetTypeId]="hardwareAssetType?.asset_type_id || 'hardware-mock-id'"
-          [autoLoad]="true"
-        >
-        </app-hardware-table>
-      </div>
-
-      <!-- Software Table -->
-      <div
-        *ngIf="selectedCategory === 'software'"
-        class="equipment-table-container"
-      >
-        <div class="table-header">
-          <h3>Software Equipment</h3>
-          <small class="debug-info"
-            >Using Asset Type ID:
-            {{ softwareAssetType?.asset_type_id || "software-mock-id" }}</small
-          >
-          <button
-            pButton
-            type="button"
-            label="Back to Categories"
-            icon="pi pi-arrow-left"
-            class="p-button-secondary p-button-outlined"
-            (click)="backToCategorySelection()"
-          ></button>
-        </div>
-        <app-software-table
-          [assetTypeId]="softwareAssetType?.asset_type_id || 'software-mock-id'"
-          [autoLoad]="true"
-        >
-        </app-software-table>
-      </div>
-    </div>
-
-    <!-- Loading indicator -->
+  
     <div *ngIf="loading" class="loading-container">
       <p-progressSpinner></p-progressSpinner>
       <p>Loading assets...</p>
@@ -95,69 +28,5 @@
   </div>
 
   <!-- Category Selection Modal/Overlay (positioned at bottom) -->
-  <div *ngIf="showCategorySelection" class="category-selection-bottom">
-    <div class="category-overlay" (click)="hideTable()"></div>
-    <div class="category-content">
-      <div class="category-header">
-        <div>
-          <h3>Select Equipment Category</h3>
-          <p class="subtitle">
-            Choose which type of equipment table to display
-          </p>
-        </div>
-        <button
-          pButton
-          type="button"
-          label="Close"
-          icon="pi pi-times"
-          class="close-btn p-button-secondary p-button-outlined"
-          (click)="hideTable()"
-        ></button>
-      </div>
-
-      <div class="category-cards">
-        <div
-          class="category-card hardware-card"
-          (click)="selectCategory('hardware')"
-        >
-          <div class="card-icon">
-            <i class="pi pi-desktop"></i>
-          </div>
-          <h4>Hardware Equipment</h4>
-          <p>
-            View and manage physical equipment, devices, and hardware assets
-          </p>
-          <div class="card-action">
-            <button
-              pButton
-              type="button"
-              label="View Hardware Table"
-              class="p-button-primary"
-            ></button>
-          </div>
-        </div>
-
-        <div
-          class="category-card software-card"
-          (click)="selectCategory('software')"
-        >
-          <div class="card-icon">
-            <i class="pi pi-code"></i>
-          </div>
-          <h4>Software Equipment</h4>
-          <p>
-            View and manage software licenses, applications, and digital assets
-          </p>
-          <div class="card-action">
-            <button
-              pButton
-              type="button"
-              label="View Software Table"
-              class="p-button-primary"
-            ></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  
 </div>

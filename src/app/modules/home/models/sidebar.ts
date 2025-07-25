@@ -93,7 +93,7 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
       if (campus) {
         inventoryMenu.items = [
           {
-            label: 'Equipment',
+            label: 'Assets',
             icon: 'pi pi-cog',
             routerLink: '/home/equipments',
             items: [],
@@ -117,7 +117,7 @@ export function getPanelMenuItems(role: string, assignedCampus?: string) {
       } else {
         inventoryMenu.items = [
           {
-            label: 'Equipment',
+            label: 'Assets',
             icon: 'pi pi-cog',
             routerLink: '/home/equipments',
             items: [],
