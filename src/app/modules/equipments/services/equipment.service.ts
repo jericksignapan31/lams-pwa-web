@@ -60,6 +60,22 @@ export interface HardwareAssetType {
   updated_at: string;
 }
 
+// New Asset Data Interface for the Add Asset form
+export interface NewAssetData {
+  asset_category: string | null;
+  asset_name: string;
+  property_number: string;
+  foun_cluster: string;
+  PO_number: string;
+  purpose: string;
+  date_acquired: Date | string | null;
+  issued_to: string;
+  Location: string | null;
+  Supplier: string | null;
+  Program: string | null;
+  is_active: boolean;
+}
+
 /**
  * EquipmentService - API service for assets management using /api/assets/ endpoints
  *
@@ -70,6 +86,9 @@ export interface HardwareAssetType {
  * PUT    /api/assets/{id}/                         # Update asset
  * PATCH  /api/assets/{id}/                         # Partial update asset
  * DELETE /api/assets/{id}/                         # Delete asset
+ * GET    /api/assets/locations/                    # Get all locations
+ * GET    /api/assets/asset-suppliers/              # Get all suppliers
+ * GET    /api/assets/programs/                     # Get all programs
  */
 
 @Injectable({
@@ -77,12 +96,12 @@ export interface HardwareAssetType {
 })
 export class EquipmentService {
   private baseUrl = environment.baseUrl + '/assets/';
+  private locationsUrl = environment.baseUrl + '/assets/locations/';
+  private suppliersUrl = environment.baseUrl + '/assets/asset-suppliers/';
+  private programsUrl = environment.baseUrl + '/assets/programs/';
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Get authentication headers
-   */
   private getHeaders(): HttpHeaders {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       console.log('⚠️ EquipmentService - No window/localStorage available');
@@ -213,5 +232,157 @@ export class EquipmentService {
 
     const headers = this.getHeaders();
     return this.http.delete<any>(assetUrl, { headers });
+  }
+
+  /**
+   * Get all locations
+   * @returns Observable<any[]> - List of all locations
+   */
+  getLocations(): Observable<any[]> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    console.log('🔍 EquipmentService - Getting all locations');
+    console.log('🔍 EquipmentService - Locations API URL:', this.locationsUrl);
+
+    const headers = this.getHeaders();
+    return this.http.get<any[]>(this.locationsUrl, { headers }).pipe(
+      tap((response) =>
+        console.log('📍 EquipmentService - Locations response:', response)
+      ),
+      catchError((error) => {
+        console.error('❌ EquipmentService - Error getting locations:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Get all suppliers
+   * @returns Observable<any[]> - List of all suppliers
+   */
+  getSuppliers(): Observable<any[]> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    console.log('🔍 EquipmentService - Getting all suppliers');
+    console.log('🔍 EquipmentService - Suppliers API URL:', this.suppliersUrl);
+
+    const headers = this.getHeaders();
+    return this.http.get<any[]>(this.suppliersUrl, { headers }).pipe(
+      tap((response) =>
+        console.log('🏢 EquipmentService - Suppliers response:', response)
+      ),
+      catchError((error) => {
+        console.error('❌ EquipmentService - Error getting suppliers:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Get all programs
+   * @returns Observable<any[]> - List of all programs
+   */
+  getPrograms(): Observable<any[]> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of([]);
+    }
+
+    console.log('🔍 EquipmentService - Getting all programs');
+    console.log('🔍 EquipmentService - Programs API URL:', this.programsUrl);
+
+    const headers = this.getHeaders();
+    return this.http.get<any[]>(this.programsUrl, { headers }).pipe(
+      tap((response) =>
+        console.log('📚 EquipmentService - Programs response:', response)
+      ),
+      catchError((error) => {
+        console.error('❌ EquipmentService - Error getting programs:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Test all new endpoints - For development/testing purposes
+   * @returns Observable<any> - Combined test results
+   */
+  testNewEndpoints(): Observable<any> {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return of({
+        locations: [],
+        suppliers: [],
+        programs: [],
+        error: 'No window/localStorage available',
+      });
+    }
+
+    console.log('🧪 EquipmentService - Testing all new endpoints...');
+
+    return new Observable((observer) => {
+      const results: any = {
+        locations: null,
+        suppliers: null,
+        programs: null,
+        errors: [],
+      };
+
+      let completed = 0;
+      const total = 3;
+
+      const checkCompletion = () => {
+        completed++;
+        if (completed === total) {
+          console.log('🧪 EquipmentService - Test results:', results);
+          observer.next(results);
+          observer.complete();
+        }
+      };
+
+      // Test locations
+      this.getLocations().subscribe({
+        next: (locations) => {
+          results.locations = locations;
+          console.log('✅ Locations test passed:', locations.length, 'items');
+          checkCompletion();
+        },
+        error: (error) => {
+          results.errors.push({ endpoint: 'locations', error });
+          console.error('❌ Locations test failed:', error);
+          checkCompletion();
+        },
+      });
+
+      // Test suppliers
+      this.getSuppliers().subscribe({
+        next: (suppliers) => {
+          results.suppliers = suppliers;
+          console.log('✅ Suppliers test passed:', suppliers.length, 'items');
+          checkCompletion();
+        },
+        error: (error) => {
+          results.errors.push({ endpoint: 'suppliers', error });
+          console.error('❌ Suppliers test failed:', error);
+          checkCompletion();
+        },
+      });
+
+      // Test programs
+      this.getPrograms().subscribe({
+        next: (programs) => {
+          results.programs = programs;
+          console.log('✅ Programs test passed:', programs.length, 'items');
+          checkCompletion();
+        },
+        error: (error) => {
+          results.errors.push({ endpoint: 'programs', error });
+          console.error('❌ Programs test failed:', error);
+          checkCompletion();
+        },
+      });
+    });
   }
 }

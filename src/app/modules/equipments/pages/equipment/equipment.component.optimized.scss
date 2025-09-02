@@ -1,6 +1,4 @@
-/* Equipment Component - Optimized Styles */
 
-/* Use CSS custom properties for common values */
 :root {
   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --glass-bg: rgba(255, 255, 255, 0.95);
@@ -25,7 +23,6 @@
   opacity: 0.8;
 }
 
-/* Common glass morphism styles */
 .glass-panel {
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
@@ -68,7 +65,6 @@
   }
 }
 
-/* Common button styles */
 .btn-modern {
   padding: 0.75rem 2rem;
   border-radius: 50px;
@@ -109,7 +105,6 @@
   }
 }
 
-/* Content sections */
 .content {
   @extend .glass-panel;
   padding: var(--spacing);
@@ -130,7 +125,6 @@
   gap: 0.5rem;
 }
 
-/* Category Modal */
 .category-modal-overlay {
   position: fixed;
   top: 0;
@@ -231,7 +225,6 @@
   }
 }
 
-/* Animations */
 @keyframes pulse {
   0%,
   100% {
@@ -260,7 +253,6 @@
   }
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .equipment-container {
     padding: 1rem;
@@ -317,14 +309,12 @@
   }
 }
 
-/* Focus states for accessibility */
 .btn-modern:focus,
 .category-card:focus {
   outline: 2px solid #667eea;
   outline-offset: 2px;
 }
 
-/* Print styles */
 @media print {
   .equipment-container {
     background: white;

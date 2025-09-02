@@ -8,6 +8,7 @@
         label="Add Asset"
         icon="pi pi-plus"
         class="add-equipment-btn"
+        (click)="showAddAssetForm()"
       ></button>
       <button
         pButton
@@ -15,18 +16,437 @@
         label="Show Table"
         icon="pi pi-table"
         class="show-table-btn"
+        (click)="showTable()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Test API"
+        icon="pi pi-cog"
+        class="test-api-btn"
+        (click)="runEndpointTests()"
+        pTooltip="Test new API endpoints (Locations, Suppliers, Programs)"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Reload Dropdowns"
+        icon="pi pi-refresh"
+        class="p-button-secondary"
+        (click)="reloadDropdownData()"
+        pTooltip="Reload dropdown data for debugging"
       ></button>
     </div>
   </div>
 
   <div class="content">
-  
     <div *ngIf="loading" class="loading-container">
       <p-progressSpinner></p-progressSpinner>
       <p>Loading assets...</p>
     </div>
+
+    <!-- Add Asset Form Section -->
+    <div *ngIf="showAddForm" class="add-asset-section">
+      <div class="form-header">
+        <h3>Add New Asset</h3>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          class="p-button-text p-button-rounded"
+          (click)="hideAddAssetForm()"
+          pTooltip="Close Form"
+        ></button>
+      </div>
+
+      <form
+        [formGroup]="addAssetForm"
+        (ngSubmit)="onSubmitAddAsset()"
+        class="asset-form"
+      >
+        <div class="form-grid">
+          <!-- Row 1 -->
+          <div class="form-row">
+            <!-- Asset Category -->
+            <div class="field">
+              <label for="asset_category">Asset Category</label>
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-tag"></i>
+                </p-inputgroup-addon>
+                <p-select
+                  formControlName="asset_category"
+                  [options]="assetCategoryOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select category"
+                  [showClear]="true"
+                >
+                </p-select>
+              </p-inputgroup>
+            </div>
+
+            <!-- Asset Name -->
+            <div class="field">
+              <label for="asset_name"
+                >Asset Name <span class="required">*</span></label
+              >
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-box"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  id="asset_name"
+                  formControlName="asset_name"
+                  placeholder="Enter asset name"
+                />
+              </p-inputgroup>
+              <small
+                class="p-error"
+                *ngIf="
+                  addAssetForm.get('asset_name')?.invalid &&
+                  addAssetForm.get('asset_name')?.touched
+                "
+              >
+                Asset name is required.
+              </small>
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="form-row">
+            <!-- Property Number -->
+            <div class="field">
+              <label for="property_number"
+                >Property Number <span class="required">*</span></label
+              >
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-id-card"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  id="property_number"
+                  formControlName="property_number"
+                  placeholder="Enter property number"
+                />
+              </p-inputgroup>
+              <small
+                class="p-error"
+                *ngIf="
+                  addAssetForm.get('property_number')?.invalid &&
+                  addAssetForm.get('property_number')?.touched
+                "
+              >
+                Property number is required.
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="property_number_id"
+                >property number id<span class="required">*</span></label
+              >
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-id-card"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  id="property_number_id"
+                  formControlName="property_number_id"
+                  placeholder="Enter property number"
+                />
+              </p-inputgroup>
+              <small
+                class="p-error"
+                *ngIf="
+                  addAssetForm.get('property_number')?.invalid &&
+                  addAssetForm.get('property_number')?.touched
+                "
+              >
+                Property number is required.
+              </small>
+            </div>
+
+            <!-- Foundation Cluster -->
+            <div class="field">
+              <label for="foun_cluster"
+                >Foundation Cluster <span class="required">*</span></label
+              >
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-building"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  id="foun_cluster"
+                  formControlName="foun_cluster"
+                  placeholder="Enter foundation cluster"
+                />
+              </p-inputgroup>
+              <small
+                class="p-error"
+                *ngIf="
+                  addAssetForm.get('foun_cluster')?.invalid &&
+                  addAssetForm.get('foun_cluster')?.touched
+                "
+              >
+                Foundation cluster is required.
+              </small>
+            </div>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="form-row">
+            <!-- PO Number -->
+            <div class="field">
+              <label for="PO_number"
+                >PO Number <span class="required">*</span></label
+              >
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-file-o"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  id="PO_number"
+                  formControlName="PO_number"
+                  placeholder="Enter PO number"
+                />
+              </p-inputgroup>
+              <small
+                class="p-error"
+                *ngIf="
+                  addAssetForm.get('PO_number')?.invalid &&
+                  addAssetForm.get('PO_number')?.touched
+                "
+              >
+                PO number is required.
+              </small>
+            </div>
+
+            <!-- Date Acquired -->
+            <div class="field">
+              <label for="date_acquired">Date Acquired</label>
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-calendar"></i>
+                </p-inputgroup-addon>
+                <p-calendar
+                  formControlName="date_acquired"
+                  dateFormat="mm/dd/yy"
+                  placeholder="Select date acquired"
+                  [showIcon]="false"
+                  [monthNavigator]="true"
+                  [yearNavigator]="true"
+                  yearRange="2000:2030"
+                >
+                </p-calendar>
+              </p-inputgroup>
+            </div>
+          </div>
+
+          <!-- Row 4 -->
+          <div class="form-row">
+            <!-- Issued To -->
+            <div class="field">
+              <label for="issued_to">Issued To</label>
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  id="issued_to"
+                  formControlName="issued_to"
+                  placeholder="Enter issued to"
+                />
+              </p-inputgroup>
+            </div>
+
+            <!-- Location -->
+            <div class="field">
+              <label for="Location">Location</label>
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-map-marker"></i>
+                </p-inputgroup-addon>
+                <p-select
+                  formControlName="Location"
+                  [options]="locations"
+                  optionLabel="location_name"
+                  optionValue="location_id"
+                  placeholder="Select location"
+                  [showClear]="true"
+                  [loading]="dropdownsLoading"
+                >
+                </p-select>
+              </p-inputgroup>
+              <!-- Debug info -->
+              <small
+                class="debug-info"
+                *ngIf="locations.length === 0 && !dropdownsLoading"
+              >
+                No locations available. Check console for API errors.
+              </small>
+              <small class="debug-info" *ngIf="locations.length > 0">
+                {{ locations.length }} locations loaded
+              </small>
+            </div>
+          </div>
+
+          <!-- Row 5 -->
+          <div class="form-row">
+            <!-- Supplier -->
+            <div class="field">
+              <label for="Supplier">Supplier</label>
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-shopping-cart"></i>
+                </p-inputgroup-addon>
+                <p-select
+                  formControlName="Supplier"
+                  [options]="suppliers"
+                  optionLabel="supplier_name"
+                  optionValue="supplier_id"
+                  placeholder="Select supplier"
+                  [showClear]="true"
+                  [loading]="dropdownsLoading"
+                >
+                </p-select>
+              </p-inputgroup>
+              <!-- Debug info -->
+              <small
+                class="debug-info"
+                *ngIf="suppliers.length === 0 && !dropdownsLoading"
+              >
+                No suppliers available. Check console for API errors.
+              </small>
+              <small class="debug-info" *ngIf="suppliers.length > 0">
+                {{ suppliers.length }} suppliers loaded
+              </small>
+            </div>
+
+            <!-- Program -->
+            <div class="field">
+              <label for="Program">Program</label>
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-book"></i>
+                </p-inputgroup-addon>
+                <p-select
+                  formControlName="Program"
+                  [options]="programs"
+                  optionLabel="program_name"
+                  optionValue="program_id"
+                  placeholder="Select program"
+                  [showClear]="true"
+                  [loading]="dropdownsLoading"
+                >
+                </p-select>
+              </p-inputgroup>
+              <!-- Debug info -->
+              <small
+                class="debug-info"
+                *ngIf="programs.length === 0 && !dropdownsLoading"
+              >
+                No programs available. Check console for API errors.
+              </small>
+              <small class="debug-info" *ngIf="programs.length > 0">
+                {{ programs.length }} programs loaded
+              </small>
+            </div>
+          </div>
+
+          <!-- Row 6 -->
+          <div class="form-row">
+            <!-- Is Active -->
+            <div class="field checkbox-field">
+              <label for="is_active">Asset Status</label>
+              <div class="checkbox-wrapper">
+                <p-toggleswitch formControlName="is_active" inputId="is_active">
+                </p-toggleswitch>
+                <label for="is_active" class="checkbox-label">
+                  <span
+                    *ngIf="
+                      addAssetForm.get('is_active')?.value;
+                      else inactiveLabel
+                    "
+                  >
+                    <i class="pi pi-check-circle text-success"></i> Active
+                  </span>
+                  <ng-template #inactiveLabel>
+                    <i class="pi pi-times-circle text-muted"></i> Inactive
+                  </ng-template>
+                </label>
+              </div>
+            </div>
+
+            <!-- Empty field to maintain grid layout -->
+            <div class="field"></div>
+          </div>
+
+          <!-- Purpose - Full Width -->
+          <div class="form-row full-width">
+            <div class="field">
+              <label for="purpose"
+                >Purpose <span class="required">*</span></label
+              >
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-align-left"></i>
+                </p-inputgroup-addon>
+                <textarea
+                  pInputTextarea
+                  id="purpose"
+                  formControlName="purpose"
+                  rows="4"
+                  placeholder="Enter the purpose and description of this asset..."
+                  [autoResize]="true"
+                >
+                </textarea>
+              </p-inputgroup>
+              <small
+                class="p-error"
+                *ngIf="
+                  addAssetForm.get('purpose')?.invalid &&
+                  addAssetForm.get('purpose')?.touched
+                "
+              >
+                Purpose is required.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button
+            pButton
+            type="button"
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-secondary"
+            (click)="hideAddAssetForm()"
+            [disabled]="submitting"
+          ></button>
+          <button
+            pButton
+            type="submit"
+            label="Save Asset"
+            icon="pi pi-check"
+            class="p-button-primary"
+            [loading]="submitting"
+            [disabled]="!addAssetForm.valid"
+          ></button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Assets Table Section -->
   </div>
 
-  <!-- Category Selection Modal/Overlay (positioned at bottom) -->
-  
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
 </div>
